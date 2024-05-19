@@ -86,6 +86,7 @@ Display chips, mult or X mult based on the cards in the hand being played. Keep 
 |  |  |  |
 |     :---:      |     :---:      |     :---:      |
 | **Business Card** | **Photograph** | **Triboulet** |
+
 ![Modifier Jokers 3](04_modifier_jokers_6.png)
 ![Modifier Jokers Example 4](04_modifier_jokers_7.png)
 
