@@ -43,5 +43,7 @@ Also I would appreciate if people contect me when there are updates to the game 
 ## Contact
 
 If you have any issues feel free to contact me on Twitter: [@nh6574](https://twitter.com/nh6574)
+
 Or on Discord: nh6574
+
 And here's my [ko-fi link](https://ko-fi.com/nh6574) if you feel especially grateful.
