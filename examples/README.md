@@ -18,6 +18,8 @@ If **Baseball Card** is in play it add the multiplier to any **Uncommon** Joker.
 
 These Jokers don't display any infromation unless they're enhanced.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Four Fingers** | **Mime** | **Credit Card** | **Marble Joker** | **Chaos the Clown** |
 | **Pareidolia** | **Space Joker** | **Egg** | **Burglar** | **Splash** |
 | **Hiker** | **Riff-raff** | **Shortcut** | **Midas Mask** | **Gift Card** |
@@ -49,6 +51,8 @@ Jokers that display odds are affected by this card.
 
 These Jokers will display static information on either their effects or trigger conditions.
 
+|  |  |  |
+|     :---:      |     :---:      |     :---:      |
 | **Joker** | **Hack** | **Gros Michel** |  
 | **Cavendish** | **Golden Joker** | **Stuntman** |
 
@@ -64,23 +68,31 @@ Displays random values.
 
 Display chips, mult or X mult based on the cards in the hand being played. Keep it mind these multipliers apply to the cards, not the joker. If you have a better idea on how to display this infromation, please let me know.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Fibonacci** | **Even Steven** | **Odd Todd** | **Scholar** | **Walkie Talkie** |
 
 ![Modifier Jokers 1](04_modifier_jokers_1.png)
 ![Modifier Jokers Example 1](04_modifier_jokers_2.png)
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Golden Ticket** | **Scary Face** | **Smiley Face** | **Ancient Joker** | **The Idol** |
 
 ![Modifier Jokers 2](04_modifier_jokers_3.png)
 ![Modifier Jokers Example 2](04_modifier_jokers_4.png)
 ![Modifier Jokers Example 3](04_modifier_jokers_5.png)
 
+|  |  |  |
+|     :---:      |     :---:      |     :---:      |
 | **Business Card** | **Photograph** | **Triboulet** |
 ![Modifier Jokers 3](04_modifier_jokers_6.png)
 ![Modifier Jokers Example 4](04_modifier_jokers_7.png)
 
 ### Sinful Jokers
 
+|  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |
 | **Greedy Joker** | **Lusty Joker** | **Wrathful Joker** | **Gluttonous Joker** |
 
 ![Sinful Jokers](04_sinful_jokers_1.png)
@@ -88,6 +100,8 @@ Display chips, mult or X mult based on the cards in the hand being played. Keep 
 
 ### Gem Jokers
 
+|  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |
 | **Rough Gem** | **Blood Stone** | **Arrowhead** | **Onyx Agate** |
 
 ![Gem Jokers](04_gem_jokers_1.png)
@@ -97,6 +111,8 @@ Display chips, mult or X mult based on the cards in the hand being played. Keep 
 
 Display chips, mult or X mult based on the hand being played.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Jolly Joker** | **Zany Joker** | **Mad Joker** | **Crazy Joker** | **Droll Joker** |
 | **Sly Joker** | **Wily Joker** | **Clever Joker** | **Devious Joker** | **Crafty Joker** |
 | **The Duo** | **The Trio** | **The Family** | **The Order** | **The Tribe** |
@@ -125,6 +141,8 @@ Display chips, mult or X mult based on the hand being played.
 
 Jokers that display information depending on the cards in the hand being played.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Half Joker** | **Sixth Sense** | **8 Ball** | **Seeing Double** | **Flower Pot** |
 
 ![Played Hand Jokers](06_played_hand_jokers_1.png)
@@ -135,6 +153,8 @@ Jokers that display information depending on the cards in the hand being played.
 
 Jokers that display information depending on the cards remaining in hand.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Raised Fist** | **Reserved Parking** | **Shoot the Moon** | **Baron** | **Blackboard** |
 
 ![Remaining Hand Jokers](07_remaining_hand_jokers_1.png)
@@ -144,6 +164,8 @@ Jokers that display information depending on the cards remaining in hand.
 
 Jokers that affect cards that are discarded check if the appropiate hand is selected.
 
+|  |  |  | 
+|     :---:      |     :---:      |     :---:      |
 | **Trading Card** | **Mail-In Rebate** | **Faceless Joker** |
 
 ![Discard Jokers](08_discard_jokers_1.png)
@@ -154,6 +176,8 @@ Jokers that affect cards that are discarded check if the appropiate hand is sele
 
 Jokers that activate under conditions not listed above.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Mystic Summit** | **Delayed Gratification** | **Dusk** | **DNA** | **Loyalty Card** |
 
 ![Conditional Jokers 1](09_conditional_jokers_1.png)
@@ -163,11 +187,15 @@ Note:
 
 - **Loyalty Card** updates the information as soon as you play the hand. That means that when you play your fifth hand it will display X4 and when you play your sixth hand X1, despite being the reverse.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Vagabond** | **Matador** | **Luchador** | **Mr. Bones** | **Acrobat** |
 
 ![Conditional Jokers 2](09_conditional_jokers_3.png)
 ![Conditional Jokers Example 2](09_conditional_jokers_4.png)
 
+|  |  |  |
+|     :---:      |     :---:      |     :---:      |
 | **Chicot** | **Invisible Joker** | **Driver's License** |
 
 ![Conditional Jokers 3](09_conditional_jokers_5.png)
@@ -189,6 +217,8 @@ These display if they're compatible with the Joker they're pointing to. In the f
 
 Any other Joker that increases or decreases value over time, either permanently or just for the round/ante.
 
+|  |  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Abstract Joker** | **Banner** | **Steel Joker** | **Ride the Bus** | **Ceremonial Dagger** |
 | **Runner** | **Ice Cream** | **Blue Joker** | **Green Joker** | **Constellation** |
 | **Square Joker** | **Red Card** | **Vampire** | **Madness** | **Hologram** |
