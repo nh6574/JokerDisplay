@@ -20,7 +20,7 @@ _For information on all the Jokers, please refer to the [examples document](exam
 
 - Blueprint and Brainstorm should display the information of the Joker they're copying. They also have a small graphical glitch when you get them for the first time.
 - Loyalty Card updates the multiplier at the same time you play the last hand it's active in so it displays X1 instead of X4 like it should.
-- Blue Joker starts on +0 on a reload.
+- Some jokers starts on +0 on a reload. (Clicking on something fixes it)
 - Retriggering card Jokers don't factor into other Jokers' calculations.
 - Blueprint and Brainstorm don't factor into Basecall Card's calculations.
 - Some cards might not update properly when Vampire is used on a Stone Card.
