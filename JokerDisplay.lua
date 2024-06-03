@@ -524,7 +524,7 @@ function Card:initialize_joker_display()
     elseif self.ability.name == 'Egg' then
         text_rows[1] = {
             create_display_text_object({ text = "$", colour = G.C.GOLD }),
-            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "sell_cost", colour = G.C.GOLD })
+            create_display_text_object({ ref_table = self, ref_value = "sell_cost", colour = G.C.GOLD })
         }
     elseif self.ability.name == 'Blackboard' then
         text_rows[1] = {
@@ -1185,7 +1185,6 @@ function Card:calculate_joker_display()
     self.joker_display_values.mult_mod = ""
     self.joker_display_values.x_mult_mod = ""
     self.joker_display_values.mod_end = ""
-    self.joker_display_values.sell_cost = ""
 
     local joker_edition = self:get_edition()
     local baseball_enhancements = (self.config.center.rarity == 2 and #find_joker('Baseball Card') or 0)
@@ -1385,9 +1384,8 @@ function Card:calculate_joker_display()
         local text, _, _ = joker_display_evaluate_hand(hand)
         self.joker_display_values.mult = (G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played) or 0
     elseif self.ability.name == 'Ride the Bus' then
-    elseif self.ability.name == 'Space Joker' or self.ability.name == 'Burglar' then
-    elseif self.ability.name == 'Egg' then
-        self.joker_display_values.sell_cost = self.sell_cost
+    elseif self.ability.name == 'Space Joker' or self.ability.name == 'Egg' or
+            self.ability.name == 'Burglar' then
     elseif self.ability.name == 'Blackboard' then
         local playing_hand = next(G.play.cards)
         local black_suits, all_cards = 0, 0
