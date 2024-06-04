@@ -520,8 +520,12 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = "+", colour = G.C.MULT }),
             create_display_text_object({ ref_table = self.ability, ref_value = "mult", colour = G.C.MULT })
         }
-    elseif self.ability.name == 'Space Joker' or self.ability.name == 'Egg' or
-        self.ability.name == 'Burglar' then
+    elseif self.ability.name == 'Space Joker' or self.ability.name == 'Burglar' then
+    elseif self.ability.name == 'Egg' then
+        text_rows[1] = {
+            create_display_text_object({ text = "$", colour = G.C.GOLD }),
+            create_display_text_object({ ref_table = self, ref_value = "sell_cost", colour = G.C.GOLD })
+        }
     elseif self.ability.name == 'Blackboard' then
         text_rows[1] = {
             create_display_border_text_object({ create_display_text_object({ text = "X" }),
@@ -1381,7 +1385,7 @@ function Card:calculate_joker_display()
         self.joker_display_values.mult = (G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played) or 0
     elseif self.ability.name == 'Ride the Bus' then
     elseif self.ability.name == 'Space Joker' or self.ability.name == 'Egg' or
-        self.ability.name == 'Burglar' then
+            self.ability.name == 'Burglar' then
     elseif self.ability.name == 'Blackboard' then
         local playing_hand = next(G.play.cards)
         local black_suits, all_cards = 0, 0
