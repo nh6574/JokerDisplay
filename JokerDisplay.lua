@@ -1224,7 +1224,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit(self.ability.extra.suit) then
-                mult = mult + self.ability.extra.s_mult
+                mult = mult + self.ability.extra.s_mult * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.mult = mult
@@ -1277,7 +1277,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() == 8 then
-                count = count + 1
+                count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.count = count
@@ -1291,7 +1291,7 @@ function Card:calculate_joker_display()
         local temp_card = nil
         for i = 1, #G.hand.cards do
             if not G.hand.cards[i].highlighted and temp_ID >= G.hand.cards[i].base.id and G.hand.cards[i].ability.effect ~= 'Stone Card' then
-                temp_Mult = G.hand.cards[i].base.nominal
+                temp_Mult = G.hand.cards[i].base.nominal * (G.hand.cards[i]:get_seal() == 'Red' and 2 or 1)
                 temp_ID = G.hand.cards[i].base.id
                 temp_card = G.hand.cards[i]
             end
@@ -1308,7 +1308,7 @@ function Card:calculate_joker_display()
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() == 2 or v:get_id() == 3 or v:get_id() == 5
                 or v:get_id() == 8 or v:get_id() == 14 then
-                mult = mult + self.ability.extra
+                mult = mult + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.mult = mult
@@ -1320,7 +1320,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
-                chips = chips + self.ability.extra
+                chips = chips + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.chips = chips
@@ -1337,7 +1337,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() <= 10 and v:get_id() >= 0 and v:get_id() % 2 == 0 then
-                mult = mult + self.ability.extra
+                mult = mult + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.mult = mult
@@ -1348,7 +1348,7 @@ function Card:calculate_joker_display()
         for k, v in pairs(scoring_hand) do
             if not v.debuff and ((v:get_id() <= 10 and v:get_id() >= 0 and
                     v:get_id() % 2 == 1) or (v:get_id() == 14)) then
-                chips = chips + self.ability.extra
+                chips = chips + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.chips = chips
@@ -1358,8 +1358,8 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() == 14 then
-                chips = chips + self.ability.extra.chips
-                mult = mult + self.ability.extra.mult
+                chips = chips + self.ability.extra.chips * (v:get_seal() == 'Red' and 2 or 1)
+                mult = mult + self.ability.extra.mult * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.mult = mult
@@ -1370,7 +1370,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
-                count = count + 1
+                count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.count = count
@@ -1474,7 +1474,7 @@ function Card:calculate_joker_display()
         for k, v in ipairs(G.hand.cards) do
             if playing_hand or not v.highlighted then
                 if not v.debuff and v:get_id() == 13 then
-                    count = count + 1
+                    count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
                 end
             end
         end
@@ -1503,13 +1503,15 @@ function Card:calculate_joker_display()
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_face = nil
+        local has_red_seal = false
         for i = 1, #scoring_hand do
             if scoring_hand[i]:is_face() then
-                first_face = scoring_hand[i];
+                first_face = scoring_hand[i]
+                has_red_seal = first_face:get_seal() == 'Red'
                 break
             end
         end
-        self.joker_display_values.x_mult = first_face and self.ability.extra or 1
+        self.joker_display_values.x_mult = first_face and (self.ability.extra * (has_red_seal and 2 or 1)) or 1
     elseif self.ability.name == 'Gift Card' or self.ability.name == 'Turtle Bean' then
     elseif self.ability.name == 'Erosion' then
         self.joker_display_values.mult = math.max(0,
@@ -1520,7 +1522,7 @@ function Card:calculate_joker_display()
         for k, v in ipairs(G.hand.cards) do
             if playing_hand or not v.highlighted then
                 if v:is_face() then
-                    count = count + 1
+                    count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
                 end
             end
         end
@@ -1575,7 +1577,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit(G.GAME.current_round.ancient_card.suit) then
-                count = count + 1
+                count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.x_mult = tonumber(string.format("%.2f", (self.ability.extra ^ count)))
@@ -1587,8 +1589,8 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and (v:get_id() == 10 or v:get_id() == 4) then
-                chips = chips + self.ability.extra.chips
-                mult = mult + self.ability.extra.mult
+                chips = chips + self.ability.extra.chips * (v:get_seal() == 'Red' and 2 or 1)
+                mult = mult + self.ability.extra.mult * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.chips = chips
@@ -1602,7 +1604,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
-                mult = mult + self.ability.extra
+                mult = mult + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.mult = mult
@@ -1613,7 +1615,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v.ability.name == 'Gold Card' then
-                dollars = dollars + self.ability.extra
+                dollars = dollars + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.dollars = dollars
@@ -1636,7 +1638,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Diamonds") then
-                dollars = dollars + self.ability.extra
+                dollars = dollars + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.dollars = dollars
@@ -1646,7 +1648,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Hearts") then
-                count = count + 1
+                count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.count = count
@@ -1657,7 +1659,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Spades") then
-                chips = chips + self.ability.extra
+                chips = chips + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.chips = chips
@@ -1667,7 +1669,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Clubs") then
-                mult = mult + self.ability.extra
+                mult = mult + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.mult = mult
@@ -1721,7 +1723,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit(G.GAME.current_round.idol_card.suit) and v:get_id() == G.GAME.current_round.idol_card.id then
-                count = count + 1
+                count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.x_mult = self.ability.extra ^ count
@@ -1801,7 +1803,7 @@ function Card:calculate_joker_display()
         for k, v in ipairs(G.hand.cards) do
             if playing_hand or not v.highlighted then
                 if not v.debuff and v:get_id() == 12 then
-                    mult = mult + self.ability.extra
+                    mult = mult + self.ability.extra * (v:get_seal() == 'Red' and 2 or 1)
                 end
             end
         end
@@ -1823,7 +1825,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and (v:get_id() == 13 or v:get_id() == 12) then
-                count = count + 1
+                count = count + 1 * (v:get_seal() == 'Red' and 2 or 1)
             end
         end
         self.joker_display_values.x_mult = self.ability.extra ^ count
