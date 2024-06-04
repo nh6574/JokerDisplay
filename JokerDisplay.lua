@@ -282,7 +282,7 @@ G.FUNCS.joker_display_style_override = function(e)
     elseif card.ability.name == 'Blueprint' or card.ability.name == 'Brainstorm' then
         if e.children and e.children[1] then
             e.children[1].children[1].config.colour = card.ability.blueprint_compat == 'compatible' and G.C.GREEN or
-            G.C.RED
+                G.C.RED
         end
     end
 end
@@ -732,8 +732,12 @@ function Card:initialize_joker_display()
     elseif self.ability.name == 'Turtle Bean' then
         text_rows[1] = {
             create_display_text_object({ text = "(+", colour = G.C.UI.TEXT_INACTIVE }),
-            create_display_text_object({ ref_table = self.ability.extra, ref_value = "h_size", colour = G.C.UI
-            .TEXT_INACTIVE }),
+            create_display_text_object({
+                ref_table = self.ability.extra,
+                ref_value = "h_size",
+                colour = G.C.UI
+                    .TEXT_INACTIVE
+            }),
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE }),
         }
     elseif self.ability.name == 'Erosion' then
@@ -1096,8 +1100,18 @@ function Card:initialize_joker_display()
                 { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) },
                 G.C.XMULT)
         }
-    elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' or
-        self.ability.name == 'Burnt Joker' then
+    elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' then
+    elseif self.ability.name == 'Burnt Joker' then
+        text_rows[1] = {
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE }),
+            create_display_text_object({
+                ref_table = self.joker_display_values,
+                ref_value = "active",
+                colour = G.C.UI
+                    .TEXT_INACTIVE
+            }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE }),
+        }
     elseif self.ability.name == 'Bootstraps' then
         text_rows[1] = {
             create_display_text_object({ text = "+", colour = G.C.MULT }),
@@ -1809,8 +1823,9 @@ function Card:calculate_joker_display()
         self.joker_display_values.active = self.ability.driver_tally and self.ability.driver_tally >= 16
         self.joker_display_values.x_mult = self.joker_display_values.active and ("X" .. self.ability.extra) or
             ("(" .. (self.ability.driver_tally or '0') .. "/16)")
-    elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' or
-        self.ability.name == 'Burnt Joker' then
+    elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' then
+    elseif self.ability.name == 'Burnt Joker' then
+        self.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and localize("k_active_ex") or "Inactive")
     elseif self.ability.name == 'Bootstraps' then
         self.joker_display_values.mult = G.GAME and
             self.ability.extra.mult *
