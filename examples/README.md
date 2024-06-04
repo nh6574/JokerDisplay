@@ -25,7 +25,7 @@ These Jokers don't display any infromation unless they're enhanced.
 | **Hiker** | **Riff-raff** | **Shortcut** | **Midas Mask** | **Gift Card** |
 | **Hallucination** | **Juggler** | **Drunkard** | **Diet Cola** | **Sock and Buskin** |
 | **Troubadour** | **Certificate** | **Smeared Joker** | **Hanging Chad** | **Merry Andy** |
-| **Oops! All 6s** | **Cartomancer** | **Astronomer** | **Burnt Joker** | **Perkeo** |
+| **Oops! All 6s** | **Cartomancer** | **Astronomer** | **Perkeo** |  |
 
 ![Blank Joker example 1](02_blank_joker_1.png)
 ![Blank Joker example 2](02_blank_joker_2.png)
@@ -193,18 +193,19 @@ Note:
 ![Conditional Jokers 2](09_conditional_jokers_3.png)
 ![Conditional Jokers Example 2](09_conditional_jokers_4.png)
 
-|  |  |  |
-|     :---:      |     :---:      |     :---:      |
-| **Chicot** | **Invisible Joker** | **Driver's License** |
+|  |  |  |  |
+|     :---:      |     :---:      |     :---:      |     :---:      |
+| **Chicot** | **Invisible Joker** | **Driver's License** | **Burnt Joker** |
 
 ![Conditional Jokers 3](09_conditional_jokers_5.png)
 ![Conditional Jokers Example 3](09_conditional_jokers_6.png)
+![Conditional Jokers 4](09_conditional_jokers_7.png)
 
 ### Seltzer
 
-Displays the ramaining uses.
+Displays the remaining uses.
 
-![Seltzer](09_conditional_jokers_7.png)
+![Seltzer](09_conditional_jokers_8.png)
 
 ### Blueprint and Brainstorm
 
