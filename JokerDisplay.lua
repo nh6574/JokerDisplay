@@ -9,7 +9,6 @@
 
 --- UPDATE CONDITIONS
 
---TODO: check which update conditions are missing
 local node_stop_drag_ref = Node.stop_drag
 function Node:stop_drag()
     node_stop_drag_ref(self)
@@ -699,7 +698,6 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
         }
     elseif self.ability.name == 'Obelisk' then
-        --It only shows one hand even if tied, I don't think there's a way to show more without clutering the UI (maybe with images?)
         text_rows[1] = {
             create_display_border_text_object({ create_display_text_object({ text = "X" }),
                 create_display_text_object({ ref_table = self.ability, ref_value = "x_mult" }) }, G.C.XMULT)
@@ -998,7 +996,6 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
         }
     elseif self.ability.name == 'Blueprint' then
-        --TODO: Display the other joker's info when compatible
         text_rows[1] = {
             create_display_text_object({ ref_table = self.ability, ref_value = "blueprint_compat" }),
         }
@@ -1079,7 +1076,6 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE }),
         }
     elseif self.ability.name == 'Brainstorm' then
-        --TODO: Display the other joker's info when compatible
         text_rows[1] = {
             create_display_text_object({ ref_table = self.ability, ref_value = "blueprint_compat" }),
         }
@@ -1100,7 +1096,6 @@ function Card:initialize_joker_display()
                 { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) },
                 G.C.XMULT)
         }
-        --{ create_display_text_object({ text = "(" .. (self.ability.driver_tally or '0') .. "/16)", colour = G.C.UI.TEXT_INACTIVE } )}
     elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' or
         self.ability.name == 'Burnt Joker' then
     elseif self.ability.name == 'Bootstraps' then
@@ -1229,7 +1224,6 @@ function Card:calculate_joker_display()
     if self.ability.name == 'Joker' then
     elseif self.ability.name == 'Greedy Joker' or self.ability.name == 'Lusty Joker' or
         self.ability.name == 'Wrathful Joker' or self.ability.name == 'Gluttonous Joker' then
-        --TODO: Make it work with Vampire on Stone Card
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
@@ -1269,7 +1263,6 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Joker Stencil' then
     elseif self.ability.name == 'Four Fingers' or self.ability.name == 'Mime' or
         self.ability.name == 'Credit Card' then
-        --TODO: Calculate Mime retriggers for other jokers?
     elseif self.ability.name == 'Ceremonial Dagger' then
     elseif self.ability.name == 'Banner' then
         self.joker_display_values.chips = self.ability.extra *
@@ -1279,7 +1272,6 @@ function Card:calculate_joker_display()
             (G.GAME and G.GAME.current_round and G.GAME.current_round.discards_left <= self.ability.extra.d_remaining and 1 or 0)
     elseif self.ability.name == 'Marble Joker' then
     elseif self.ability.name == 'Loyalty Card' then
-        --TODO: Fix this so it doesn't update x_mult up until the hand where it became active finishes playing
         self.joker_display_values.loyalty_text = localize { type = 'variable', key = (self.ability.loyalty_remaining == 0 and 'loyalty_active' or 'loyalty_inactive'), vars = { self.ability.loyalty_remaining } }
         self.joker_display_values.x_mult = (self.ability.loyalty_remaining == 0 and self.ability.extra.Xmult or 1)
     elseif self.ability.name == '8 Ball' then
@@ -1413,7 +1405,6 @@ function Card:calculate_joker_display()
         self.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("k_active_ex") or "Inactive")
     elseif self.ability.name == 'Splash' then
     elseif self.ability.name == 'Blue Joker' then
-        --TODO: Fix +0 on load
         self.joker_display_values.chips = self.ability.extra * ((G.deck and G.deck.cards) and #G.deck.cards or 52)
     elseif self.ability.name == 'Sixth Sense' then
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
@@ -1494,7 +1485,6 @@ function Card:calculate_joker_display()
         self.joker_display_values.dollars = self.ability.extra * (self.ability.nine_tally or 0)
     elseif self.ability.name == 'Rocket' then
     elseif self.ability.name == 'Obelisk' then
-        --It only shows one hand even if tied, I don't think there's a way to show more without clutering the UI (maybe with images?)
         local play_more_than = 0
         local most_played_obelisk = 'High Card'
         for k, v in pairs(G.GAME.hands) do
@@ -1636,13 +1626,11 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Acrobat' then
         self.joker_display_values.x_mult = G.GAME and G.GAME.current_round.hands_left == 1 and self.ability.extra or 1
     elseif self.ability.name == 'Sock and Buskin' then
-        --TODO: Calculate retriggers for other jokers?
     elseif self.ability.name == 'Swashbuckler' then
     elseif self.ability.name == 'Troubadour' or self.ability.name == 'Certificate' or
         self.ability.name == 'Smeared Joker' then
     elseif self.ability.name == 'Throwback' then
     elseif self.ability.name == 'Hanging Chad' then
-        --TODO: Calculate retriggers for other jokers?
     elseif self.ability.name == 'Rough Gem' then
         local dollars = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
@@ -1727,7 +1715,6 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Blueprint' then
     elseif self.ability.name == 'Wee Joker' then
     elseif self.ability.name == 'Merry Andy' or self.ability.name == 'Oops! All 6s' then
-        --TODO: Oops! All 6s odds don't update on sell
     elseif self.ability.name == 'The Idol' then
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
@@ -1779,7 +1766,6 @@ function Card:calculate_joker_display()
             suits["Clubs"] > 0
         self.joker_display_values.x_mult = is_seeing_double_hand and self.ability.extra or 1
     elseif self.ability.name == 'Matador' then
-        --TODO: calculate in real time OR figure out a way to display it
         local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
             ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
         self.joker_display_values.active = disableable
