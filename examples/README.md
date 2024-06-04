@@ -21,12 +21,11 @@ These Jokers don't display any infromation unless they're enhanced.
 |  |  |  |  |  |
 |     :---:      |     :---:      |     :---:      |     :---:      |     :---:      |
 | **Four Fingers** | **Mime** | **Credit Card** | **Marble Joker** | **Chaos the Clown** |
-| **Pareidolia** | **Space Joker** | **Egg** | **Burglar** | **Splash** |
+| **Pareidolia** | **Space Joker** | **Burglar** | **Splash** | |
 | **Hiker** | **Riff-raff** | **Shortcut** | **Midas Mask** | **Gift Card** |
-| **Turtle Bean** | **Hallucination** | **Juggler** | **Drunkard** | **Diet Cola** |
-| **Sock and Buskin** | **Troubadour** | **Certificate** | **Smeared Joker** | **Hanging Chad** |
-| **Merry Andy** | **Oops! All 6s** | **Cartomancer** | **Astronomer** | **Burnt Joker** |
-| **Perkeo** |  |  |  |  |
+| **Hallucination** | **Juggler** | **Drunkard** | **Diet Cola** | **Sock and Buskin** |
+| **Troubadour** | **Certificate** | **Smeared Joker** | **Hanging Chad** | **Merry Andy** |
+| **Oops! All 6s** | **Cartomancer** | **Astronomer** | **Burnt Joker** | **Perkeo** |
 
 ![Blank Joker example 1](02_blank_joker_1.png)
 ![Blank Joker example 2](02_blank_joker_2.png)
@@ -37,7 +36,6 @@ These Jokers don't display any infromation unless they're enhanced.
 
 Notes:
 
-- **Turtle Bean** could display remaining turns in the future.
 - **Burnt Joker** could display that it is active on the first hand.
 - Feel free to suggest info these could display.
 
@@ -228,6 +226,7 @@ Any other Joker that increases or decreases value over time, either permanently 
 | **Castle** | **Popcorn** | **Spare Trousers** | **Ramen** | **Lucky Cat** |
 | **Wee Joker** | **Swashbuckler** | **Throwback** | **Campfire** | **Hit the Road** |
 | **Joker Stencil** | **Satellite** | **Bootstraps** | **Canio** | **Yorick** |
+| **Egg** | **Turtle Bean** | | | |
 
 ![Variable Jokers 1](10_variable_jokers_1.png)
 ![Variable Jokers 2](10_variable_jokers_2.png)
@@ -237,6 +236,7 @@ Any other Joker that increases or decreases value over time, either permanently 
 ![Variable Jokers 6](10_variable_jokers_6.png)
 ![Variable Jokers 7](10_variable_jokers_7.png)
 ![Variable Jokers 8](10_variable_jokers_8.png)
+![Variable Jokers 9](10_variable_jokers_9.png)
 
 Notes:
 
