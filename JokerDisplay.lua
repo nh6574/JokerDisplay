@@ -282,7 +282,8 @@ G.FUNCS.joker_display_style_override = function(e)
         end
     elseif card.ability.name == 'Blueprint' or card.ability.name == 'Brainstorm' then
         if e.children and e.children[1] then
-            e.children[1].children[1].config.colour = card.ability.blueprint_compat == 'compatible' and G.C.GREEN or G.C.RED
+            e.children[1].children[1].config.colour = card.ability.blueprint_compat == 'compatible' and G.C.GREEN or
+            G.C.RED
         end
     end
 end
@@ -729,8 +730,14 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.35 }),
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
         }
-    elseif self.ability.name == 'Gift Card' or self.ability.name == 'Turtle Bean' then
-        --TODO: Add expiration to Turtle Bean?
+    elseif self.ability.name == 'Gift Card' then
+    elseif self.ability.name == 'Turtle Bean' then
+        text_rows[1] = {
+            create_display_text_object({ text = "(+", colour = G.C.UI.TEXT_INACTIVE }),
+            create_display_text_object({ ref_table = self.ability.extra, ref_value = "h_size", colour = G.C.UI
+            .TEXT_INACTIVE }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE }),
+        }
     elseif self.ability.name == 'Erosion' then
         text_rows[1] = {
             create_display_text_object({ text = "+", colour = G.C.MULT }),
@@ -993,7 +1000,7 @@ function Card:initialize_joker_display()
     elseif self.ability.name == 'Blueprint' then
         --TODO: Display the other joker's info when compatible
         text_rows[1] = {
-            create_display_text_object({ ref_table=self.ability, ref_value="blueprint_compat" }),
+            create_display_text_object({ ref_table = self.ability, ref_value = "blueprint_compat" }),
         }
     elseif self.ability.name == 'Wee Joker' then
         text_rows[1] = {
@@ -1074,7 +1081,7 @@ function Card:initialize_joker_display()
     elseif self.ability.name == 'Brainstorm' then
         --TODO: Display the other joker's info when compatible
         text_rows[1] = {
-            create_display_text_object({ ref_table=self.ability, ref_value="blueprint_compat" }),
+            create_display_text_object({ ref_table = self.ability, ref_value = "blueprint_compat" }),
         }
     elseif self.ability.name == 'Satellite' then
         text_rows[1] = {
@@ -1303,7 +1310,7 @@ function Card:calculate_joker_display()
         if temp_card and temp_card.debuff then
             temp_Mult = 0
         end
-        self.joker_display_values.mult = (temp_Mult < 15 and temp_Mult*2 or 0)
+        self.joker_display_values.mult = (temp_Mult < 15 and temp_Mult * 2 or 0)
     elseif self.ability.name == 'Chaos the Clown' then
     elseif self.ability.name == 'Fibonacci' then
         local mult = 0
@@ -1385,7 +1392,7 @@ function Card:calculate_joker_display()
         self.joker_display_values.mult = (G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played) or 0
     elseif self.ability.name == 'Ride the Bus' then
     elseif self.ability.name == 'Space Joker' or self.ability.name == 'Egg' or
-            self.ability.name == 'Burglar' then
+        self.ability.name == 'Burglar' then
     elseif self.ability.name == 'Blackboard' then
         local playing_hand = next(G.play.cards)
         local black_suits, all_cards = 0, 0
