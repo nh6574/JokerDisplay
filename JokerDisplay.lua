@@ -57,7 +57,7 @@ end
 ---DISPLAY CONFIGURATION
 function Card:update_joker_display(from)
     if self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
-        sendDebugMessage(self.ability.name .. ((" " .. from) or ""))
+        --sendDebugMessage(self.ability.name .. ((" " .. from) or ""))
 
         if not self.children.joker_display then
             self.joker_display_values = {}
@@ -179,7 +179,20 @@ function joker_display_evaluate_hand(_cards)
     return text, poker_hands, scoring_hand
 end
 
-function calculate_card_triggers(card, scoring_hand, held_in_hand)
+function calculate_leftmost_card(cards)
+    if not cards or type(cards) ~= "table" then
+        return nil
+    end
+    local leftmost = cards[1]
+    for i=1, #cards do
+        if cards[i].T.x < leftmost.T.x then
+            leftmost = cards[i]
+        end
+    end
+    return leftmost
+end
+
+function calculate_card_triggers(card, first_card, held_in_hand)
     if card.debuff then
         return 0
     end
@@ -192,7 +205,7 @@ function calculate_card_triggers(card, scoring_hand, held_in_hand)
         triggers = triggers + (card:is_face() and #find_joker('Sock and Buskin') or 0)
         triggers = triggers + ((card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and #find_joker('Hack') or 0)
         triggers = triggers + (G.GAME.current_round.hands_left == 0 and #find_joker('Dusk') or 0)
-        triggers = triggers + (scoring_hand and card == scoring_hand[1] and #find_joker('Hanging Chad')*2 or 0)
+        triggers = triggers + (first_card and card == first_card and #find_joker('Hanging Chad')*2 or 0)
     end
     triggers = triggers + (card:get_seal() == 'Red' and 1 or 0)
 
@@ -1267,9 +1280,10 @@ function Card:calculate_joker_display()
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit(self.ability.extra.suit) then
-                mult = mult + self.ability.extra.s_mult * calculate_card_triggers(v, scoring_hand)
+                mult = mult + self.ability.extra.s_mult * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.mult = mult
@@ -1318,9 +1332,10 @@ function Card:calculate_joker_display()
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() == 8 then
-                count = count + 1 * calculate_card_triggers(v, scoring_hand)
+                count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.count = count
@@ -1348,10 +1363,11 @@ function Card:calculate_joker_display()
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() == 2 or v:get_id() == 3 or v:get_id() == 5
                 or v:get_id() == 8 or v:get_id() == 14 then
-                mult = mult + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                mult = mult + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.mult = mult
@@ -1361,9 +1377,10 @@ function Card:calculate_joker_display()
         local chips = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
-                chips = chips + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                chips = chips + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.chips = chips
@@ -1378,9 +1395,10 @@ function Card:calculate_joker_display()
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() <= 10 and v:get_id() >= 0 and v:get_id() % 2 == 0 then
-                mult = mult + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                mult = mult + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.mult = mult
@@ -1388,10 +1406,11 @@ function Card:calculate_joker_display()
         local chips = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and ((v:get_id() <= 10 and v:get_id() >= 0 and
                     v:get_id() % 2 == 1) or (v:get_id() == 14)) then
-                chips = chips + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                chips = chips + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.chips = chips
@@ -1399,9 +1418,10 @@ function Card:calculate_joker_display()
         local chips, mult = 0, 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v:get_id() == 14 then
-                local retriggers = calculate_card_triggers(v, scoring_hand)
+                local retriggers = calculate_card_triggers(v, first_card)
                 chips = chips + self.ability.extra.chips * retriggers
                 mult = mult + self.ability.extra.mult * retriggers
             end
@@ -1412,9 +1432,10 @@ function Card:calculate_joker_display()
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
-                count = count + 1 * calculate_card_triggers(v, scoring_hand)
+                count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.count = count
@@ -1545,14 +1566,15 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Photograph' then
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
-        local first_face = nil
-        for i = 1, #scoring_hand do
-            if scoring_hand[i]:is_face() then
-                first_face = scoring_hand[i]
-                break
+        local face_cards = {}
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
+        for k, v in pairs(scoring_hand) do
+            if v:is_face() then
+                table.insert(face_cards, v)
             end
         end
-        self.joker_display_values.x_mult = first_face and (self.ability.extra * calculate_card_triggers(first_face, scoring_hand)) or 1
+        local first_face = calculate_leftmost_card(face_cards)
+        self.joker_display_values.x_mult = first_face and (self.ability.extra * calculate_card_triggers(first_face, first_card)) or 1
     elseif self.ability.name == 'Gift Card' or self.ability.name == 'Turtle Bean' then
     elseif self.ability.name == 'Erosion' then
         self.joker_display_values.mult = math.max(0,
@@ -1616,9 +1638,10 @@ function Card:calculate_joker_display()
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit(G.GAME.current_round.ancient_card.suit) then
-                count = count + 1 * calculate_card_triggers(v, scoring_hand)
+                count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.x_mult = tonumber(string.format("%.2f", (self.ability.extra ^ count)))
@@ -1628,9 +1651,10 @@ function Card:calculate_joker_display()
         local chips, mult = 0, 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and (v:get_id() == 10 or v:get_id() == 4) then
-                local retriggers = calculate_card_triggers(v, scoring_hand)
+                local retriggers = calculate_card_triggers(v, first_card)
                 chips = chips + self.ability.extra.chips * retriggers
                 mult = mult + self.ability.extra.mult * retriggers
             end
@@ -1644,9 +1668,10 @@ function Card:calculate_joker_display()
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
-                mult = mult + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                mult = mult + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.mult = mult
@@ -1655,9 +1680,10 @@ function Card:calculate_joker_display()
         local dollars = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and v.ability.name == 'Gold Card' then
-                dollars = dollars + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                dollars = dollars + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.dollars = dollars
@@ -1676,9 +1702,10 @@ function Card:calculate_joker_display()
         local dollars = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Diamonds") then
-                dollars = dollars + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                dollars = dollars + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.dollars = dollars
@@ -1686,9 +1713,10 @@ function Card:calculate_joker_display()
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Hearts") then
-                count = count + 1 * calculate_card_triggers(v, scoring_hand)
+                count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.count = count
@@ -1697,9 +1725,10 @@ function Card:calculate_joker_display()
         local chips = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Spades") then
-                chips = chips + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                chips = chips + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.chips = chips
@@ -1707,9 +1736,10 @@ function Card:calculate_joker_display()
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit("Clubs") then
-                mult = mult + self.ability.extra * calculate_card_triggers(v, scoring_hand)
+                mult = mult + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.mult = mult
@@ -1760,9 +1790,10 @@ function Card:calculate_joker_display()
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_suit(G.GAME.current_round.idol_card.suit) and v:get_id() == G.GAME.current_round.idol_card.id then
-                count = count + 1 * calculate_card_triggers(v, scoring_hand)
+                count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.x_mult = self.ability.extra ^ count
@@ -1862,9 +1893,10 @@ function Card:calculate_joker_display()
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
+        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if not v.debuff and (v:get_id() == 13 or v:get_id() == 12) then
-                count = count + 1 * calculate_card_triggers(v, scoring_hand)
+                count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
         self.joker_display_values.x_mult = self.ability.extra ^ count
