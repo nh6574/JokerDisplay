@@ -619,7 +619,7 @@ function Card:initialize_joker_display()
         }
     elseif self.ability.name == 'Egg' then
         text_rows[1] = {
-            create_display_text_object({ text = "$", colour = G.C.GOLD }),
+            create_display_text_object({ text = localize('$'), colour = G.C.GOLD }),
             create_display_text_object({ ref_table = self, ref_value = "sell_cost", colour = G.C.GOLD })
         }
     elseif self.ability.name == 'Blackboard' then
