@@ -36,7 +36,6 @@ These Jokers don't display any infromation unless they're enhanced.
 
 Notes:
 
-- **Burnt Joker** could display that it is active on the first hand.
 - Feel free to suggest info these could display.
 
 ### Oops! All 6s
