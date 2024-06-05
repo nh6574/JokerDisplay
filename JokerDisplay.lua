@@ -177,6 +177,30 @@ function joker_display_evaluate_hand(_cards)
     return text, poker_hands, scoring_hand
 end
 
+function calculate_blueprint_copy(card, cycle_count)
+    if cycle_count and cycle_count > #G.jokers.cards + 1 then
+        return nil
+    end
+    local other_joker = nil
+    if card.ability.name == "Blueprint" then
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i] == card then
+                other_joker = G.jokers.cards[i+1]
+            end
+        end
+    elseif card.ability.name == "Brainstorm" then
+        other_joker = G.jokers.cards[1]
+    end
+    if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
+        if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
+            return calculate_blueprint_copy(other_joker, cycle_count and cycle_count+1 or 1)
+        else
+            return other_joker.ability.name
+        end
+    end
+    return nil
+end
+
 function calculate_leftmost_card(cards)
     if not cards or type(cards) ~= "table" then
         return nil
@@ -312,7 +336,7 @@ G.FUNCS.joker_display_style_override = function(e)
         end
     elseif card.ability.name == 'Blueprint' or card.ability.name == 'Brainstorm' then
         if e.children and e.children[1] then
-            e.children[1].children[1].config.colour = card.ability.blueprint_compat == 'compatible' and G.C.GREEN or
+            e.children[1].children[1].config.colour = card.joker_display_values.blueprint_ability_name and G.C.GREEN or
                 G.C.RED
         end
     end
@@ -1038,7 +1062,10 @@ function Card:initialize_joker_display()
         }
     elseif self.ability.name == 'Blueprint' then
         text_rows[1] = {
-            create_display_text_object({ ref_table = self.ability, ref_value = "blueprint_compat" }),
+            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_compat" }),
+        }
+        text_rows[2] = {
+            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui" }),
         }
     elseif self.ability.name == 'Wee Joker' then
         text_rows[1] = {
@@ -1118,7 +1145,10 @@ function Card:initialize_joker_display()
         }
     elseif self.ability.name == 'Brainstorm' then
         text_rows[1] = {
-            create_display_text_object({ ref_table = self.ability, ref_value = "blueprint_compat" }),
+            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_compat" }),
+        }
+        text_rows[2] = {
+            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui" }),
         }
     elseif self.ability.name == 'Satellite' then
         text_rows[1] = {
@@ -1782,6 +1812,10 @@ function Card:calculate_joker_display()
             suits["Clubs"] > 0
         self.joker_display_values.x_mult = is_flower_pot_hand and self.ability.extra or 1
     elseif self.ability.name == 'Blueprint' then
+        local ability_name = calculate_blueprint_copy(self)
+        self.joker_display_values.blueprint_ability_name = ability_name
+        self.joker_display_values.blueprint_ability_name_ui = ability_name or localize("k_none")
+        self.joker_display_values.blueprint_compat = localize('k_'..(self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
     elseif self.ability.name == 'Wee Joker' then
     elseif self.ability.name == 'Merry Andy' or self.ability.name == 'Oops! All 6s' then
     elseif self.ability.name == 'The Idol' then
@@ -1856,6 +1890,10 @@ function Card:calculate_joker_display()
         self.joker_display_values.active = self.ability.invis_rounds >= self.ability.extra and localize("k_active_ex") or
             (self.ability.invis_rounds .. "/" .. self.ability.extra)
     elseif self.ability.name == 'Brainstorm' then
+        local ability_name = calculate_blueprint_copy(self)
+        self.joker_display_values.blueprint_ability_name = ability_name
+        self.joker_display_values.blueprint_ability_name_ui = ability_name or localize("k_none")
+        self.joker_display_values.blueprint_compat = localize('k_'..(self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
     elseif self.ability.name == 'Satellite' then
         local planets_used = 0
         for k, v in pairs(G.GAME.consumeable_usage) do
