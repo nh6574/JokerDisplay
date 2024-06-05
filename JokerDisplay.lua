@@ -1608,7 +1608,8 @@ function Card:calculate_joker_display()
                 play_more_than = v.played
             end
         end
-        self.joker_display_values.x_mult = (G.GAME and G.GAME.hands and G.GAME.hands[text] and G.GAME.hands[text].played >= play_more_than and 1 or self.ability.x_mult)
+        local hand_exits = G.GAME and G.GAME.hands and G.GAME.hands[text]
+        self.joker_display_values.x_mult = (hand_exits and (G.GAME.hands[text].played >= play_more_than and 1 or self.ability.x_mult+self.ability.extra) or self.ability.x_mult)
     elseif self.ability.name == 'Midas Mask' then
     elseif self.ability.name == 'Luchador' then
         local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
