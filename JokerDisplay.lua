@@ -796,18 +796,7 @@ function Card:initialize_joker_display()
     elseif self.ability.name == 'Obelisk' then
         text_rows[1] = {
             create_display_border_text_object({ create_display_text_object({ text = "X" }),
-                create_display_text_object({ ref_table = self.ability, ref_value = "x_mult" }) }, G.C.XMULT)
-        }
-        text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({
-                ref_table = self.joker_display_values,
-                ref_value = "most_played_poker_hand",
-                colour =
-                    G.C.UI.TEXT_INACTIVE,
-                scale = 0.35
-            }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+                create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
     elseif self.ability.name == 'Midas Mask' then
     elseif self.ability.name == 'Luchador' then
@@ -1611,15 +1600,15 @@ function Card:calculate_joker_display()
         self.joker_display_values.dollars = self.ability.extra * (self.ability.nine_tally or 0)
     elseif self.ability.name == 'Rocket' then
     elseif self.ability.name == 'Obelisk' then
+        local hand = G.hand.highlighted
+        local text, _, _ = joker_display_evaluate_hand(hand)
         local play_more_than = 0
-        local most_played_obelisk = 'High Card'
         for k, v in pairs(G.GAME.hands) do
             if v.played >= play_more_than and v.visible then
-                most_played_obelisk = k
                 play_more_than = v.played
             end
         end
-        self.joker_display_values.most_played_poker_hand = most_played_obelisk
+        self.joker_display_values.x_mult = (G.GAME and G.GAME.hands and G.GAME.hands[text] and G.GAME.hands[text].played >= play_more_than and 1 or self.ability.x_mult)
     elseif self.ability.name == 'Midas Mask' then
     elseif self.ability.name == 'Luchador' then
         local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
