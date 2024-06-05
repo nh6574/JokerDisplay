@@ -195,7 +195,7 @@ function calculate_blueprint_copy(card, cycle_count)
         if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
             return calculate_blueprint_copy(other_joker, cycle_count and cycle_count+1 or 1)
         else
-            return other_joker.ability.name
+            return other_joker.config.center.key
         end
     end
     return nil
@@ -1849,7 +1849,7 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Blueprint' then
         local ability_name = calculate_blueprint_copy(self)
         self.joker_display_values.blueprint_ability_name = ability_name
-        self.joker_display_values.blueprint_ability_name_ui = ability_name or localize("k_none")
+        self.joker_display_values.blueprint_ability_name_ui = ability_name and localize{type ='name_text', key = ability_name, set = 'Joker'} or localize("k_none")
         self.joker_display_values.blueprint_compat = localize('k_'..(self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
     elseif self.ability.name == 'Wee Joker' then
     elseif self.ability.name == 'Merry Andy' or self.ability.name == 'Oops! All 6s' then
@@ -1927,7 +1927,7 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Brainstorm' then
         local ability_name = calculate_blueprint_copy(self)
         self.joker_display_values.blueprint_ability_name = ability_name
-        self.joker_display_values.blueprint_ability_name_ui = ability_name or localize("k_none")
+        self.joker_display_values.blueprint_ability_name_ui = ability_name and localize{type ='name_text', key = ability_name, set = 'Joker'} or localize("k_none")
         self.joker_display_values.blueprint_compat = localize('k_'..(self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
     elseif self.ability.name == 'Satellite' then
         local planets_used = 0
