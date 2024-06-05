@@ -201,6 +201,41 @@ function calculate_blueprint_copy(card, cycle_count)
     return nil
 end
 
+function find_joker_or_copy(name, non_debuff)
+    local jokers = {}
+    if not G.jokers or not G.jokers.cards then return {} end
+    for k, v in pairs(G.jokers.cards) do
+      if v and type(v) == 'table' and
+            (v.ability.name == name or
+            v.joker_display_values and v.joker_display_values.blueprint_ability_name and
+            v.joker_display_values.blueprint_ability_name == name) and
+            (non_debuff or not v.debuff) then
+        table.insert(jokers, v)
+      end
+    end
+    for k, v in pairs(G.consumeables.cards) do
+      if v and type(v) == 'table' and
+            (v.ability.name == name or
+            v.joker_display_values and v.joker_display_values.blueprint_ability_name and
+            v.joker_display_values.blueprint_ability_name == name) and
+            (non_debuff or not v.debuff) then
+        table.insert(jokers, v)
+      end
+    end
+
+    local blueprint_count = 0
+    for k, v in pairs(jokers) do
+        if v.ability.name == "Blueprint" or v.ability.name == "Brainstorm" then
+            blueprint_count = blueprint_count + 1
+        end
+    end
+    if blueprint_count >= #jokers then
+        return {}
+    end
+
+    return jokers
+  end
+
 function calculate_leftmost_card(cards)
     if not cards or type(cards) ~= "table" then
         return nil
@@ -221,13 +256,13 @@ function calculate_card_triggers(card, first_card, held_in_hand)
 
     local triggers = 1
 
-    triggers = triggers + (held_in_hand and #find_joker('Mime') or 0)
+    triggers = triggers + (held_in_hand and #find_joker_or_copy('Mime') or 0)
     if not held_in_hand then
-        triggers = triggers + (#find_joker('Seltzer') or 0)
-        triggers = triggers + (card:is_face() and #find_joker('Sock and Buskin') or 0)
-        triggers = triggers + ((card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and #find_joker('Hack') or 0)
-        triggers = triggers + (G.GAME.current_round.hands_left == 0 and #find_joker('Dusk') or 0)
-        triggers = triggers + (first_card and card == first_card and #find_joker('Hanging Chad')*2 or 0)
+        triggers = triggers + (#find_joker_or_copy('Seltzer') or 0)
+        triggers = triggers + (card:is_face() and #find_joker_or_copy('Sock and Buskin') or 0)
+        triggers = triggers + ((card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and #find_joker_or_copy('Hack') or 0)
+        triggers = triggers + (G.GAME.current_round.hands_left == 0 and #find_joker_or_copy('Dusk') or 0)
+        triggers = triggers + (first_card and card == first_card and #find_joker_or_copy('Hanging Chad')*2 or 0)
     end
     triggers = triggers + (card:get_seal() == 'Red' and 1 or 0)
 
@@ -1270,7 +1305,7 @@ function Card:calculate_joker_display()
     self.joker_display_values.mod_end = ""
 
     local joker_edition = self:get_edition()
-    local baseball_enhancements = (self.config.center.rarity == 2 and #find_joker('Baseball Card') or 0)
+    local baseball_enhancements = (self.config.center.rarity == 2 and #find_joker_or_copy('Baseball Card') or 0)
 
     if joker_edition then
         if joker_edition.chip_mod then
