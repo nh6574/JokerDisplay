@@ -1,6 +1,6 @@
 # JokerDisplay - Balatro Mod
 
-Simple Balatro mod that displays information such as modifiers or relevant hands, ranks or suits underneath the Joker.
+Simple Balatro mod that displays information such as modifiers or relevant hands, ranks or suits underneath Jokers.
 
 ## Installation
 
