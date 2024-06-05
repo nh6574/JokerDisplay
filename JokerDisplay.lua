@@ -12,9 +12,7 @@
 local node_stop_drag_ref = Node.stop_drag
 function Node:stop_drag()
     node_stop_drag_ref(self)
-    if self.config and self.config.joker_display then
-        update_all_joker_display("Node.stop_drag")
-    end
+    update_all_joker_display("Node.stop_drag")
 end
 
 local cardarea_emplace_ref = CardArea.emplace
