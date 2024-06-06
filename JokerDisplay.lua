@@ -1134,7 +1134,7 @@ function Card:define_joker_display()
         text_rows[2] = {
             create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui", colour =
-            G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            G.C.ORANGE, scale = 0.3 }),
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Wee Joker' then
@@ -1221,7 +1221,7 @@ function Card:define_joker_display()
         text_rows[2] = {
             create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui", colour =
-            G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            G.C.ORANGE, scale = 0.3 }),
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Satellite' then
