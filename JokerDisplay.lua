@@ -1639,7 +1639,7 @@ function Card:calculate_joker_display()
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local face_cards = {}
-        local first_card = next(G.play.cards) and scoring_hand[1] or calculate_leftmost_card(scoring_hand)
+        local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
             if v:is_face() then
                 table.insert(face_cards, v)
