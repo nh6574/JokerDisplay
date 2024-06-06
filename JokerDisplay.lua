@@ -153,7 +153,7 @@ end
 
 ---HELPER FUNCTIONS
 function joker_display_evaluate_hand(_cards)
-    local text, disp_text, poker_hands, scoring_hand, non_loc_disp_text = G.FUNCS.get_poker_hand_info(_cards)
+    local text, _, poker_hands, scoring_hand, _ = G.FUNCS.get_poker_hand_info(_cards)
 
     local pures = {}
     for i = 1, #_cards do
@@ -185,7 +185,7 @@ function calculate_blueprint_copy(card, cycle_count)
     if card.ability.name == "Blueprint" then
         for i = 1, #G.jokers.cards do
             if G.jokers.cards[i] == card then
-                other_joker = G.jokers.cards[i+1]
+                other_joker = G.jokers.cards[i + 1]
             end
         end
     elseif card.ability.name == "Brainstorm" then
@@ -193,7 +193,7 @@ function calculate_blueprint_copy(card, cycle_count)
     end
     if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
         if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
-            return calculate_blueprint_copy(other_joker, cycle_count and cycle_count+1 or 1)
+            return calculate_blueprint_copy(other_joker, cycle_count and cycle_count + 1 or 1)
         else
             return other_joker.ability.name, other_joker.config.center.key
         end
@@ -205,22 +205,22 @@ function find_joker_or_copy(name, non_debuff)
     local jokers = {}
     if not G.jokers or not G.jokers.cards then return {} end
     for k, v in pairs(G.jokers.cards) do
-      if v and type(v) == 'table' and
+        if v and type(v) == 'table' and
             (v.ability.name == name or
-            v.joker_display_values and v.joker_display_values.blueprint_ability_name and
-            v.joker_display_values.blueprint_ability_name == name) and
+                v.joker_display_values and v.joker_display_values.blueprint_ability_name and
+                v.joker_display_values.blueprint_ability_name == name) and
             (non_debuff or not v.debuff) then
-        table.insert(jokers, v)
-      end
+            table.insert(jokers, v)
+        end
     end
     for k, v in pairs(G.consumeables.cards) do
-      if v and type(v) == 'table' and
+        if v and type(v) == 'table' and
             (v.ability.name == name or
-            v.joker_display_values and v.joker_display_values.blueprint_ability_name and
-            v.joker_display_values.blueprint_ability_name == name) and
+                v.joker_display_values and v.joker_display_values.blueprint_ability_name and
+                v.joker_display_values.blueprint_ability_name == name) and
             (non_debuff or not v.debuff) then
-        table.insert(jokers, v)
-      end
+            table.insert(jokers, v)
+        end
     end
 
     local blueprint_count = 0
@@ -234,14 +234,14 @@ function find_joker_or_copy(name, non_debuff)
     end
 
     return jokers
-  end
+end
 
 function calculate_leftmost_card(cards)
     if not cards or type(cards) ~= "table" then
         return nil
     end
     local leftmost = cards[1]
-    for i=1, #cards do
+    for i = 1, #cards do
         if cards[i].T.x < leftmost.T.x then
             leftmost = cards[i]
         end
@@ -260,9 +260,10 @@ function calculate_card_triggers(card, first_card, held_in_hand)
     if not held_in_hand then
         triggers = triggers + (#find_joker_or_copy('Seltzer') or 0)
         triggers = triggers + (card:is_face() and #find_joker_or_copy('Sock and Buskin') or 0)
-        triggers = triggers + ((card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and #find_joker_or_copy('Hack') or 0)
+        triggers = triggers +
+            ((card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and #find_joker_or_copy('Hack') or 0)
         triggers = triggers + (G.GAME.current_round.hands_left == 0 and #find_joker_or_copy('Dusk') or 0)
-        triggers = triggers + (first_card and card == first_card and #find_joker_or_copy('Hanging Chad')*2 or 0)
+        triggers = triggers + (first_card and card == first_card and #find_joker_or_copy('Hanging Chad') * 2 or 0)
     end
     triggers = triggers + (card:get_seal() == 'Red' and 1 or 0)
 
@@ -370,7 +371,7 @@ G.FUNCS.joker_display_style_override = function(e)
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == 'Blueprint' or card.ability.name == 'Brainstorm' then
-        if e.children and e.children[1] then
+        if e.children and e.children[1] and card.joker_display_values then
             e.children[1].children[1].config.colour = card.joker_display_values.blueprint_ability_name and G.C.GREEN or
                 G.C.RED
         end
@@ -379,9 +380,48 @@ end
 
 ---DISPLAY DEFINITION
 function Card:initialize_joker_display()
-    local text_rows = {}
-
     self:calculate_joker_display()
+
+    local text_rows = self:define_joker_display()
+
+    if not text_rows or not next(text_rows) then
+        text_rows[1] = { create_display_text_object({
+            ref_table = self.joker_display_values,
+            ref_value = "empty",
+            colour =
+                G.C.UI.TEXT_INACTIVE
+        }) }
+    end
+
+    table.insert(text_rows[1],
+        create_display_text_object({
+            ref_table = self.joker_display_values,
+            ref_value = "mod_begin",
+            colour = G.C.UI
+                .TEXT_INACTIVE
+        }))
+    table.insert(text_rows[1],
+        create_display_text_object({ ref_table = self.joker_display_values, ref_value = "chips_mod", colour = G.C.CHIPS }))
+    table.insert(text_rows[1],
+        create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult_mod", colour = G.C.MULT }))
+    local xmult_border = create_display_border_text_object(
+        { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult_mod" }) }, G.C.XMULT)
+    xmult_border.config.padding = 0
+    xmult_border.config.id = "xmult_mod"
+    table.insert(text_rows[1], xmult_border)
+    table.insert(text_rows[1],
+        create_display_text_object({
+            ref_table = self.joker_display_values,
+            ref_value = "mod_end",
+            colour = G.C.UI
+                .TEXT_INACTIVE
+        }))
+
+    return create_display_row_objects(text_rows)
+end
+
+function Card:define_joker_display()
+    local text_rows = {}
 
     if self.ability.name == 'Joker' then
         text_rows[1] = {
@@ -438,8 +478,9 @@ function Card:initialize_joker_display()
             create_display_border_text_object({ create_display_text_object({ text = "X" }),
                 create_display_text_object({ ref_table = self.ability, ref_value = "x_mult" }) }, G.C.XMULT)
         }
-    elseif self.ability.name == 'Four Fingers' or self.ability.name == 'Mime' or
-        self.ability.name == 'Credit Card' then
+    elseif self.ability.name == 'Four Fingers' then
+    elseif self.ability.name == 'Mime' then
+    elseif self.ability.name == 'Credit Card' then
     elseif self.ability.name == 'Ceremonial Dagger' then
         text_rows[1] = {
             create_display_text_object({ text = "+", colour = G.C.MULT }),
@@ -462,15 +503,15 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "loyalty_text",
                 colour = G.C
                     .UI.TEXT_INACTIVE,
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == '8 Ball' then
         text_rows[1] = {
@@ -519,7 +560,7 @@ function Card:initialize_joker_display()
                 text = "(" .. localize("Ace", "ranks") .. ",2,3,5,8)",
                 colour = G.C.UI
                     .TEXT_INACTIVE,
-                scale = 0.35
+                scale = 0.3
             }),
         }
     elseif self.ability.name == 'Steel Joker' then
@@ -533,9 +574,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "chips", colour = G.C.CHIPS })
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Abstract Joker' then
         text_rows[1] = {
@@ -564,7 +605,7 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult", colour = G.C.MULT })
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(10,8,6,4,2)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(10,8,6,4,2)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Odd Todd' then
         text_rows[1] = {
@@ -576,7 +617,7 @@ function Card:initialize_joker_display()
                 text = "(" .. localize("Ace", "ranks") .. ",9,7,5,3)",
                 colour = G.C.UI
                     .TEXT_INACTIVE,
-                scale = 0.35
+                scale = 0.3
             }),
         }
     elseif self.ability.name == 'Scholar' then
@@ -587,7 +628,7 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult", colour = G.C.MULT })
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(" .. localize("k_aces") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = "(" .. localize("k_aces") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Business Card' then
         text_rows[1] = {
@@ -697,7 +738,7 @@ function Card:initialize_joker_display()
                 text = "(" ..
                     localize("Ace", "ranks") .. "+" .. localize('Straight', "poker_hands") .. ")",
                 colour = G.C.UI.TEXT_INACTIVE,
-                scale = 0.35
+                scale = 0.3
             }),
         }
     elseif self.ability.name == 'To Do List' then
@@ -706,15 +747,15 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "dollars", colour = G.C.GOLD }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "to_do_poker_hand",
                 colour =
                     G.C.ORANGE,
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Cavendish' then
         text_rows[1] = {
@@ -753,14 +794,14 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = " " .. localize("k_spectral"), colour = G.C.SECONDARY_SET.Spectral })
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 text = localize(self.ability.extra.poker_hand, 'poker_hands'),
                 colour = G.C
                     .ORANGE,
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Riff-raff' then
     elseif self.ability.name == 'Vampire' then
@@ -809,9 +850,9 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Gift Card' then
     elseif self.ability.name == 'Turtle Bean' then
@@ -847,15 +888,15 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "dollars", colour = G.C.GOLD }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "mail_card_rank",
                 colour = G
                     .C.ORANGE,
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'To the Moon' then
         text_rows[1] = {
@@ -925,13 +966,13 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "ancient_card_suit",
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Ramen' then
         text_rows[1] = {
@@ -946,7 +987,7 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult", colour = G.C.MULT })
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(10,4)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = "(10,4)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Seltzer' then
         text_rows[1] = {
@@ -960,13 +1001,13 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.ability.extra, ref_value = "chips", colour = G.C.CHIPS }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "castle_card_suit",
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Smiley Face' then
         text_rows[1] = {
@@ -974,9 +1015,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult", colour = G.C.MULT })
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("k_face_cards"), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Campfire' then
         text_rows[1] = {
@@ -989,9 +1030,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "dollars", colour = G.C.GOLD }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("k_gold"), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("k_gold"), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Mr. Bones' then
         text_rows[1] = {
@@ -1015,8 +1056,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ text = "+", colour = G.C.MULT }),
             create_display_text_object({ ref_table = self.ability, ref_value = "mult", colour = G.C.MULT })
         }
-    elseif self.ability.name == 'Troubadour' or self.ability.name == 'Certificate' or
-        self.ability.name == 'Smeared Joker' then
+    elseif self.ability.name == 'Troubadour' then
+    elseif self.ability.name == 'Certificate' then
+    elseif self.ability.name == 'Smeared Joker' then
     elseif self.ability.name == 'Throwback' then
         text_rows[1] = {
             create_display_border_text_object({ create_display_text_object({ text = "X" }),
@@ -1029,9 +1071,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "dollars", colour = G.C.GOLD }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("Diamonds", 'suits_plural'), colour = G.C.SUITS["Diamonds"], scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("Diamonds", 'suits_plural'), colour = G.C.SUITS["Diamonds"], scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Bloodstone' then
         text_rows[1] = {
@@ -1054,9 +1096,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "chips", colour = G.C.CHIPS }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("Spades", 'suits_plural'), colour = G.C.SUITS["Spades"], scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("Spades", 'suits_plural'), colour = G.C.SUITS["Spades"], scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Onyx Agate' then
         text_rows[1] = {
@@ -1064,9 +1106,9 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult", colour = G.C.MULT }),
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("Clubs", 'suits_plural'), colour = G.C.SUITS["Clubs"], scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("Clubs", 'suits_plural'), colour = G.C.SUITS["Clubs"], scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Glass Joker' then
         text_rows[1] = {
@@ -1080,30 +1122,34 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = "All Suits", colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 })
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = "All Suits", colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Blueprint' then
         text_rows[1] = {
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_compat" }),
         }
         text_rows[2] = {
-            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui" }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui", colour =
+            G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Wee Joker' then
         text_rows[1] = {
             create_display_text_object({ text = "+", colour = G.C.CHIPS }),
             create_display_text_object({ ref_table = self.ability.extra, ref_value = "chips", colour = G.C.CHIPS }),
         }
-    elseif self.ability.name == 'Merry Andy' or self.ability.name == 'Oops! All 6s' then
+    elseif self.ability.name == 'Merry Andy' then
+    elseif self.ability.name == 'Oops! All 6s' then
     elseif self.ability.name == 'The Idol' then
         text_rows[1] = {
             create_display_border_text_object({ create_display_text_object({ text = "X" }),
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "idol_card_rank",
@@ -1111,13 +1157,13 @@ function Card:initialize_joker_display()
                     .C.ORANGE,
                 scale = 0.35
             }),
-            create_display_text_object({ text = " of ", scale = 0.35 }),
+            create_display_text_object({ text = " of ", scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "idol_card_suit",
                 scale = 0.35
             }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Seeing Double' then
         text_rows[1] = {
@@ -1125,11 +1171,11 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("Clubs", 'suits_singular'), colour = G.C.SUITS["Clubs"], scale = 0.35 }),
-            create_display_text_object({ text = "+", scale = 0.35 }),
-            create_display_text_object({ text = localize('k_other'), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("Clubs", 'suits_singular'), colour = G.C.SUITS["Clubs"], scale = 0.3 }),
+            create_display_text_object({ text = "+", scale = 0.3 }),
+            create_display_text_object({ text = localize('k_other'), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Matador' then
         text_rows[1] = {
@@ -1172,7 +1218,10 @@ function Card:initialize_joker_display()
             create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_compat" }),
         }
         text_rows[2] = {
-            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui" }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui", colour =
+            G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Satellite' then
         text_rows[1] = {
@@ -1191,7 +1240,8 @@ function Card:initialize_joker_display()
                 { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) },
                 G.C.XMULT)
         }
-    elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' then
+    elseif self.ability.name == 'Cartomancer' then
+    elseif self.ability.name == 'Astronomer' then
     elseif self.ability.name == 'Burnt Joker' then
         text_rows[1] = {
             create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE }),
@@ -1219,11 +1269,11 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("King", "ranks"), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ",", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
-            create_display_text_object({ text = localize("Queen", "ranks"), colour = G.C.ORANGE, scale = 0.35 }),
-            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("King", "ranks"), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ",", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
+            create_display_text_object({ text = localize("Queen", "ranks"), colour = G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Yorick' then
         text_rows[1] = {
@@ -1231,15 +1281,15 @@ function Card:initialize_joker_display()
                 create_display_text_object({ ref_table = self.ability, ref_value = "x_mult" }) }, G.C.XMULT)
         }
         text_rows[2] = {
-            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
             create_display_text_object({
                 ref_table = self.joker_display_values,
                 ref_value = "yorick_discards",
                 colour = G
                     .C.UI.TEXT_INACTIVE,
-                scale = 0.35
+                scale = 0.3
             }),
-            create_display_text_object({ text = "/" .. self.ability.extra.discards .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }),
+            create_display_text_object({ text = "/" .. self.ability.extra.discards .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
         }
     elseif self.ability.name == 'Chicot' then
         text_rows[1] = {
@@ -1248,40 +1298,7 @@ function Card:initialize_joker_display()
     elseif self.ability.name == 'Perkeo' then
     end
 
-    if not next(text_rows) then
-        text_rows[1] = { create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "empty",
-            colour =
-                G.C.UI.TEXT_INACTIVE
-        }) }
-    end
-
-    table.insert(text_rows[1],
-        create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "mod_begin",
-            colour = G.C.UI
-                .TEXT_INACTIVE
-        }))
-    table.insert(text_rows[1],
-        create_display_text_object({ ref_table = self.joker_display_values, ref_value = "chips_mod", colour = G.C.CHIPS }))
-    table.insert(text_rows[1],
-        create_display_text_object({ ref_table = self.joker_display_values, ref_value = "mult_mod", colour = G.C.MULT }))
-    local xmult_border = create_display_border_text_object(
-        { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult_mod" }) }, G.C.XMULT)
-    xmult_border.config.padding = 0
-    xmult_border.config.id = "xmult_mod"
-    table.insert(text_rows[1], xmult_border)
-    table.insert(text_rows[1],
-        create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "mod_end",
-            colour = G.C.UI
-                .TEXT_INACTIVE
-        }))
-
-    return create_display_row_objects(text_rows)
+    return text_rows
 end
 
 ---DISPLAY CALCULATION
@@ -1367,8 +1384,9 @@ function Card:calculate_joker_display()
         end
         self.joker_display_values.mult = mult
     elseif self.ability.name == 'Joker Stencil' then
-    elseif self.ability.name == 'Four Fingers' or self.ability.name == 'Mime' or
-        self.ability.name == 'Credit Card' then
+    elseif self.ability.name == 'Four Fingers' then
+    elseif self.ability.name == 'Mime' then
+    elseif self.ability.name == 'Credit Card' then
     elseif self.ability.name == 'Ceremonial Dagger' then
     elseif self.ability.name == 'Banner' then
         self.joker_display_values.chips = self.ability.extra *
@@ -1497,7 +1515,8 @@ function Card:calculate_joker_display()
         local text, _, _ = joker_display_evaluate_hand(hand)
         self.joker_display_values.mult = (G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played) or 0
     elseif self.ability.name == 'Ride the Bus' then
-    elseif self.ability.name == 'Egg' or self.ability.name == 'Burglar' then
+    elseif self.ability.name == 'Egg' then
+    elseif self.ability.name == 'Burglar' then
     elseif self.ability.name == 'Space Joker' then
         self.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
     elseif self.ability.name == 'Blackboard' then
@@ -1609,7 +1628,7 @@ function Card:calculate_joker_display()
             end
         end
         local hand_exits = G.GAME and G.GAME.hands and G.GAME.hands[text]
-        self.joker_display_values.x_mult = (hand_exits and (G.GAME.hands[text].played >= play_more_than and 1 or self.ability.x_mult+self.ability.extra) or self.ability.x_mult)
+        self.joker_display_values.x_mult = (hand_exits and (G.GAME.hands[text].played >= play_more_than and 1 or self.ability.x_mult + self.ability.extra) or self.ability.x_mult)
     elseif self.ability.name == 'Midas Mask' then
     elseif self.ability.name == 'Luchador' then
         local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
@@ -1627,8 +1646,10 @@ function Card:calculate_joker_display()
             end
         end
         local first_face = calculate_leftmost_card(face_cards)
-        self.joker_display_values.x_mult = first_face and (self.ability.extra * calculate_card_triggers(first_face, first_card)) or 1
-    elseif self.ability.name == 'Gift Card' or self.ability.name == 'Turtle Bean' then
+        self.joker_display_values.x_mult = first_face and
+            (self.ability.extra * calculate_card_triggers(first_face, first_card)) or 1
+    elseif self.ability.name == 'Gift Card' then
+    elseif self.ability.name == 'Turtle Bean' then
     elseif self.ability.name == 'Erosion' then
         self.joker_display_values.mult = math.max(0,
             self.ability.extra * (G.playing_cards and (G.GAME.starting_deck_size - #G.playing_cards) or 0))
@@ -1747,8 +1768,9 @@ function Card:calculate_joker_display()
         self.joker_display_values.x_mult = G.GAME and G.GAME.current_round.hands_left == 1 and self.ability.extra or 1
     elseif self.ability.name == 'Sock and Buskin' then
     elseif self.ability.name == 'Swashbuckler' then
-    elseif self.ability.name == 'Troubadour' or self.ability.name == 'Certificate' or
-        self.ability.name == 'Smeared Joker' then
+    elseif self.ability.name == 'Troubadour' then
+    elseif self.ability.name == 'Certificate' then
+    elseif self.ability.name == 'Smeared Joker' then
     elseif self.ability.name == 'Throwback' then
     elseif self.ability.name == 'Hanging Chad' then
     elseif self.ability.name == 'Rough Gem' then
@@ -1839,10 +1861,13 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Blueprint' then
         local ability_name, ability_key = calculate_blueprint_copy(self)
         self.joker_display_values.blueprint_ability_name = ability_name
-        self.joker_display_values.blueprint_ability_name_ui = ability_key and localize{type ='name_text', key = ability_key, set = 'Joker'} or localize("k_none")
-        self.joker_display_values.blueprint_compat = localize('k_'..(self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
+        self.joker_display_values.blueprint_ability_name_ui = ability_key and
+            localize { type = 'name_text', key = ability_key, set = 'Joker' } or "-"
+        self.joker_display_values.blueprint_compat = localize('k_' ..
+            (self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
     elseif self.ability.name == 'Wee Joker' then
-    elseif self.ability.name == 'Merry Andy' or self.ability.name == 'Oops! All 6s' then
+    elseif self.ability.name == 'Merry Andy' then
+    elseif self.ability.name == 'Oops! All 6s' then
     elseif self.ability.name == 'The Idol' then
         local count = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
@@ -1917,8 +1942,10 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Brainstorm' then
         local ability_name, ability_key = calculate_blueprint_copy(self)
         self.joker_display_values.blueprint_ability_name = ability_name
-        self.joker_display_values.blueprint_ability_name_ui = ability_key and localize{type ='name_text', key = ability_key, set = 'Joker'} or localize("k_none")
-        self.joker_display_values.blueprint_compat = localize('k_'..(self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
+        self.joker_display_values.blueprint_ability_name_ui = ability_key and
+            localize { type = 'name_text', key = ability_key, set = 'Joker' } or "-"
+        self.joker_display_values.blueprint_compat = localize('k_' ..
+            (self.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
     elseif self.ability.name == 'Satellite' then
         local planets_used = 0
         for k, v in pairs(G.GAME.consumeable_usage) do
@@ -1942,7 +1969,8 @@ function Card:calculate_joker_display()
         self.joker_display_values.active = self.ability.driver_tally and self.ability.driver_tally >= 16
         self.joker_display_values.x_mult = self.joker_display_values.active and ("X" .. self.ability.extra) or
             ("(" .. (self.ability.driver_tally or '0') .. "/16)")
-    elseif self.ability.name == 'Cartomancer' or self.ability.name == 'Astronomer' then
+    elseif self.ability.name == 'Cartomancer' then
+    elseif self.ability.name == 'Astronomer' then
     elseif self.ability.name == 'Burnt Joker' then
         self.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and localize("k_active_ex") or "Inactive")
     elseif self.ability.name == 'Bootstraps' then
