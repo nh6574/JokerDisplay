@@ -1647,7 +1647,7 @@ function Card:calculate_joker_display()
         end
         local first_face = calculate_leftmost_card(face_cards)
         self.joker_display_values.x_mult = first_face and
-            (self.ability.extra * calculate_card_triggers(first_face, first_card)) or 1
+            (self.ability.extra ^ calculate_card_triggers(first_face, first_card)) or 1
     elseif self.ability.name == 'Gift Card' then
     elseif self.ability.name == 'Turtle Bean' then
     elseif self.ability.name == 'Erosion' then
