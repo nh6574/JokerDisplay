@@ -362,7 +362,8 @@ G.FUNCS.joker_display_style_override = function(e)
     elseif card.ability.name == "Driver's License" then
         if e.children and e.children[1] and card.joker_display_values then
             e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.XMULT or
-                G.C.UI.TEXT_INACTIVE
+                adjust_alpha(G.C.UI.TEXT_INACTIVE, 0)
+            e.children[1].children[1].children[1].config.colour = card.joker_display_values.active and G.C.UI.TEXT_LIGHT or G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Chicot' then
         if e.children and e.children[1] and card.joker_display_values then
