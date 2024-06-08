@@ -319,26 +319,30 @@ end
 
 G.FUNCS.joker_display_style_override = function(e)
     local card = e.config.ref_table
+    local perishable_shift = card.ability.perishable and 2 or 0
 
     if card.ability.name == 'Sixth Sense' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.UI.TEXT_LIGHT or
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and
+                G.C.UI.TEXT_LIGHT or
                 G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Vagabond' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Tarot or
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and
+                G.C.SECONDARY_SET.Tarot or
                 G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Luchador' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
-            e.children[1].children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            e.children[1].children[1 + perishable_shift1].config.colour = card.joker_display_values.active and G.C.GREEN or
+                G.C.RED
+            e.children[1].children[1 + perishable_shift].config.scale = card.joker_display_values.active and 0.4 or 0.3
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == 'Trading Card' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.GOLD or
                 G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Ancient Joker' then
@@ -355,25 +359,29 @@ G.FUNCS.joker_display_style_override = function(e)
         end
     elseif card.ability.name == 'Matador' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GOLD or G.C.RED
-            e.children[1].children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.GOLD or
+                G.C.RED
+            e.children[1].children[1 + perishable_shift].config.scale = card.joker_display_values.active and 0.4 or 0.3
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == "Driver's License" then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.XMULT or
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.XMULT or
                 adjust_alpha(G.C.UI.TEXT_INACTIVE, 0)
-            e.children[1].children[1].children[1].config.colour = card.joker_display_values.active and G.C.UI.TEXT_LIGHT or G.C.UI.TEXT_INACTIVE
+            e.children[1].children[1 + perishable_shift].children[1].config.colour = card.joker_display_values.active and
+                G.C.UI.TEXT_LIGHT or G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Chicot' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
-            e.children[1].children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.GREEN or
+                G.C.RED
+            e.children[1].children[1 + perishable_shift].config.scale = card.joker_display_values.active and 0.4 or 0.3
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == 'Blueprint' or card.ability.name == 'Brainstorm' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1].config.colour = card.joker_display_values.blueprint_ability_name and G.C.GREEN or
+            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values
+                .blueprint_ability_name and G.C.GREEN or
                 G.C.RED
         end
     end
@@ -381,10 +389,11 @@ end
 
 ---DISPLAY DEFINITION
 function Card:initialize_joker_display()
+    
+    self.joker_display_values.is_empty = true
     self:calculate_joker_display()
 
     local text_rows = self:define_joker_display()
-
     if not text_rows or not next(text_rows) then
         text_rows[1] = { create_display_text_object({
             ref_table = self.joker_display_values,
@@ -392,7 +401,19 @@ function Card:initialize_joker_display()
             colour =
                 G.C.UI.TEXT_INACTIVE
         }) }
+    else
+        self.joker_display_values.is_empty = false
+        self.joker_display_values.perishable = self.joker_display_values.perishable..(self.ability.perishable and " " or "")
+        self.joker_display_values.mod_begin = (self.joker_display_values.has_mod and " " or "")..self.joker_display_values.mod_begin
     end
+
+    table.insert(text_rows[1], 1,
+        create_display_text_object({
+            ref_table = self.joker_display_values,
+            ref_value = "perishable",
+            colour = lighten(G.C.PERISHABLE, 0.35),
+            scale = 0.35
+        }))
 
     table.insert(text_rows[1],
         create_display_text_object({
@@ -1133,8 +1154,13 @@ function Card:define_joker_display()
         }
         text_rows[2] = {
             create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
-            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui", colour =
-            G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({
+                ref_table = self.joker_display_values,
+                ref_value = "blueprint_ability_name_ui",
+                colour =
+                    G.C.ORANGE,
+                scale = 0.3
+            }),
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Wee Joker' then
@@ -1220,8 +1246,13 @@ function Card:define_joker_display()
         }
         text_rows[2] = {
             create_display_text_object({ text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }),
-            create_display_text_object({ ref_table = self.joker_display_values, ref_value = "blueprint_ability_name_ui", colour =
-            G.C.ORANGE, scale = 0.3 }),
+            create_display_text_object({
+                ref_table = self.joker_display_values,
+                ref_value = "blueprint_ability_name_ui",
+                colour =
+                    G.C.ORANGE,
+                scale = 0.3
+            }),
             create_display_text_object({ text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 })
         }
     elseif self.ability.name == 'Satellite' then
@@ -1310,6 +1341,8 @@ function Card:calculate_joker_display()
     self.joker_display_values.mult_mod = ""
     self.joker_display_values.x_mult_mod = ""
     self.joker_display_values.mod_end = ""
+    self.joker_display_values.perishable = ""
+    self.joker_display_values.has_mod = false
 
     local joker_edition = self:get_edition()
     local baseball_enhancements = (self.config.center.rarity == 2 and #find_joker_or_copy('Baseball Card') or 0)
@@ -1331,16 +1364,24 @@ function Card:calculate_joker_display()
             self.joker_display_values.x_mult_mod = "X" .. joker_edition.x_mult_mod
         end
         if baseball_enhancements > 0 or joker_edition.chip_mod or joker_edition.mult_mod or joker_edition.x_mult_mod then
-            self.joker_display_values.mod_begin = "("
+            self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ").. "("
             self.joker_display_values.mod_end = ")"
             self.joker_display_values.empty = ""
+            self.joker_display_values.has_mod = true
         end
     elseif baseball_enhancements > 0 then
         local baseball_xmult = find_joker('Baseball Card')[1].ability.extra ^ baseball_enhancements
         baseball_xmult = tonumber(string.format("%.2f", baseball_xmult))
         self.joker_display_values.x_mult_mod = "X" .. baseball_xmult
-        self.joker_display_values.mod_begin = "("
+        self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ").. "("
         self.joker_display_values.mod_end = ")"
+        self.joker_display_values.empty = ""
+        self.joker_display_values.has_mod = true
+    end
+
+    if self.ability.perishable then
+        self.joker_display_values.perishable = "(" .. self.ability.perish_tally .. "/" .. G.GAME.perishable_rounds .. ")"
+        self.joker_display_values.perishable = self.joker_display_values.perishable..(self.joker_display_values.is_empty and "" or " ")
         self.joker_display_values.empty = ""
     end
 
