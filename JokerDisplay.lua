@@ -59,6 +59,8 @@ function Card:update_joker_display(from)
 
         if not self.children.joker_display then
             self.joker_display_values = {}
+
+            --Regular Display
             self.joker_display_nodes = self:initialize_joker_display()
             self.config.joker_display = {
                 n = G.UIT.ROOT,
@@ -99,6 +101,7 @@ function Card:update_joker_display(from)
                 self.children.joker_display.states.drag.can = true
             end
 
+            --Debuff Display
             self.config.joker_display_debuff = {
                 n = G.UIT.ROOT,
                 config = {
@@ -136,6 +139,88 @@ function Card:update_joker_display(from)
                 }
                 self.children.joker_display_debuff.states.collide.can = false
                 self.children.joker_display_debuff.states.drag.can = true
+            end
+
+            --Perishable Display
+            self.config.joker_display_perishable = {
+                n = G.UIT.ROOT,
+                config = {
+                    minh = 0.5,
+                    maxh = 0.5,
+                    minw = 0.75,
+                    maxw = 0.75,
+                    r = 0.001,
+                    padding = 0.1,
+                    align = 'cm',
+                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                    shadow = true,
+                    func = 'joker_display_perishable',
+                    ref_table = self
+                },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm" },
+                        nodes = { { n = G.UIT.R, config = { align = "cm" }, nodes = { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "perishable", colour = lighten(G.C.PERISHABLE, 0.35), scale = 0.35 }) } } }
+                    }
+
+                }
+            }
+
+            self.config.joker_display_perishable_config = {
+                align = "tl",
+                bond = 'Strong',
+                parent = self,
+                offset = {x = 0.8, y = 0},
+            }
+            if self.config.joker_display_perishable then
+                self.children.joker_display_perishable = UIBox {
+                    definition = self.config.joker_display_perishable,
+                    config = self.config.joker_display_perishable_config,
+                }
+                self.children.joker_display_perishable.states.collide.can = false
+                self.children.joker_display_perishable.states.drag.can = true
+            end
+
+            --Rental Display
+            self.config.joker_display_rental = {
+                n = G.UIT.ROOT,
+                config = {
+                    minh = 0.5,
+                    maxh = 0.5,
+                    minw = 0.75,
+                    maxw = 0.75,
+                    r = 0.001,
+                    padding = 0.1,
+                    align = 'cm',
+                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                    shadow = true,
+                    func = 'joker_display_rental',
+                    ref_table = self
+                },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm" },
+                        nodes = { { n = G.UIT.R, config = { align = "cm" }, nodes = { create_display_text_object({ ref_table = self.joker_display_values, ref_value = "rental", colour = G.C.GOLD, scale = 0.35 }) } } }
+                    }
+
+                }
+            }
+
+            self.config.joker_display_rental_config = {
+                align = "tr",
+                bond = 'Strong',
+                parent = self,
+                offset = {x = -0.8, y = 0},
+            }
+            if self.config.joker_display_rental then
+                self.children.joker_display_rental = UIBox {
+                    definition = self.config.joker_display_rental,
+                    config = self.config.joker_display_rental_config,
+                }
+                self.children.joker_display_rental.states.collide.can = false
+                self.children.joker_display_rental.states.drag.can = true
             end
         else
             self:calculate_joker_display()
@@ -310,7 +395,25 @@ end
 
 G.FUNCS.joker_display_debuff = function(e)
     local card = e.config.ref_table
-    if card.debuff then
+    if card.facing ~= 'back' and card.debuff then
+        e.states.visible = true
+    else
+        e.states.visible = false
+    end
+end
+
+G.FUNCS.joker_display_perishable = function(e)
+    local card = e.config.ref_table
+    if card.facing ~= 'back' and card.ability.perishable then
+        e.states.visible = true
+    else
+        e.states.visible = false
+    end
+end
+
+G.FUNCS.joker_display_rental = function(e)
+    local card = e.config.ref_table
+    if card.facing ~= 'back' and card.ability.rental then
         e.states.visible = true
     else
         e.states.visible = false
@@ -319,30 +422,29 @@ end
 
 G.FUNCS.joker_display_style_override = function(e)
     local card = e.config.ref_table
-    local perishable_shift = card.ability.perishable and 2 or 0
 
     if card.ability.name == 'Sixth Sense' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and
+            e.children[1].children[1].config.colour = card.joker_display_values.active and
                 G.C.UI.TEXT_LIGHT or
                 G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Vagabond' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and
+            e.children[1].children[1].config.colour = card.joker_display_values.active and
                 G.C.SECONDARY_SET.Tarot or
                 G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Luchador' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift1].config.colour = card.joker_display_values.active and G.C.GREEN or
+            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
                 G.C.RED
-            e.children[1].children[1 + perishable_shift].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            e.children[1].children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == 'Trading Card' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.GOLD or
+            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
                 G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Ancient Joker' then
@@ -359,28 +461,28 @@ G.FUNCS.joker_display_style_override = function(e)
         end
     elseif card.ability.name == 'Matador' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.GOLD or
+            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
                 G.C.RED
-            e.children[1].children[1 + perishable_shift].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            e.children[1].children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == "Driver's License" then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.XMULT or
+            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.XMULT or
                 adjust_alpha(G.C.UI.TEXT_INACTIVE, 0)
-            e.children[1].children[1 + perishable_shift].children[1].config.colour = card.joker_display_values.active and
+            e.children[1].children[1].children[1].config.colour = card.joker_display_values.active and
                 G.C.UI.TEXT_LIGHT or G.C.UI.TEXT_INACTIVE
         end
     elseif card.ability.name == 'Chicot' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values.active and G.C.GREEN or
+            e.children[1].children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
                 G.C.RED
-            e.children[1].children[1 + perishable_shift].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            e.children[1].children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
             e.UIBox:recalculate(true)
         end
     elseif card.ability.name == 'Blueprint' or card.ability.name == 'Brainstorm' then
         if e.children and e.children[1] and card.joker_display_values then
-            e.children[1].children[1 + perishable_shift].config.colour = card.joker_display_values
+            e.children[1].children[1].config.colour = card.joker_display_values
                 .blueprint_ability_name and G.C.GREEN or
                 G.C.RED
         end
@@ -389,7 +491,6 @@ end
 
 ---DISPLAY DEFINITION
 function Card:initialize_joker_display()
-    
     self.joker_display_values.is_empty = true
     self:calculate_joker_display()
 
@@ -403,17 +504,9 @@ function Card:initialize_joker_display()
         }) }
     else
         self.joker_display_values.is_empty = false
-        self.joker_display_values.perishable = self.joker_display_values.perishable..(self.ability.perishable and " " or "")
-        self.joker_display_values.mod_begin = (self.joker_display_values.has_mod and " " or "")..self.joker_display_values.mod_begin
+        self.joker_display_values.mod_begin = (self.joker_display_values.has_mod and " " or "") ..
+            self.joker_display_values.mod_begin
     end
-
-    table.insert(text_rows[1], 1,
-        create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "perishable",
-            colour = lighten(G.C.PERISHABLE, 0.35),
-            scale = 0.35
-        }))
 
     table.insert(text_rows[1],
         create_display_text_object({
@@ -1341,7 +1434,8 @@ function Card:calculate_joker_display()
     self.joker_display_values.mult_mod = ""
     self.joker_display_values.x_mult_mod = ""
     self.joker_display_values.mod_end = ""
-    self.joker_display_values.perishable = ""
+    self.joker_display_values.perishable = G.GAME.perishable_rounds .. "/" .. G.GAME.perishable_rounds
+    self.joker_display_values.rental = "-$" .. G.GAME.rental_rate
     self.joker_display_values.has_mod = false
 
     local joker_edition = self:get_edition()
@@ -1364,7 +1458,7 @@ function Card:calculate_joker_display()
             self.joker_display_values.x_mult_mod = "X" .. joker_edition.x_mult_mod
         end
         if baseball_enhancements > 0 or joker_edition.chip_mod or joker_edition.mult_mod or joker_edition.x_mult_mod then
-            self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ").. "("
+            self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ") .. "("
             self.joker_display_values.mod_end = ")"
             self.joker_display_values.empty = ""
             self.joker_display_values.has_mod = true
@@ -1373,16 +1467,18 @@ function Card:calculate_joker_display()
         local baseball_xmult = find_joker('Baseball Card')[1].ability.extra ^ baseball_enhancements
         baseball_xmult = tonumber(string.format("%.2f", baseball_xmult))
         self.joker_display_values.x_mult_mod = "X" .. baseball_xmult
-        self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ").. "("
+        self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ") .. "("
         self.joker_display_values.mod_end = ")"
         self.joker_display_values.empty = ""
         self.joker_display_values.has_mod = true
     end
 
     if self.ability.perishable then
-        self.joker_display_values.perishable = "(" .. self.ability.perish_tally .. "/" .. G.GAME.perishable_rounds .. ")"
-        self.joker_display_values.perishable = self.joker_display_values.perishable..(self.joker_display_values.is_empty and "" or " ")
-        self.joker_display_values.empty = ""
+        self.joker_display_values.perishable = self.ability.perish_tally .. "/" .. G.GAME.perishable_rounds
+    end
+
+    if self.ability.rental then
+        self.joker_display_values.rental = "-$" .. G.GAME.rental_rate
     end
 
     if self.ability.name == 'Joker' then
