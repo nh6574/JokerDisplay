@@ -53,6 +53,9 @@ function Card:calculate_joker(context)
 end
 
 ---DISPLAY CONFIGURATION
+
+---Updates the JokerDisplay and initializes it if necessary.
+---@param from string? Optional string with information of where the call is from. For debug purposes.
 function Card:update_joker_display(from)
     if self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
         --sendDebugMessage(self.ability.name .. ((" " .. from) or ""))
@@ -171,7 +174,7 @@ function Card:update_joker_display(from)
                 align = "tl",
                 bond = 'Strong',
                 parent = self,
-                offset = {x = 0.8, y = 0},
+                offset = { x = 0.8, y = 0 },
             }
             if self.config.joker_display_perishable then
                 self.children.joker_display_perishable = UIBox {
@@ -212,7 +215,7 @@ function Card:update_joker_display(from)
                 align = "tr",
                 bond = 'Strong',
                 parent = self,
-                offset = {x = -0.8, y = 0},
+                offset = { x = -0.8, y = 0 },
             }
             if self.config.joker_display_rental then
                 self.children.joker_display_rental = UIBox {
@@ -228,6 +231,8 @@ function Card:update_joker_display(from)
     end
 end
 
+---Updates the JokerDisplay for all jokers and initializes it if necessary.
+---@param from string? Optional string with information of where the call is from. For debug purposes.
 function update_all_joker_display(from)
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
@@ -236,23 +241,29 @@ function update_all_joker_display(from)
     end
 end
 
----HELPER FUNCTIONS
-function joker_display_evaluate_hand(_cards)
-    local text, _, poker_hands, scoring_hand, _ = G.FUNCS.get_poker_hand_info(_cards)
+--HELPER FUNCTIONS
+
+---Returns scoring information about a set of cards. Similar to _G.FUNCS.evaluate_play_.
+---@param cards table Cards to calculate.
+---@return string text Scoring poker hand's non-localized text.
+---@return table poker_hands Poker hands contained in the scoring hand.
+---@return table scoring_hand Scoring cards in hand.
+function joker_display_evaluate_hand(cards)
+    local text, _, poker_hands, scoring_hand, _ = G.FUNCS.get_poker_hand_info(cards)
 
     local pures = {}
-    for i = 1, #_cards do
+    for i = 1, #cards do
         if next(find_joker('Splash')) then
-            scoring_hand[i] = _cards[i]
+            scoring_hand[i] = cards[i]
         else
-            if _cards[i].ability.effect == 'Stone Card' then
+            if cards[i].ability.effect == 'Stone Card' then
                 local inside = false
                 for j = 1, #scoring_hand do
-                    if scoring_hand[j] == _cards[i] then
+                    if scoring_hand[j] == cards[i] then
                         inside = true
                     end
                 end
-                if not inside then table.insert(pures, _cards[i]) end
+                if not inside then table.insert(pures, cards[i]) end
             end
         end
     end
@@ -262,8 +273,13 @@ function joker_display_evaluate_hand(_cards)
     return text, poker_hands, scoring_hand
 end
 
-function calculate_blueprint_copy(card, cycle_count)
-    if cycle_count and cycle_count > #G.jokers.cards + 1 then
+---Returns what Joker the current card (i.e. Blueprint or Brainstorm) is copying.
+---@param card table Blueprint or Brainstorm card to calculate copy.
+---@param _cycle_count integer? Counts how many times the function has recurred to prevent loops.
+---@return string|nil name Copied Joker's non-localized name if any.
+---@return string|nil key Copied Joker's key if any.
+function calculate_blueprint_copy(card, _cycle_count)
+    if _cycle_count and _cycle_count > #G.jokers.cards + 1 then
         return nil, nil
     end
     local other_joker = nil
@@ -278,7 +294,7 @@ function calculate_blueprint_copy(card, cycle_count)
     end
     if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
         if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
-            return calculate_blueprint_copy(other_joker, cycle_count and cycle_count + 1 or 1)
+            return calculate_blueprint_copy(other_joker, _cycle_count and _cycle_count + 1 or 1)
         else
             return other_joker.ability.name, other_joker.config.center.key
         end
@@ -286,6 +302,10 @@ function calculate_blueprint_copy(card, cycle_count)
     return nil, nil
 end
 
+---Returns all held instances of certain Joker, including Blueprint copies. Similar to _find_joker_.
+---@param name string Name of the Joker to find.
+---@param non_debuff boolean? If true also returns debuffed cards.
+---@return table #All Jokers found, including Jokers with copy abilities.
 function find_joker_or_copy(name, non_debuff)
     local jokers = {}
     if not G.jokers or not G.jokers.cards then return {} end
@@ -321,6 +341,9 @@ function find_joker_or_copy(name, non_debuff)
     return jokers
 end
 
+---Returns the leftmost card in a set of cards.
+---@param cards table Cards to calculate.
+---@return table|nil # Leftmost card in hand if any.
 function calculate_leftmost_card(cards)
     if not cards or type(cards) ~= "table" then
         return nil
@@ -334,6 +357,11 @@ function calculate_leftmost_card(cards)
     return leftmost
 end
 
+---Returns how many times the scoring card would be triggered for scoring if played.
+---@param card table Card to calculate.
+---@param first_card table? First card in hand.
+---@param held_in_hand boolean? If the card is held in hand and not a scoring card.
+---@return integer # Times the card would retrigger. (0 if debuffed)
 function calculate_card_triggers(card, first_card, held_in_hand)
     if card.debuff then
         return 0
@@ -355,6 +383,9 @@ function calculate_card_triggers(card, first_card, held_in_hand)
     return triggers
 end
 
+---Creates a G.UIT.T object with JokerDisplay configurations for text display.
+---@param config {text: string?, ref_table: table?, ref_value: string?, scale: number?, colour: table?}
+---@return table
 function create_display_text_object(config)
     local text_node = {}
     if config.ref_table then
@@ -365,14 +396,21 @@ function create_display_text_object(config)
     return text_node
 end
 
-function create_display_border_text_object(nodes, border)
+---Creates a G.UIT.C object with JokerDisplay configurations for text borders (e.g. for XMULT).
+---@param nodes table Nodes contained inside the border.
+---@param border_color table Color of the border.
+---@return table
+function create_display_border_text_object(nodes, border_color)
     return {
         n = G.UIT.C,
-        config = { colour = border, r = 0.05, padding = 0.03, res = 0.15 },
+        config = { colour = border_color, r = 0.05, padding = 0.03, res = 0.15 },
         nodes = nodes
     }
 end
 
+---Creates a G.UIT.R object with JokerDisplay configurations for displaying a row.
+---@param node_rows table Nodes contained in the row.
+---@return table
 function create_display_row_objects(node_rows)
     local row_nodes = {}
 
@@ -420,6 +458,8 @@ G.FUNCS.joker_display_rental = function(e)
     end
 end
 
+---Modifies JokerDisplay's nodes style values dinamically
+---@param e table
 G.FUNCS.joker_display_style_override = function(e)
     local card = e.config.ref_table
 
@@ -490,6 +530,9 @@ G.FUNCS.joker_display_style_override = function(e)
 end
 
 ---DISPLAY DEFINITION
+
+---Initializes nodes for JokerDisplay.
+---@return table # JokerDisplay nodes for the card.
 function Card:initialize_joker_display()
     self.joker_display_values.is_empty = true
     self:calculate_joker_display()
@@ -535,6 +578,8 @@ function Card:initialize_joker_display()
     return create_display_row_objects(text_rows)
 end
 
+---Defines nodes for the joker for JokerDisplay.
+---@return table # JokerDisplay text nodes for the card.
 function Card:define_joker_display()
     local text_rows = {}
 
@@ -1427,6 +1472,8 @@ function Card:define_joker_display()
 end
 
 ---DISPLAY CALCULATION
+
+---Calculates values for JokerDisplay. Saves them to Card.joker_display_values.
 function Card:calculate_joker_display()
     self.joker_display_values.empty = "-"
     self.joker_display_values.mod_begin = ""
