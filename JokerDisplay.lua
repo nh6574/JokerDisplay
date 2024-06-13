@@ -156,7 +156,7 @@ function Card:update_joker_display(from)
                     padding = 0.1,
                     align = 'cm',
                     colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = true,
+                    shadow = false,
                     func = 'joker_display_perishable',
                     ref_table = self
                 },
@@ -197,7 +197,7 @@ function Card:update_joker_display(from)
                     padding = 0.1,
                     align = 'cm',
                     colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = true,
+                    shadow = false,
                     func = 'joker_display_rental',
                     ref_table = self
                 },
