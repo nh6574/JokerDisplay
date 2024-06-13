@@ -2077,32 +2077,32 @@ function Card:calculate_joker_display()
         }
         for i = 1, #scoring_hand do
             if scoring_hand[i].ability.name ~= 'Wild Card' then
-                if scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then
+                if scoring_hand[i]:is_suit('Hearts') then
                     suits["Hearts"] = suits["Hearts"] + 1
-                elseif scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0 then
+                elseif scoring_hand[i]:is_suit('Diamonds') then
                     suits["Diamonds"] = suits["Diamonds"] + 1
-                elseif scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0 then
+                elseif scoring_hand[i]:is_suit('Spades') then
                     suits["Spades"] = suits["Spades"] + 1
-                elseif scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0 then
+                elseif scoring_hand[i]:is_suit('Clubs') then
                     suits["Clubs"] = suits["Clubs"] + 1
                 end
             end
         end
         for i = 1, #scoring_hand do
             if scoring_hand[i].ability.name == 'Wild Card' then
-                if scoring_hand[i]:is_suit('Hearts') and suits["Hearts"] == 0 then
-                    suits["Hearts"] = suits["Hearts"] + 1
+                if scoring_hand[i]:is_suit('Clubs') and suits["Clubs"] == 0 then
+                    suits["Clubs"] = suits["Clubs"] + 1
                 elseif scoring_hand[i]:is_suit('Diamonds') and suits["Diamonds"] == 0 then
                     suits["Diamonds"] = suits["Diamonds"] + 1
                 elseif scoring_hand[i]:is_suit('Spades') and suits["Spades"] == 0 then
                     suits["Spades"] = suits["Spades"] + 1
-                elseif scoring_hand[i]:is_suit('Clubs') and suits["Clubs"] == 0 then
-                    suits["Clubs"] = suits["Clubs"] + 1
+                elseif scoring_hand[i]:is_suit('Hearts') and suits["Hearts"] == 0 then
+                    suits["Hearts"] = suits["Hearts"] + 1
                 end
             end
         end
         local is_seeing_double_hand = (suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0) and
-            suits["Clubs"] > 0
+            (suits["Clubs"] > 0)
         self.joker_display_values.x_mult = is_seeing_double_hand and self.ability.extra or 1
     elseif self.ability.name == 'Matador' then
         local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
