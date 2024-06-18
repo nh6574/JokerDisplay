@@ -1564,7 +1564,7 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Half Joker' then
         local mult = 0
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-        if #hand > 0 and #hand <= self.ability.extra.size then
+        if type(hand) == "table" and #hand > 0 and #hand <= self.ability.extra.size then
             mult = self.ability.extra.mult
         end
         self.joker_display_values.mult = mult
@@ -1589,7 +1589,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and v:get_id() == 8 then
+            if not v.debuff and v:get_id() and v:get_id() == 8 then
                 count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
@@ -1620,7 +1620,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and v:get_id() == 2 or v:get_id() == 3 or v:get_id() == 5
+            if not v.debuff and v:get_id() and v:get_id() == 2 or v:get_id() == 3 or v:get_id() == 5
                 or v:get_id() == 8 or v:get_id() == 14 then
                 mult = mult + self.ability.extra * calculate_card_triggers(v, first_card)
             end
@@ -1652,7 +1652,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and v:get_id() <= 10 and v:get_id() >= 0 and v:get_id() % 2 == 0 then
+            if not v.debuff and v:get_id() and v:get_id() <= 10 and v:get_id() >= 0 and v:get_id() % 2 == 0 then
                 mult = mult + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
@@ -1663,7 +1663,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and ((v:get_id() <= 10 and v:get_id() >= 0 and
+            if not v.debuff and v:get_id() and ((v:get_id() <= 10 and v:get_id() >= 0 and
                     v:get_id() % 2 == 1) or (v:get_id() == 14)) then
                 chips = chips + self.ability.extra * calculate_card_triggers(v, first_card)
             end
@@ -1675,7 +1675,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and v:get_id() == 14 then
+            if not v.debuff and v:get_id() and v:get_id() == 14 then
                 local retriggers = calculate_card_triggers(v, first_card)
                 chips = chips + self.ability.extra.chips * retriggers
                 mult = mult + self.ability.extra.mult * retriggers
@@ -1752,7 +1752,7 @@ function Card:calculate_joker_display()
         local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
         local _, poker_hands, scoring_hand = joker_display_evaluate_hand(hand)
         for k, v in pairs(scoring_hand) do
-            if v:get_id() == 14 then
+            if v:get_id() and v:get_id() == 14 then
                 has_ace = true
             end
         end
@@ -1794,7 +1794,7 @@ function Card:calculate_joker_display()
         local count = 0
         for k, v in ipairs(G.hand.cards) do
             if playing_hand or not v.highlighted then
-                if not v.debuff and v:get_id() == 13 then
+                if not v.debuff and v:get_id() and v:get_id() == 13 then
                     count = count + 1 * calculate_card_triggers(v, nil, true)
                 end
             end
@@ -1808,7 +1808,7 @@ function Card:calculate_joker_display()
         local text, _, _ = joker_display_evaluate_hand(hand)
         local play_more_than = 0
         for k, v in pairs(G.GAME.hands) do
-            if v.played >= play_more_than and v.visible then
+            if v.played and v.played >= play_more_than and v.visible then
                 play_more_than = v.played
             end
         end
@@ -1854,7 +1854,7 @@ function Card:calculate_joker_display()
         local dollars = 0
         local hand = G.hand.highlighted
         for k, v in pairs(hand) do
-            if not v.debuff and v:get_id() == G.GAME.current_round.mail_card.id then
+            if not v.debuff and v:get_id() and v:get_id() == G.GAME.current_round.mail_card.id then
                 dollars = dollars + self.ability.extra
             end
         end
@@ -1876,7 +1876,7 @@ function Card:calculate_joker_display()
         local count = 0
         if G.jokers then
             for k, v in ipairs(G.jokers.cards) do
-                if v.config.center.rarity == 2 then
+                if v.config.center.rarity and v.config.center.rarity == 2 then
                     count = count + 1
                 end
             end
@@ -1912,7 +1912,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and (v:get_id() == 10 or v:get_id() == 4) then
+            if not v.debuff and v:get_id() and (v:get_id() == 10 or v:get_id() == 4) then
                 local retriggers = calculate_card_triggers(v, first_card)
                 chips = chips + self.ability.extra.chips * retriggers
                 mult = mult + self.ability.extra.mult * retriggers
@@ -1941,7 +1941,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and v.ability.name == 'Gold Card' then
+            if not v.debuff and v.ability.name and v.ability.name == 'Gold Card' then
                 dollars = dollars + self.ability.extra * calculate_card_triggers(v, first_card)
             end
         end
@@ -2059,7 +2059,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if v:is_suit(G.GAME.current_round.idol_card.suit) and v:get_id() == G.GAME.current_round.idol_card.id then
+            if v:is_suit(G.GAME.current_round.idol_card.suit) and v:get_id() and v:get_id() == G.GAME.current_round.idol_card.id then
                 count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
@@ -2134,7 +2134,7 @@ function Card:calculate_joker_display()
     elseif self.ability.name == 'Satellite' then
         local planets_used = 0
         for k, v in pairs(G.GAME.consumeable_usage) do
-            if v.set == 'Planet' then
+            if v.set and v.set == 'Planet' then
                 planets_used = planets_used + 1
             end
         end
@@ -2169,7 +2169,7 @@ function Card:calculate_joker_display()
         local _, _, scoring_hand = joker_display_evaluate_hand(hand)
         local first_card = calculate_leftmost_card(scoring_hand)
         for k, v in pairs(scoring_hand) do
-            if not v.debuff and (v:get_id() == 13 or v:get_id() == 12) then
+            if not v.debuff and v:get_id() and (v:get_id() == 13 or v:get_id() == 12) then
                 count = count + 1 * calculate_card_triggers(v, first_card)
             end
         end
