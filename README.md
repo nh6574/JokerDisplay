@@ -8,6 +8,8 @@ Simple Balatro mod that displays information such as modifiers or relevant hands
 2. Download the [latest release](https://github.com/nh6574/JokerDisplay/releases)
 3. Drop JokerDisplay.lua into your Balatro mods folder (%appdata%\Balatro\Mods)
 
+Tested with Steamodded 0.9.8 but it might work with other version or other injectors, as it doesnt use any specific API.
+
 ## Examples
 
 ![Example 1](examples/example_1.png)
