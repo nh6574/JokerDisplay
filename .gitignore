@@ -41,4 +41,7 @@ luac.out
 
 #VS Code
 .vscode
+
+#App Specific
 tk_debug_window.py
+JokerDisplay.zip
