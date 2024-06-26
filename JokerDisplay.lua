@@ -522,7 +522,10 @@ G.FUNCS.joker_display_style_override = function(e)
     local style_function = joker_display_definition and joker_display_definition.style_function
 
     if style_function then
-        style_function(card, line_1, line_2)
+        local recalculate = style_function(card, line_1, line_2)
+        if recalculate then
+            e.UIBox:recalculate(true)
+        end
     end
 end
 
