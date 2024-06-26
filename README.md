@@ -6,9 +6,9 @@ Simple Balatro mod that displays information such as modifiers or relevant hands
 
 1. Install [Steamodded](https://github.com/Steamopollys/Steamodded)
 2. Download the [latest release](https://github.com/nh6574/JokerDisplay/releases)
-3. Drop JokerDisplay.lua into your Balatro mods folder (%appdata%\Balatro\Mods)
+3. Extract JokerDisplay.zip into your Balatro mods folder (%appdata%\Balatro\Mods)
 
-Tested with Steamodded 0.9.8 but it might work with other versions and other injectors, as it doesnt use any specific API.
+Tested with Steamodded 0.9.8 but it should work with 1.0.0.
 
 ## Examples
 
@@ -33,6 +33,39 @@ _For information on all the Jokers, please refer to the [examples document](exam
 - Held Planet cards could display their multiplier if the player has the Observatory voucher.
 
 Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for suggestions or bug reports.
+
+## Mod Support
+
+This mod only supports vanilla jokers but you can add support for it in your mod by defining how the display should look.
+Make sure that JokerDisplay.Definitions is loaded and add a new value with your joker key (ex. JokerDisplay.Definitions\["j_my_custom"\])
+
+Example:
+```lua
+JokerDisplay.Definitions["j_mf_bowlingball"] = {
+  line_1 = {
+    { text = " +",                             colour = G.C.MULT },
+    { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
+  },
+  line_2 = {
+    { text = "(6)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+  },
+  calc_function = function(card)
+    local mult = 0
+    local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
+    local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+    local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
+    for k, v in pairs(scoring_hand) do
+      if not v.debuff and v:get_id() and v:get_id() == 6 then
+        local retriggers = JokerDisplay.calculate_card_triggers(v, first_card)
+        mult = mult + 10 * retriggers
+      end
+    end
+    card.joker_display_values.mult = mult
+  end
+}
+```
+
+Check joker_definitions.lua for a hint on how to implement your own jokers (or modify vanilla ones). Complex custom Jokers might need to inject code into JokerDisplay's functions.
 
 ## Contributing
 
