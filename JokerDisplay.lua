@@ -1,9 +1,10 @@
 --- STEAMODDED HEADER
 --- MOD_NAME: JokerDisplay
 --- MOD_ID: JokerDisplay
+--- PREFIX: jd
 --- MOD_AUTHOR: [nh6574]
---- MOD_DESCRIPTION: Display information underneath Jokers
 --- PRIORITY: -1000
+--- MOD_DESCRIPTION: Display information underneath Jokers
 --- VERSION: 1.3.0
 
 ----------------------------------------------
@@ -13,8 +14,9 @@
 
 JokerDisplay = {}
 
-if SMODS.INIT then -- 0.9.x
-    function SMODS.INIT.JokerDisplay()
+if SMODS["INIT"] then -- 0.9.x
+    local init = SMODS["INIT"]
+    function init.JokerDisplay()
         JokerDisplay.Path = (SMODS.findModByID and SMODS.findModByID('JokerDisplay').path)
         JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
     end
@@ -620,8 +622,6 @@ end
 
 ---Calculates values for JokerDisplay. Saves them to Card.joker_display_values.
 function Card:calculate_joker_display()
-    sendDebugMessage(self.config.center.key)
-
     self.joker_display_values.empty = "-"
     self.joker_display_values.mod_begin = ""
     self.joker_display_values.chips_mod = ""
