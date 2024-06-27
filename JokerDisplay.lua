@@ -3,7 +3,7 @@
 --- MOD_ID: JokerDisplay
 --- PREFIX: jd
 --- MOD_AUTHOR: [nh6574]
---- PRIORITY: -1000
+--- PRIORITY: -100000
 --- MOD_DESCRIPTION: Display information underneath Jokers
 --- VERSION: 1.3.0
 
@@ -233,11 +233,11 @@ end
 
 ---Returns scoring information about a set of cards. Similar to _G.FUNCS.evaluate_play_.
 ---@param cards table Cards to calculate.
----@param count_facedows boolean? If true, counts cards facing back.
+---@param count_facedowns boolean? If true, counts cards facing back.
 ---@return string text Scoring poker hand's non-localized text. "Unknown" if there's a card facedown.
 ---@return table poker_hands Poker hands contained in the scoring hand.
 ---@return table scoring_hand Scoring cards in hand.
-JokerDisplay.evaluate_hand = function(cards, count_facedows)
+JokerDisplay.evaluate_hand = function(cards, count_facedowns)
     local valid_cards = cards
     local has_facedown = false
 
@@ -250,7 +250,7 @@ JokerDisplay.evaluate_hand = function(cards, count_facedows)
         end
     end
 
-    if not count_facedows then
+    if not count_facedowns then
         valid_cards = {}
         for i = 1, #cards do
             if cards[i].facing and not (cards[i].facing == 'back') then
