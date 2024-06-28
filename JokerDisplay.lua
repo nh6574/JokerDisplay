@@ -96,9 +96,22 @@ function Card:update_joker_display(from)
                     {
                         n = G.UIT.R,
                         config = { align = "cm" },
-                        nodes = { { n = G.UIT.R, config = { align = "cm" }, nodes = { { n = G.UIT.T, config = { text = localize("k_debuffed"), scale = 0.4, colour = G.C.UI.TEXT_INACTIVE } } } } }
+                        nodes = {
+                            {
+                                n = G.UIT.R,
+                                config = {
+                                    align = "cm"
+                                },
+                                nodes = {
+                                    JokerDisplay.create_display_text_object({
+                                        text = "" .. localize("k_debuffed"),
+                                        colour =
+                                            G.C.UI.TEXT_INACTIVE
+                                    })
+                                }
+                            }
+                        }
                     }
-
                 }
             }
 
@@ -114,6 +127,71 @@ function Card:update_joker_display(from)
                 }
                 self.children.joker_display_debuff.states.collide.can = false
                 self.children.joker_display_debuff.states.drag.can = true
+            end
+
+            --Debuff Display (with Baseball XMULT)
+            self.config.joker_display_debuff_baseball = {
+                n = G.UIT.ROOT,
+                config = {
+                    minh = 0.6,
+                    maxh = 1.2,
+                    minw = 2,
+                    maxw = 2,
+                    r = 0.001,
+                    padding = 0.1,
+                    align = 'cm',
+                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                    shadow = true,
+                    func = 'joker_display_debuff_baseball',
+                    ref_table = self
+                },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm" },
+                        nodes = {
+                            {
+                                n = G.UIT.R,
+                                config = {
+                                    align = "cm"
+                                },
+                                nodes = {
+                                    JokerDisplay.create_display_text_object({
+                                        text = "" .. localize("k_debuffed") .. " (",
+                                        colour =
+                                            G.C.UI.TEXT_INACTIVE
+                                    }),
+                                    JokerDisplay.create_display_border_text_object(
+                                        { JokerDisplay.create_display_text_object({
+                                            ref_table = self
+                                                .joker_display_values,
+                                            ref_value = "x_mult_mod"
+                                        }) },
+                                        G.C.XMULT),
+                                    JokerDisplay.create_display_text_object({
+                                        text = ")",
+                                        colour =
+                                            G.C.UI.TEXT_INACTIVE
+                                    }),
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            self.config.joker_display_debuff_baseball_config = {
+                align = "bm",
+                bond = 'Strong',
+                parent = self,
+            }
+            if self.config.joker_display_debuff_baseball then
+                self.children.joker_display_debuff_baseball = UIBox {
+                    definition = self.config.joker_display_debuff_baseball,
+                    config = self.config.joker_display_debuff_baseball_config,
+                }
+                self.children.joker_display_debuff_baseball.states.collide.can = false
+                self.children.joker_display_debuff_baseball.states.drag.can = true
             end
 
             --Perishable Display
@@ -422,13 +500,13 @@ JokerDisplay.create_display_object = function(card, config)
     local node = {}
     if config.dynatext then
         return {
-                n = G.UIT.O,
-                config = {
-                    object = DynaText(
-                        deepcopy(config.dynatext)
-                    )
-                }
+            n = G.UIT.O,
+            config = {
+                object = DynaText(
+                    deepcopy(config.dynatext)
+                )
             }
+        }
     end
     if config.border_nodes then
         local inside_nodes = {}
@@ -512,7 +590,16 @@ end
 
 G.FUNCS.joker_display_debuff = function(e)
     local card = e.config.ref_table
-    if not (card.facing == 'back') and card.debuff then
+    if not (card.facing == 'back') and (card.config.center.rarity ~= 2 or #JokerDisplay.find_joker_or_copy('Baseball Card') == 0) and card.debuff then
+        e.states.visible = true
+    else
+        e.states.visible = false
+    end
+end
+
+G.FUNCS.joker_display_debuff_baseball = function(e)
+    local card = e.config.ref_table
+    if not (card.facing == 'back') and card.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') > 0 and card.debuff then
         e.states.visible = true
     else
         e.states.visible = false
@@ -659,7 +746,7 @@ function Card:calculate_joker_display()
     local joker_edition = self:get_edition()
     local baseball_enhancements = (self.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') or 0)
 
-    if joker_edition then
+    if joker_edition and not card.debuff then
         if joker_edition.chip_mod then
             self.joker_display_values.chips_mod = "+" ..
                 joker_edition.chip_mod .. (((joker_edition.mult_mod or joker_edition.x_mult_mod) and " ") or "")
