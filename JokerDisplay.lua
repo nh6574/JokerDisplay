@@ -740,7 +740,7 @@ function Card:calculate_joker_display()
     self.joker_display_values.x_mult_mod = ""
     self.joker_display_values.mod_end = ""
     self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
-    self.joker_display_values.rental = "-$" .. G.GAME.rental_rate
+    self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
     self.joker_display_values.has_mod = false
 
     local joker_edition = self:get_edition()
