@@ -11,7 +11,7 @@
 --- --- ref_table string | Location of the reference table for ref_value. (Ignored if ref_value doesn't exist) (ex. "card.joker_display_values" or "card.ability")
 --- --- border_nodes table | Ignore all previous parameters and creates a border object with the specified text blocks. (The text blocks use the parameters above)
 --- --- border_colour table | Color of the border around boder_nodes. (Used for X Mult. Default = G.C.XMULT)
---- --- custom_node table | Ignore all previous parameters and use a custom node instead. (See Misprint for example)
+--- --- dynatext table | Ignore all previous parameters and use a dynatext with this configuration instead. (See Misprint for example)
 --- calc_function function | Calculation function that will be called every time the display updates.
 --- --- Arguments:
 --- --- card table | Joker card.
@@ -434,28 +434,23 @@ return {
         line_1 = {
             { text = "+", colour = G.C.MULT },
             {
-                custom_node = {
-                    n = G.UIT.O,
-                    config = {
-                        object = DynaText({
-                            string = (
-                                function()
-                                    local r_mult = {}
-                                    for i = G.P_CENTERS["j_misprint"].config.extra.min, G.P_CENTERS["j_misprint"].config.extra.max do
-                                        r_mult[#r_mult + 1] = tostring(i)
-                                    end
-                                    return r_mult
-                                end
-                            )(),
-                            colours = { G.C.RED },
-                            pop_in_rate = 9999999,
-                            silent = true,
-                            random_element = true,
-                            pop_delay = 0.5,
-                            scale = 0.4,
-                            min_cycle_time = 0
-                        })
-                    }
+                dynatext = {
+                    string = (
+                        function()
+                            local r_mult = {}
+                            for i = G.P_CENTERS["j_misprint"].config.extra.min, G.P_CENTERS["j_misprint"].config.extra.max do
+                                r_mult[#r_mult + 1] = tostring(i)
+                            end
+                            return r_mult
+                        end
+                    )(),
+                    colours = { G.C.RED },
+                    pop_in_rate = 9999999,
+                    silent = true,
+                    random_element = true,
+                    pop_delay = 0.5,
+                    scale = 0.4,
+                    min_cycle_time = 0
                 }
             }
         }

@@ -230,6 +230,24 @@ local function strsplit(str, sep)
     return t
 end
 
+--- Deep copies a table
+---@param orig table? Table to copy
+---@return table? copy
+function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
 ---Returns scoring information about a set of cards. Similar to _G.FUNCS.evaluate_play_.
 ---@param cards table Cards to calculate.
 ---@param count_facedowns boolean? If true, counts cards facing back.
@@ -398,12 +416,19 @@ end
 
 ---Creates an object with JokerDisplay configurations.
 ---@param card table Reference card
----@param config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, custom_node: table?} Node configuration
+---@param config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?} Node configuration
 ---@return table
 JokerDisplay.create_display_object = function(card, config)
     local node = {}
-    if config.custom_node then
-        return config.custom_node
+    if config.dynatext then
+        return {
+                n = G.UIT.O,
+                config = {
+                    object = DynaText(
+                        deepcopy(config.dynatext)
+                    )
+                }
+            }
     end
     if config.border_nodes then
         local inside_nodes = {}
