@@ -628,7 +628,7 @@ function Card:calculate_joker_display()
     self.joker_display_values.mult_mod = ""
     self.joker_display_values.x_mult_mod = ""
     self.joker_display_values.mod_end = ""
-    self.joker_display_values.perishable = G.GAME.perishable_rounds .. "/" .. G.GAME.perishable_rounds
+    self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
     self.joker_display_values.rental = "-$" .. G.GAME.rental_rate
     self.joker_display_values.has_mod = false
 
@@ -668,11 +668,11 @@ function Card:calculate_joker_display()
     end
 
     if self.ability.perishable then
-        self.joker_display_values.perishable = self.ability.perish_tally .. "/" .. G.GAME.perishable_rounds
+        self.joker_display_values.perishable = (self.ability.perish_tally or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
     end
 
     if self.ability.rental then
-        self.joker_display_values.rental = "-$" .. G.GAME.rental_rate
+        self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
     end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
