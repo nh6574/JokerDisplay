@@ -1,10 +1,9 @@
 --- STEAMODDED HEADER
 --- MOD_NAME: JokerDisplay
 --- MOD_ID: JokerDisplay
---- PREFIX: jd
 --- MOD_AUTHOR: [nh6574]
---- PRIORITY: -100000
 --- MOD_DESCRIPTION: Display information underneath Jokers
+--- PRIORITY: -100000
 --- VERSION: 1.3.2
 
 ----------------------------------------------
