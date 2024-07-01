@@ -746,7 +746,7 @@ function Card:calculate_joker_display()
     local joker_edition = self:get_edition()
     local baseball_enhancements = (self.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') or 0)
 
-    if joker_edition and not card.debuff then
+    if joker_edition and not self.debuff then
         if joker_edition.chip_mod then
             self.joker_display_values.chips_mod = "+" ..
                 joker_edition.chip_mod .. (((joker_edition.mult_mod or joker_edition.x_mult_mod) and " ") or "")
