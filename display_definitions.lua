@@ -477,7 +477,8 @@ return {
             for i = 1, #G.hand.cards do
                 if not G.hand.cards[i].highlighted and temp_ID >= G.hand.cards[i].base.id
                     and G.hand.cards[i].ability.effect ~= 'Stone Card' then
-                    temp_Mult = G.hand.cards[i].base.nominal * JokerDisplay.calculate_card_triggers(G.hand.cards[i], nil, true)
+                    temp_Mult = G.hand.cards[i].base.nominal *
+                    JokerDisplay.calculate_card_triggers(G.hand.cards[i], nil, true)
                     temp_ID = G.hand.cards[i].base.id
                     temp_card = G.hand.cards[i]
                 end
@@ -788,16 +789,18 @@ return {
         style_function = function(card, line_1, line_2)
             if line_1 then
                 line_1.children[1].config.colour = card.joker_display_values.active and G.C.UI.TEXT_LIGHT or
-                G.C.UI.TEXT_INACTIVE
+                    G.C.UI.TEXT_INACTIVE
             end
             return false
         end
     },
     j_constellation = {
-        {
-            border_nodes = {
-                { text = "X" },
-                { ref_table = "card.ability", ref_value = "x_mult" }
+        line_1 = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.ability", ref_value = "x_mult" }
+                }
             }
         }
     },
@@ -1357,9 +1360,9 @@ return {
             { ref_table = "card.ability.extra", ref_value = "chips", colour = G.C.CHIPS },
         },
         line_2 = {
-            { text = "(",                            colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "castle_card_suit", scale = 0.3 },
-            { text = ")",                            colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 }
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 }
         },
         calc_function = function(card)
             card.joker_display_values.castle_card_suit = localize(G.GAME.current_round.castle_card.suit, 'suits_singular')
@@ -2022,7 +2025,7 @@ return {
             if line_1 then
                 line_1.children[1].config.colour = card.joker_display_values.active and G.C.XMULT or
                     adjust_alpha(G.C.UI.TEXT_INACTIVE, 0)
-                    line_1.children[1].children[1].config.colour = card.joker_display_values.active and
+                line_1.children[1].children[1].config.colour = card.joker_display_values.active and
                     G.C.UI.TEXT_LIGHT or G.C.UI.TEXT_INACTIVE
             end
             return false
@@ -2102,8 +2105,8 @@ return {
             }
         },
         line_2 = {
-            { text = "(",                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
-            { ref_table = "card.joker_display_values",          ref_value = "yorick_discards", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.joker_display_values",                            ref_value = "yorick_discards", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = "/" .. G.P_CENTERS["j_yorick"].config.extra.discards .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
@@ -2123,8 +2126,8 @@ return {
             if line_1 then
                 line_1.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.RED
-                    line_1.children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
-               return true
+                line_1.children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+                return true
             end
             return false
         end
