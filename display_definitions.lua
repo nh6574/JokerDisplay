@@ -26,7 +26,7 @@
 --- --- Returns:
 --- --- recalculate boolean | Whether to recalculate the UI or not. (Generally return true if there's a change in scale, false otherwise)
 --- --- Notes:
---- --- If border_colour is used, the text object if a child of that child.
+--- --- If border_colour is used, the text object is a child of that child.
 --- --- (ex. line_1.children[1].children[1].colour to change the text colour)
 
 return {
