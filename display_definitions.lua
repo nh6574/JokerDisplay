@@ -10,7 +10,7 @@
 --- --- ref_value string | Value to reference for the text.
 --- --- ref_table string | Location of the reference table for ref_value. (Ignored if ref_value doesn't exist) (ex. "card.joker_display_values" or "card.ability")
 --- --- border_nodes table | Ignore all previous parameters and creates a border object with the specified text blocks. (The text blocks use the parameters above)
---- --- border_colour table | Color of the border around boder_nodes. (Used for X Mult. Default = G.C.XMULT)
+--- --- border_colour table | Colour of the border around border_nodes. (Used for X Mult. Default = G.C.XMULT)
 --- --- dynatext table | Ignore all previous parameters and use a dynatext with this configuration instead. (See Misprint for example)
 --- calc_function function | Calculation function that will be called every time the display updates.
 --- --- Arguments:
