@@ -41,7 +41,7 @@ Make sure that JokerDisplay.Definitions is loaded and add a new value with your 
 
 Example:
 ```lua
-JokerDisplay.Definitions["j_mf_bowlingball"] = {
+JokerDisplay.Definitions["j_custom"] = {
   line_1 = {
     { text = " +",                             colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
