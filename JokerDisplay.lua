@@ -311,7 +311,7 @@ end
 --- Deep copies a table
 ---@param orig table? Table to copy
 ---@return table? copy
-function deepcopy(orig)
+local function deepcopy(orig)
     local orig_type = type(orig)
     local copy
     if orig_type == 'table' then
