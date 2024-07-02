@@ -483,7 +483,7 @@ return {
                     temp_card = G.hand.cards[i]
                 end
             end
-            if temp_card and (temp_card.debuff or temp_card.facing == 'back') then
+            if not temp_card or temp_card.debuff or temp_card.facing == 'back' then
                 temp_Mult = 0
             end
             card.joker_display_values.mult = (temp_Mult < 15 and temp_Mult * 2 or 0)
