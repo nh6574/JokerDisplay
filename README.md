@@ -71,7 +71,7 @@ Check joker_definitions.lua for a hint on how to implement your own jokers (or m
 
 I don't know how much time I'm going to dedicate to this (I'm not really _that_ into Balatro), so please feel free to fork or do PRs if you feel like you can improve on this or fix any of the problems above!
 
-Also I would appreciate if people contect me when there are updates to the game or Steamodded that break any features or add content.
+Also I would appreciate if people contact me when there are updates to the game or Steamodded that break any features or add content.
 
 ## Contact
 
