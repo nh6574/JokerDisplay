@@ -17,7 +17,7 @@
 --- --- card [table] | Joker card.
 --- --- Notes:
 --- --- Use to keep track of values for the display. You can use the card.joker_display_values table to store them.
---- --- You should chack if the value is being store somewhere else (for example "card.ability") to avoid unnecessary calculations.
+--- --- You should check if the value is being store somewhere else (for example "card.ability") to avoid unnecessary calculations.
 --- --- Check the main JokerDisplay file for helper functions.
 --- style_function [function] | Style modifying function for the display.
 --- --- Arguments:
@@ -30,6 +30,13 @@
 --- --- Use to change any style paramentes (like colour or scale) of the display.
 --- --- If border_nodes is used, the text object is a child of that child.
 --- --- (ex. line_1.children[1].colour changes the border color and line_1.children[1].children[1].colour changes the text colour)
+--- retrigger_function [function] | Used for retrigger calculations in the helper functions.
+--- --- Arguments:
+--- --- card [table] | Card to calculate triggers for.
+--- --- scoring_hand [table] | Scoring hand. nil if poker hand is unknown (i.e. there are facedowns) (This might change in the future).
+--- --- held_in_hand [table] | If the card is held in hand and not a scoring card.
+--- --- Returns:
+--- --- triggers [integer] | Extra triggers (0 if none)
 
 return {
     j_joker = {
@@ -52,10 +59,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -75,10 +81,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -98,10 +103,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -121,10 +125,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -357,6 +360,9 @@ return {
     j_four_fingers = {
     },
     j_mime = {
+        retrigger_function = function (card, scoring_hand, held_in_hand)
+            return held_in_hand and 1 or 0
+        end
     },
     j_credit_card = {
     },
@@ -422,10 +428,9 @@ return {
             local count = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() == 8 then
-                    count = count + 1 * JokerDisplay.calculate_card_triggers(v, first_card)
+                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.count = count
@@ -466,6 +471,9 @@ return {
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_left <= 1 and
                 localize("k_active_ex") or "Inactive"
+        end,
+        retrigger_function = function (card, scoring_hand, held_in_hand)
+            return G.GAME and G.GAME.current_round.hands_left <= 1 and 1 or 0
         end
     },
     j_raised_fist = {
@@ -505,11 +513,10 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() == 2 or v:get_id() == 3 or v:get_id() == 5
                     or v:get_id() == 8 or v:get_id() == 14 then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -542,10 +549,9 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
-                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.chips = chips
@@ -573,7 +579,10 @@ return {
     j_hack = {
         line_1 = {
             { text = "(2,3,4,5)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
-        }
+        },
+        retrigger_function = function (card, scoring_hand, held_in_hand)
+            return (card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and 1 or 0
+        end
     },
     j_pareidolia = {
     },
@@ -595,10 +604,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() <= 10 and v:get_id() >= 0 and v:get_id() % 2 == 0 then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -616,11 +624,10 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and ((v:get_id() <= 10 and v:get_id() >= 0 and
                         v:get_id() % 2 == 1) or (v:get_id() == 14)) then
-                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.chips = chips
@@ -640,10 +647,9 @@ return {
             local chips, mult = 0, 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() == 14 then
-                    local retriggers = JokerDisplay.calculate_card_triggers(v, first_card)
+                    local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                     chips = chips + card.ability.extra.chips * retriggers
                     mult = mult + card.ability.extra.mult * retriggers
                 end
@@ -667,10 +673,9 @@ return {
             local count = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
-                    count = count + 1 * JokerDisplay.calculate_card_triggers(v, first_card)
+                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.count = count
@@ -996,7 +1001,7 @@ return {
             for k, v in ipairs(G.hand.cards) do
                 if playing_hand or not v.highlighted then
                     if not (v.facing == 'back') and not v.debuff and v:get_id() and v:get_id() == 13 then
-                        count = count + 1 * JokerDisplay.calculate_card_triggers(v, nil, true)
+                        count = count + JokerDisplay.calculate_card_triggers(v, nil, true)
                     end
                 end
             end
@@ -1081,7 +1086,6 @@ return {
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             local face_cards = {}
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
                     table.insert(face_cards, v)
@@ -1089,7 +1093,7 @@ return {
             end
             local first_face = JokerDisplay.calculate_leftmost_card(face_cards)
             card.joker_display_values.x_mult = first_face and
-                (card.ability.extra ^ JokerDisplay.calculate_card_triggers(first_face, first_card)) or 1
+                (card.ability.extra ^ JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)) or 1
         end
     },
     j_gift = {
@@ -1128,7 +1132,7 @@ return {
             for k, v in ipairs(G.hand.cards) do
                 if playing_hand or not v.highlighted then
                     if v.facing and not (v.facing == 'back') and v:is_face() then
-                        count = count + 1 * JokerDisplay.calculate_card_triggers(v, nil, true)
+                        count = count + JokerDisplay.calculate_card_triggers(v, nil, true)
                     end
                 end
             end
@@ -1296,10 +1300,9 @@ return {
             local count = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(G.GAME.current_round.ancient_card.suit) then
-                    count = count + 1 * JokerDisplay.calculate_card_triggers(v, first_card)
+                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
@@ -1337,10 +1340,9 @@ return {
             local chips, mult = 0, 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and (v:get_id() == 10 or v:get_id() == 4) then
-                    local retriggers = JokerDisplay.calculate_card_triggers(v, first_card)
+                    local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                     chips = chips + card.ability.extra.chips * retriggers
                     mult = mult + card.ability.extra.mult * retriggers
                 end
@@ -1354,7 +1356,10 @@ return {
             { text = "(",                 colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.ability", ref_value = "extra",          colour = G.C.UI.TEXT_INACTIVE },
             { text = ")",                 colour = G.C.UI.TEXT_INACTIVE }
-        }
+        },
+        retrigger_function = function (card, scoring_hand, held_in_hand)
+            return 1
+        end
     },
     j_castle = {
         line_1 = {
@@ -1390,10 +1395,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -1423,10 +1427,9 @@ return {
             local dollars = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v.ability.name and v.ability.name == 'Gold Card' then
-                    dollars = dollars + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    dollars = dollars + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.dollars = dollars
@@ -1458,6 +1461,9 @@ return {
         end
     },
     j_sock_and_buskin = {
+        retrigger_function = function (card, scoring_hand, held_in_hand)
+            return card:is_face() and 1 or 0
+        end
     },
     j_swashbuckler = {
         line_1 = {
@@ -1482,6 +1488,10 @@ return {
         }
     },
     j_hanging_chad = {
+        retrigger_function = function (card, scoring_hand, held_in_hand)
+            local first_card = scoring_hand and JokerDisplay.calculate_leftmost_card(scoring_hand)
+            return first_card and card == first_card and 2 or 0
+        end
     },
     j_rough_gem = {
         line_1 = {
@@ -1497,10 +1507,9 @@ return {
             local dollars = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Diamonds") then
-                    dollars = dollars + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    dollars = dollars + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.dollars = dollars
@@ -1529,10 +1538,9 @@ return {
             local count = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Hearts") then
-                    count = count + 1 * JokerDisplay.calculate_card_triggers(v, first_card)
+                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.count = count
@@ -1553,10 +1561,9 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Spades") then
-                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.chips = chips
@@ -1576,10 +1583,9 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Clubs") then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, first_card)
+                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -1663,6 +1669,7 @@ return {
         calc_function = function(card)
             local ability_name, ability_key = JokerDisplay.calculate_blueprint_copy(card)
             card.joker_display_values.blueprint_ability_name = ability_name
+            card.joker_display_values.blueprint_ability_key = ability_key
             card.joker_display_values.blueprint_ability_name_ui = ability_key and
                 localize { type = 'name_text', key = ability_key, set = 'Joker' } or "-"
             card.joker_display_values.blueprint_compat = localize('k_' ..
@@ -1707,10 +1714,9 @@ return {
             local count = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(G.GAME.current_round.idol_card.suit) and v:get_id() and v:get_id() == G.GAME.current_round.idol_card.id then
-                    count = count + 1 * JokerDisplay.calculate_card_triggers(v, first_card)
+                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.x_mult = card.ability.extra ^ count
@@ -1961,6 +1967,7 @@ return {
         calc_function = function(card)
             local ability_name, ability_key = JokerDisplay.calculate_blueprint_copy(card)
             card.joker_display_values.blueprint_ability_name = ability_name
+            card.joker_display_values.blueprint_ability_key = ability_key
             card.joker_display_values.blueprint_ability_name_ui = ability_key and
                 localize { type = 'name_text', key = ability_key, set = 'Joker' } or "-"
             card.joker_display_values.blueprint_compat = localize('k_' ..
@@ -2088,10 +2095,9 @@ return {
             local count = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and (v:get_id() == 13 or v:get_id() == 12) then
-                    count = count + 1 * JokerDisplay.calculate_card_triggers(v, first_card)
+                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.x_mult = card.ability.extra ^ count

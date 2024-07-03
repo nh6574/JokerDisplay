@@ -41,7 +41,7 @@ Make sure that JokerDisplay.Definitions is loaded and add a new value with your 
 
 Example:
 ```lua
-JokerDisplay.Definitions["j_custom"] = {
+JokerDisplay.Definitions["j_my_custom"] = {
   line_1 = {
     { text = " +",                             colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
@@ -53,10 +53,9 @@ JokerDisplay.Definitions["j_custom"] = {
     local mult = 0
     local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
     local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-    local first_card = not (text == 'Unknown') and JokerDisplay.calculate_leftmost_card(scoring_hand) or nil
     for k, v in pairs(scoring_hand) do
       if not v.debuff and v:get_id() and v:get_id() == 6 then
-        local retriggers = JokerDisplay.calculate_card_triggers(v, first_card)
+        local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
         mult = mult + 10 * retriggers
       end
     end

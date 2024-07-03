@@ -467,26 +467,29 @@ end
 
 ---Returns how many times the scoring card would be triggered for scoring if played.
 ---@param card table Card to calculate.
----@param first_card table? First card in hand.
+---@param scoring_hand table? Scoring hand. nil if poker hand is unknown (i.e. there are facedowns) (This might change in the future).
 ---@param held_in_hand boolean? If the card is held in hand and not a scoring card.
----@return integer # Times the card would retrigger. (0 if debuffed)
-JokerDisplay.calculate_card_triggers = function(card, first_card, held_in_hand)
+---@return integer # Times the card would trigger. (0 if debuffed)
+JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand)
     if card.debuff then
         return 0
     end
 
     local triggers = 1
 
-    triggers = triggers + (held_in_hand and #JokerDisplay.find_joker_or_copy('Mime') or 0)
-    if not held_in_hand then
-        triggers = triggers + (#JokerDisplay.find_joker_or_copy('Seltzer') or 0)
-        triggers = triggers + (card:is_face() and #JokerDisplay.find_joker_or_copy('Sock and Buskin') or 0)
-        triggers = triggers +
-            ((card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and #JokerDisplay.find_joker_or_copy('Hack') or 0)
-        triggers = triggers + (G.GAME.current_round.hands_left == 0 and #JokerDisplay.find_joker_or_copy('Dusk') or 0)
-        triggers = triggers +
-            (first_card and card == first_card and #JokerDisplay.find_joker_or_copy('Hanging Chad') * 2 or 0)
+    if G.jokers then
+        for k, v in pairs(G.jokers.cards) do
+            local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
+            local retrigger_function = (joker_display_definition and joker_display_definition.retrigger_function) or
+                (v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+                JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
+                
+            if retrigger_function then
+                triggers = triggers + retrigger_function(card, scoring_hand, held_in_hand)
+            end
+        end
     end
+
     triggers = triggers + (card:get_seal() == 'Red' and 1 or 0)
 
     return triggers
