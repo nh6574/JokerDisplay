@@ -82,7 +82,7 @@ function Card:update_joker_display(from)
                 n = G.UIT.ROOT,
                 config = {
                     minh = 0.6,
-                    maxh = 1.2,
+                    maxh = 1.5,
                     minw = 2,
                     maxw = 2,
                     r = 0.001,
@@ -483,8 +483,8 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
             local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
             local retrigger_function = (joker_display_definition and joker_display_definition.retrigger_function) or
                 (v.joker_display_values and v.joker_display_values.blueprint_ability_key and
-                JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
-                
+                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
+
             if retrigger_function then
                 triggers = triggers + retrigger_function(card, scoring_hand, held_in_hand)
             end
@@ -575,9 +575,8 @@ end
 JokerDisplay.create_display_row_objects = function(node_rows)
     local row_nodes = {}
 
-    for _, row in pairs(node_rows) do
-        row_nodes[#row_nodes + 1] = { n = G.UIT.R, config = { align = "cm" }, nodes = row }
-    end
+    row_nodes[1] = { n = G.UIT.R, config = {align = "cm", minh = 0.4, maxw=2}, nodes = node_rows[1] }
+    row_nodes[2] = { n = G.UIT.R, config = {align = "cm", maxh = 0.3, maxw=1.8}, nodes = node_rows[2] }
 
     return row_nodes
 end
@@ -848,7 +847,7 @@ end
 local controller_queue_R_cursor_press_ref = Controller.queue_R_cursor_press
 function Controller:queue_R_cursor_press(x, y)
     controller_queue_R_cursor_press_ref(self, x, y)
-    if not G.SETTINGS.paused then 
+    if not G.SETTINGS.paused then
         local press_node = self.hovering.target or self.focused.target
         if press_node and G.jokers and press_node.area and press_node.area == G.jokers then
             JokerDisplay.visible = not JokerDisplay.visible
@@ -864,5 +863,6 @@ function Controller:button_press_update(button, dt)
         JokerDisplay.visible = not JokerDisplay.visible
     end
 end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
