@@ -52,7 +52,8 @@ return {
         },
         line_2 = {
             { text = "(",                                                                       colour = G.C.UI.TEXT_INACTIVE,                                                scale = 0.3 },
-            { text = localize(G.P_CENTERS["j_greedy_joker"].config.extra.suit, 'suits_plural'), colour = loc_colour(G.P_CENTERS["j_greedy_joker"].config.extra.suit:lower()), scale = 0.3 },
+            { text = localize(G.P_CENTERS["j_greedy_joker"].config.extra.suit, 'suits_plural'), colour = 
+            lighten(loc_colour(G.P_CENTERS["j_greedy_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                       colour = G.C.UI.TEXT_INACTIVE,                                                scale = 0.3 },
         },
         calc_function = function(card)
@@ -61,7 +62,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra.s_mult *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -74,7 +77,7 @@ return {
         },
         line_2 = {
             { text = "(",                                                                      colour = G.C.UI.TEXT_INACTIVE,                                               scale = 0.3 },
-            { text = localize(G.P_CENTERS["j_lusty_joker"].config.extra.suit, 'suits_plural'), colour = loc_colour(G.P_CENTERS["j_lusty_joker"].config.extra.suit:lower()), scale = 0.3 },
+            { text = localize(G.P_CENTERS["j_lusty_joker"].config.extra.suit, 'suits_plural'), colour = lighten(loc_colour(G.P_CENTERS["j_lusty_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                      colour = G.C.UI.TEXT_INACTIVE,                                               scale = 0.3 },
         },
         calc_function = function(card)
@@ -83,7 +86,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra.s_mult *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -96,7 +101,7 @@ return {
         },
         line_2 = {
             { text = "(",                                                                         colour = G.C.UI.TEXT_INACTIVE,                                                  scale = 0.3 },
-            { text = localize(G.P_CENTERS["j_wrathful_joker"].config.extra.suit, 'suits_plural'), colour = loc_colour(G.P_CENTERS["j_wrathful_joker"].config.extra.suit:lower()), scale = 0.3 },
+            { text = localize(G.P_CENTERS["j_wrathful_joker"].config.extra.suit, 'suits_plural'), colour = lighten(loc_colour(G.P_CENTERS["j_wrathful_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                         colour = G.C.UI.TEXT_INACTIVE,                                                  scale = 0.3 },
         },
         calc_function = function(card)
@@ -105,7 +110,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra.s_mult *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -118,7 +125,7 @@ return {
         },
         line_2 = {
             { text = "(",                                                                           colour = G.C.UI.TEXT_INACTIVE,                                                    scale = 0.3 },
-            { text = localize(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit, 'suits_plural'), colour = loc_colour(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit:lower()), scale = 0.3 },
+            { text = localize(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit, 'suits_plural'), colour = lighten(loc_colour(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                           colour = G.C.UI.TEXT_INACTIVE,                                                    scale = 0.3 },
         },
         calc_function = function(card)
@@ -127,7 +134,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(card.ability.extra.suit) then
-                    mult = mult + card.ability.extra.s_mult * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra.s_mult *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -159,8 +168,8 @@ return {
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
         line_2 = {
-            { text = "(",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
-            { text = localize(G.P_CENTERS["j_zany"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
+            { text = "(",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3},
+            { text = localize(G.P_CENTERS["j_zany"].config.type, 'poker_hands'), colour = G.C.ORANGE, scale = 0.3 },
             { text = ")",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
@@ -360,7 +369,7 @@ return {
     j_four_fingers = {
     },
     j_mime = {
-        retrigger_function = function (card, scoring_hand, held_in_hand)
+        retrigger_function = function(card, scoring_hand, held_in_hand)
             return held_in_hand and 1 or 0
         end
     },
@@ -415,9 +424,8 @@ return {
     },
     j_8_ball = {
         line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "count" },
-            { text = "x",                              scale = 0.35 },
-            { text = localize("k_tarot"),              colour = G.C.SECONDARY_SET.Tarot },
+            { text = "+",              colour = G.C.SECONDARY_SET.Tarot},
+            { ref_table = "card.joker_display_values", ref_value = "count" ,              colour = G.C.SECONDARY_SET.Tarot},
         },
         line_2 = {
             { text = "(",                                                   colour = G.C.GREEN, scale = 0.3 },
@@ -430,7 +438,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() == 8 then
-                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    count = count +
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.count = count
@@ -463,16 +472,16 @@ return {
         }
     },
     j_dusk = {
-        line_1 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale=0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE, scale=0.3  },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale=0.3  },
         },
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_left <= 1 and
                 localize("k_active_ex") or "Inactive"
         end,
-        retrigger_function = function (card, scoring_hand, held_in_hand)
+        retrigger_function = function(card, scoring_hand, held_in_hand)
             return G.GAME and G.GAME.current_round.hands_left <= 1 and 1 or 0
         end
     },
@@ -488,7 +497,7 @@ return {
                 if not G.hand.cards[i].highlighted and temp_ID >= G.hand.cards[i].base.id
                     and G.hand.cards[i].ability.effect ~= 'Stone Card' then
                     temp_Mult = G.hand.cards[i].base.nominal *
-                    JokerDisplay.calculate_card_triggers(G.hand.cards[i], nil, true)
+                        JokerDisplay.calculate_card_triggers(G.hand.cards[i], nil, true)
                     temp_ID = G.hand.cards[i].base.id
                     temp_card = G.hand.cards[i]
                 end
@@ -516,7 +525,9 @@ return {
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() == 2 or v:get_id() == 3 or v:get_id() == 5
                     or v:get_id() == 8 or v:get_id() == 14 then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -551,7 +562,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
-                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    chips = chips +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.chips = chips
@@ -570,17 +583,19 @@ return {
         line_1 = {
             { text = "+" .. localize('$'),               colour = G.C.GOLD },
             { ref_table = "card.joker_display_values",   ref_value = "dollars",         colour = G.C.GOLD },
-            { text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
+        },
+        line_2 = {
+            { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
             card.joker_display_values.dollars = (G.GAME and G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0 and G.GAME.current_round.discards_left * card.ability.extra or 0)
         end
     },
     j_hack = {
-        line_1 = {
-            { text = "(2,3,4,5)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+        line_2 = {
+            { text = "(2,3,4,5)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
-        retrigger_function = function (card, scoring_hand, held_in_hand)
+        retrigger_function = function(card, scoring_hand, held_in_hand)
             return (card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and 1 or 0
         end
     },
@@ -606,7 +621,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() <= 10 and v:get_id() >= 0 and v:get_id() % 2 == 0 then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -627,7 +644,9 @@ return {
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and ((v:get_id() <= 10 and v:get_id() >= 0 and
                         v:get_id() % 2 == 1) or (v:get_id() == 14)) then
-                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    chips = chips +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.chips = chips
@@ -649,7 +668,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and v:get_id() == 14 then
-                    local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    local retriggers = JokerDisplay.calculate_card_triggers(v,
+                        not (text == 'Unknown') and scoring_hand or nil)
                     chips = chips + card.ability.extra.chips * retriggers
                     mult = mult + card.ability.extra.mult * retriggers
                 end
@@ -675,7 +695,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
-                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    count = count +
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.count = count
@@ -703,7 +724,7 @@ return {
     j_burglar = {
     },
     j_space = {
-        line_1 = {
+        line_2 = {
             { text = "(",                                                  colour = G.C.GREEN, scale = 0.3 },
             { ref_table = "card.joker_display_values",                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
             { text = " in " .. G.P_CENTERS["j_space"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
@@ -713,9 +734,11 @@ return {
         end
     },
     j_egg = {
-        line_1 = {
-            { text = localize('$'), colour = G.C.GOLD },
-            { ref_table = "card",   ref_value = "sell_cost", colour = G.C.GOLD }
+        line_2 = {
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+            { text = localize('$'), colour = G.C.GOLD, scale = 0.35 },
+            { ref_table = "card",   ref_value = "sell_cost", colour = G.C.GOLD, scale = 0.35 },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
         }
     },
     j_blackboard = {
@@ -756,10 +779,10 @@ return {
         }
     },
     j_dna = {
-        line_1 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
             card.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("k_active_ex") or "Inactive")
@@ -778,24 +801,21 @@ return {
     },
     j_sixth_sense = {
         line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text" },
-            { ref_table = "card.joker_display_values", ref_value = "count" },
-            { ref_table = "card.joker_display_values", ref_value = "active_text_spectral", colour = G.C.SECONDARY_SET.Spectral }
+            { ref_table = "card.joker_display_values", ref_value = "active_text" }
+        },
+        line_2 = {
+            { text = "(6)",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
         },
         calc_function = function(card)
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             local sixth_sense_eval = #scoring_hand == 1 and scoring_hand[1]:get_id() == 6
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_played == 0
-            card.joker_display_values.count = card.joker_display_values.active and tostring(sixth_sense_eval and 1 or 0) or
-                ""
-            card.joker_display_values.active_text = card.joker_display_values.active and "+" or "(Inactive)"
-            card.joker_display_values.active_text_spectral = card.joker_display_values.active and
-                " " .. localize("k_spectral") or ""
+            card.joker_display_values.active_text = card.joker_display_values.active and "+".. tostring(sixth_sense_eval and 1 or 0) or "-"
         end,
         style_function = function(card, line_1, line_2)
             if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.UI.TEXT_LIGHT or
+                line_1.children[1].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Spectral or
                     G.C.UI.TEXT_INACTIVE
             end
             return false
@@ -839,10 +859,13 @@ return {
         line_1 = {
             { text = "+",                              colour = G.C.SECONDARY_SET.Tarot },
             { ref_table = "card.joker_display_values", ref_value = "count",             colour = G.C.SECONDARY_SET.Tarot },
-            { text = " " .. localize("k_tarot"),       colour = G.C.SECONDARY_SET.Tarot },
         },
         line_2 = {
-            { text = "(" .. localize("Ace", "ranks") .. "+" .. localize('Straight', "poker_hands") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = localize("Ace", "ranks"), colour = G.C.ORANGE, scale = 0.3 },
+            { text = "+", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = localize('Straight', "poker_hands"), colour = G.C.ORANGE, scale = 0.3 },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
             local has_ace, has_straight = false, false
@@ -930,7 +953,6 @@ return {
         line_1 = {
             { text = "+",                              colour = G.C.SECONDARY_SET.Spectral },
             { ref_table = "card.joker_display_values", ref_value = "count",                colour = G.C.SECONDARY_SET.Spectral },
-            { text = " " .. localize("k_spectral"),    colour = G.C.SECONDARY_SET.Spectral }
         },
         line_2 = {
             { text = "(",                                                                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -970,20 +992,11 @@ return {
     },
     j_vagabond = {
         line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text" }
+            { ref_table = "card.joker_display_values", ref_value = "active_text", colour = G.C.SECONDARY_SET.Tarot }
         },
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.dollars < 5
-            card.joker_display_values.active_text = card.joker_display_values.active and localize("k_plus_tarot") or
-                "(Inactive)"
-        end,
-        style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and
-                    G.C.SECONDARY_SET.Tarot or
-                    G.C.UI.TEXT_INACTIVE
-            end
-            return false
+            card.joker_display_values.active_text = card.joker_display_values.active and "+1" or "+0"
         end
     },
     j_baron = {
@@ -1012,7 +1025,9 @@ return {
         line_1 = {
             { text = "+" .. localize('$'),               colour = G.C.GOLD },
             { ref_table = "card.joker_display_values",   ref_value = "dollars",         colour = G.C.GOLD },
-            { text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
+        },
+        line_2 = {
+            { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
             card.joker_display_values.dollars = card.ability.extra * (card.ability.nine_tally or 0)
@@ -1022,8 +1037,10 @@ return {
         line_1 = {
             { text = "+" .. localize('$'),               colour = G.C.GOLD },
             { ref_table = "card.ability.extra",          ref_value = "dollars",         colour = G.C.GOLD },
-            { text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
-        }
+        },
+        line_2 = {
+            { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+        },
     },
     j_obelisk = {
         line_1 = {
@@ -1050,8 +1067,8 @@ return {
     j_midas_mask = {
     },
     j_luchador = {
-        line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text" },
+        line_2 = {
+            { ref_table = "card.joker_display_values", ref_value = "active_text", scale = 0.3 },
         },
         calc_function = function(card)
             local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
@@ -1060,9 +1077,9 @@ return {
             card.joker_display_values.active_text = localize(disableable and 'k_active' or 'ph_no_boss_active')
         end,
         style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
-                line_1.children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+            if line_2 then
+                line_2.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
+                line_2.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
             end
             return false
@@ -1093,16 +1110,17 @@ return {
             end
             local first_face = JokerDisplay.calculate_leftmost_card(face_cards)
             card.joker_display_values.x_mult = first_face and
-                (card.ability.extra ^ JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)) or 1
+                (card.ability.extra ^ JokerDisplay.calculate_card_triggers(first_face, not (text == 'Unknown') and scoring_hand or nil)) or
+                1
         end
     },
     j_gift = {
     },
     j_turtle_bean = {
-        line_1 = {
-            { text = "(+",                      colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.ability.extra", ref_value = "h_size",         colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                       colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(+",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+            { ref_table = "card.ability.extra", ref_value = "h_size",         colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+            { text = ")",                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
         }
     },
     j_erosion = {
@@ -1146,9 +1164,9 @@ return {
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
         line_2 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
-            { ref_table = "card.joker_display_values", ref_value = "mail_card_rank",  colour = G.C.ORANGE, scale = 0.3 },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+            { ref_table = "card.joker_display_values", ref_value = "mail_card_rank",  colour = G.C.ORANGE, scale = 0.35 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
         },
         calc_function = function(card)
             local dollars = 0
@@ -1166,7 +1184,9 @@ return {
         line_1 = {
             { text = "+" .. localize('$'),               colour = G.C.GOLD },
             { ref_table = "card.joker_display_values",   ref_value = "dollars",         colour = G.C.GOLD },
-            { text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
+        },
+        line_2 = {
+            { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
             card.joker_display_values.dollars = G.GAME and G.GAME.dollars and
@@ -1202,8 +1222,10 @@ return {
         line_1 = {
             { text = "+" .. localize('$'),               colour = G.C.GOLD },
             { ref_table = "card.ability",                ref_value = "extra",           colour = G.C.GOLD },
-            { text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
-        }
+        },
+        line_2 = {
+            { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+        },
     },
     j_lucky_cat = {
         line_1 = {
@@ -1216,12 +1238,12 @@ return {
         }
     },
     j_baseball = {
-        line_1 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.joker_display_values", ref_value = "count",           colour = G.C.ORANGE },
-            { text = "x",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
-            { text = localize("k_uncommon"),           colour = G.C.GREEN },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "count",           colour = G.C.ORANGE, scale = 0.3 },
+            { text = "x",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = localize("k_uncommon"),           colour = G.C.GREEN, scale = 0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
             local count = 0
@@ -1254,7 +1276,7 @@ return {
             local is_trading_card_discard = #G.hand.highlighted == 1
             card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0
             card.joker_display_values.dollars = card.joker_display_values.active and
-                ("+" .. localize('$') .. (is_trading_card_discard and card.ability.extra or 0)) or "(Inactive)"
+                ("+" .. localize('$') .. (is_trading_card_discard and card.ability.extra or 0)) or "-"
         end,
         style_function = function(card, line_1, line_2)
             if line_1 then
@@ -1302,7 +1324,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(G.GAME.current_round.ancient_card.suit) then
-                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    count = count +
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
@@ -1311,7 +1334,7 @@ return {
         end,
         style_function = function(card, line_1, line_2)
             if line_2 then
-                line_2.children[2].config.colour = G.C.SUITS[G.GAME.current_round.ancient_card.suit]
+                line_2.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.ancient_card.suit], 0.35)
             end
             return false
         end
@@ -1342,7 +1365,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and (v:get_id() == 10 or v:get_id() == 4) then
-                    local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    local retriggers = JokerDisplay.calculate_card_triggers(v,
+                        not (text == 'Unknown') and scoring_hand or nil)
                     chips = chips + card.ability.extra.chips * retriggers
                     mult = mult + card.ability.extra.mult * retriggers
                 end
@@ -1352,12 +1376,12 @@ return {
         end
     },
     j_selzer = {
-        line_1 = {
-            { text = "(",                 colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.ability", ref_value = "extra",          colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                 colour = G.C.UI.TEXT_INACTIVE }
+        line_2 = {
+            { text = "(",                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.ability", ref_value = "extra",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = "/10)",                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
-        retrigger_function = function (card, scoring_hand, held_in_hand)
+        retrigger_function = function(card, scoring_hand, held_in_hand)
             return 1
         end
     },
@@ -1376,7 +1400,7 @@ return {
         end,
         style_function = function(card, line_1, line_2)
             if line_2 then
-                line_2.children[2].config.colour = G.C.SUITS[G.GAME.current_round.castle_card.suit]
+                line_2.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.castle_card.suit], 0.35)
             end
             return false
         end
@@ -1397,7 +1421,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_face() then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -1429,17 +1455,19 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v.ability.name and v.ability.name == 'Gold Card' then
-                    dollars = dollars + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    dollars = dollars +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.dollars = dollars
         end
     },
     j_mr_bones = {
-        line_1 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.chips and G.GAME.blind.chips and
@@ -1461,7 +1489,7 @@ return {
         end
     },
     j_sock_and_buskin = {
-        retrigger_function = function (card, scoring_hand, held_in_hand)
+        retrigger_function = function(card, scoring_hand, held_in_hand)
             return card:is_face() and 1 or 0
         end
     },
@@ -1488,7 +1516,7 @@ return {
         }
     },
     j_hanging_chad = {
-        retrigger_function = function (card, scoring_hand, held_in_hand)
+        retrigger_function = function(card, scoring_hand, held_in_hand)
             local first_card = scoring_hand and JokerDisplay.calculate_leftmost_card(scoring_hand)
             return first_card and card == first_card and 2 or 0
         end
@@ -1509,7 +1537,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Diamonds") then
-                    dollars = dollars + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    dollars = dollars +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.dollars = dollars
@@ -1540,7 +1570,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Hearts") then
-                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    count = count +
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.count = count
@@ -1563,7 +1594,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Spades") then
-                    chips = chips + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    chips = chips +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.chips = chips
@@ -1585,7 +1618,9 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit("Clubs") then
-                    mult = mult + card.ability.extra * JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    mult = mult +
+                    card.ability.extra *
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.mult = mult
@@ -1658,13 +1693,10 @@ return {
         end
     },
     j_blueprint = {
-        line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "blueprint_compat" },
-        },
         line_2 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.35 },
-            { ref_table = "card.joker_display_values", ref_value = "blueprint_ability_name_ui", colour = G.C.ORANGE, scale = 0.35 },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.35 }
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "blueprint_ability_name_ui", colour = G.C.ORANGE, scale = 0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 }
         },
         calc_function = function(card)
             local ability_name, ability_key = JokerDisplay.calculate_blueprint_copy(card)
@@ -1676,8 +1708,8 @@ return {
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
         end,
         style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values
+            if line_2 then
+                line_2.children[2].config.colour = card.joker_display_values
                     .blueprint_ability_name and G.C.GREEN or
                     G.C.RED
             end
@@ -1716,7 +1748,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if v:is_suit(G.GAME.current_round.idol_card.suit) and v:get_id() and v:get_id() == G.GAME.current_round.idol_card.id then
-                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    count = count +
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.x_mult = card.ability.extra ^ count
@@ -1725,7 +1758,7 @@ return {
         end,
         style_function = function(card, line_1, line_2)
             if line_2 and card.joker_display_values then
-                line_2.children[4].config.colour = G.C.SUITS[G.GAME.current_round.idol_card.suit]
+                line_2.children[4].config.colour = lighten(G.C.SUITS[G.GAME.current_round.idol_card.suit], 0.35)
             end
             return false
         end
@@ -1741,7 +1774,7 @@ return {
         },
         line_2 = {
             { text = "(",                                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
-            { text = localize("Clubs", 'suits_singular'), colour = G.C.SUITS["Clubs"],   scale = 0.3 },
+            { text = localize("Clubs", 'suits_singular'), colour = lighten(G.C.SUITS["Clubs"], 0.35),   scale = 0.3 },
             { text = "+",                                 scale = 0.3 },
             { text = localize('k_other'),                 colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1787,8 +1820,8 @@ return {
         end
     },
     j_matador = {
-        line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text" },
+        line_2 = {
+            { ref_table = "card.joker_display_values", ref_value = "active_text", sclae = 0.3 },
         },
         calc_function = function(card)
             local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
@@ -1798,10 +1831,10 @@ return {
                 ("+" .. localize('$') .. card.ability.extra .. "?") or localize('ph_no_boss_active')
         end,
         style_function = function(card, line_1, line_2)
-            if line_1 and card.joker_display_values then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
+            if line_2 and card.joker_display_values then
+                line_2.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
                     G.C.RED
-                line_1.children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+                line_2.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
             end
             return false
@@ -1944,10 +1977,10 @@ return {
         }
     },
     j_invisible = {
-        line_1 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
         },
         calc_function = function(card)
             card.joker_display_values.active = card.ability.invis_rounds >= card.ability.extra and
@@ -1956,13 +1989,10 @@ return {
         end
     },
     j_brainstorm = {
-        line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "blueprint_compat" },
-        },
         line_2 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.35 },
-            { ref_table = "card.joker_display_values", ref_value = "blueprint_ability_name_ui", colour = G.C.ORANGE, scale = 0.35 },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.35 }
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "blueprint_ability_name_ui", colour = G.C.ORANGE, scale = 0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 }
         },
         calc_function = function(card)
             local ability_name, ability_key = JokerDisplay.calculate_blueprint_copy(card)
@@ -1974,8 +2004,8 @@ return {
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
         end,
         style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values
+            if line_2 then
+                line_2.children[2].config.colour = card.joker_display_values
                     .blueprint_ability_name and G.C.GREEN or
                     G.C.RED
             end
@@ -1986,7 +2016,9 @@ return {
         line_1 = {
             { text = "+" .. localize('$'),               colour = G.C.GOLD },
             { ref_table = "card.joker_display_values",   ref_value = "dollars",         colour = G.C.GOLD },
-            { text = " (" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
+        },
+        line_2 = {
+            { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
             local planets_used = 0
@@ -2025,19 +2057,14 @@ return {
                 }
             }
         },
+        line_2 = {
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.ability", ref_value = "driver_tally", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = "/16)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+        },
         calc_function = function(card)
             card.joker_display_values.active = card.ability.driver_tally and card.ability.driver_tally >= 16
-            card.joker_display_values.x_mult = card.joker_display_values.active and ("X" .. card.ability.extra) or
-                ("(" .. (card.ability.driver_tally or '0') .. "/16)")
-        end,
-        style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.XMULT or
-                    adjust_alpha(G.C.UI.TEXT_INACTIVE, 0)
-                line_1.children[1].children[1].config.colour = card.joker_display_values.active and
-                    G.C.UI.TEXT_LIGHT or G.C.UI.TEXT_INACTIVE
-            end
-            return false
+            card.joker_display_values.x_mult = card.joker_display_values.active and card.ability.extra or 1
         end
     },
     j_cartomancer = {
@@ -2045,10 +2072,10 @@ return {
     j_astronomer = {
     },
     j_burnt = {
-        line_1 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
-            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
+        line_2 = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale=0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "active",         colour = G.C.UI.TEXT_INACTIVE, scale=0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE , scale=0.3},
         },
         calc_function = function(card)
             card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and localize("k_active_ex") or "Inactive")
@@ -2097,7 +2124,8 @@ return {
             local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
             for k, v in pairs(scoring_hand) do
                 if not v.debuff and v:get_id() and (v:get_id() == 13 or v:get_id() == 12) then
-                    count = count + JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    count = count +
+                    JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
             card.joker_display_values.x_mult = card.ability.extra ^ count
@@ -2122,8 +2150,8 @@ return {
         end
     },
     j_chicot = {
-        line_1 = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text" },
+        line_2 = {
+            { ref_table = "card.joker_display_values", ref_value = "active_text", scale=0.3 },
         },
         calc_function = function(card)
             local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and (G.GAME.blind:get_type() == 'Boss')
@@ -2131,10 +2159,10 @@ return {
             card.joker_display_values.active_text = localize(disableable and 'k_active' or 'ph_no_boss_active')
         end,
         style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
+            if line_2 then
+                line_2.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.RED
-                line_1.children[1].config.scale = card.joker_display_values.active and 0.4 or 0.3
+                line_2.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
             end
             return false
