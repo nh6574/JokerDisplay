@@ -12,6 +12,7 @@
 ---MOD INITIALIZATION
 
 JokerDisplay = {}
+JokerDisplay.visible = true
 
 if SMODS["INIT"] then -- 0.9.x
     local init = SMODS["INIT"]
@@ -587,14 +588,14 @@ G.FUNCS.joker_display_disable = function(e)
     if card.facing == 'back' or card.debuff then
         e.states.visible = false
     else
-        e.states.visible = true
+        e.states.visible = JokerDisplay.visible
     end
 end
 
 G.FUNCS.joker_display_debuff = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and (card.config.center.rarity ~= 2 or #JokerDisplay.find_joker_or_copy('Baseball Card') == 0) and card.debuff then
-        e.states.visible = true
+        e.states.visible = JokerDisplay.visible
     else
         e.states.visible = false
     end
@@ -603,7 +604,7 @@ end
 G.FUNCS.joker_display_debuff_baseball = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') > 0 and card.debuff then
-        e.states.visible = true
+        e.states.visible = JokerDisplay.visible
     else
         e.states.visible = false
     end
@@ -612,7 +613,7 @@ end
 G.FUNCS.joker_display_perishable = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = true
+        e.states.visible = JokerDisplay.visible
     else
         e.states.visible = false
     end
@@ -621,7 +622,7 @@ end
 G.FUNCS.joker_display_rental = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = true
+        e.states.visible = JokerDisplay.visible
     else
         e.states.visible = false
     end
@@ -842,5 +843,26 @@ function Card:calculate_joker(context)
     return t
 end
 
+--- CONTROLLER INPUT
+
+local controller_queue_R_cursor_press_ref = Controller.queue_R_cursor_press
+function Controller:queue_R_cursor_press(x, y)
+    controller_queue_R_cursor_press_ref(self, x, y)
+    if not G.SETTINGS.paused then 
+        local press_node = self.hovering.target or self.focused.target
+        if press_node and G.jokers and press_node.area and press_node.area == G.jokers then
+            JokerDisplay.visible = not JokerDisplay.visible
+        end
+    end
+end
+
+local controller_button_press_update_ref = Controller.button_press_update
+function Controller:button_press_update(button, dt)
+    controller_button_press_update_ref(self, button, dt)
+
+    if button == 'b' and G.jokers and self.focused.target and self.focused.target.area == G.jokers then
+        JokerDisplay.visible = not JokerDisplay.visible
+    end
+end
 ----------------------------------------------
 ------------MOD CODE END----------------------
