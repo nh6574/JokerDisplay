@@ -43,9 +43,10 @@ Make sure that JokerDisplay.Definitions is loaded and add a new value with your 
 
 Example:
 ```lua
+-- Adds +10 mult for every 6 played
 JokerDisplay.Definitions["j_my_custom"] = {
   line_1 = {
-    { text = " +",                             colour = G.C.MULT },
+    { text = "+",                             colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
   },
   line_2 = {
