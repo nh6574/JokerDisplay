@@ -12,7 +12,7 @@ Tested with Steamodded 0.9.8 and 1.0.0.
 
 ## Examples
 
-Right-click over a Joker (or use the back button in your controller) to hide the display.
+Right-click over a Joker (or use the back button in your controller) to hide all displays.
 
 ![Example 1](examples/example_1.png)
 ![Example 2](examples/example_2.png)
