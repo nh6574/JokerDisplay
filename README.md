@@ -57,7 +57,8 @@ JokerDisplay.Definitions["j_my_custom"] = {
     local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
     for k, v in pairs(scoring_hand) do
       if not v.debuff and v:get_id() and v:get_id() == 6 then
-        local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+        local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown')
+                          and scoring_hand or nil)
         mult = mult + 10 * retriggers
       end
     end
@@ -67,6 +68,7 @@ JokerDisplay.Definitions["j_my_custom"] = {
 ```
 
 Check joker_definitions.lua for a hint on how to implement your own jokers (or modify vanilla ones). Complex custom Jokers might need to inject code into JokerDisplay's functions.
+I recommend keeping your definitions in a separate file as they can get quite long and bloat your code.
 
 ## Contributing
 
