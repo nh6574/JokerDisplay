@@ -18,7 +18,7 @@ Right-click over a Joker (or use the back button in your controller) to hide all
 ![Example 2](examples/example_2.png)
 ![Example 3](examples/example_3.png)
 
-_For information on all the Jokers, please refer to the [examples document](examples/README.md)_
+_For information on all the Jokers, please refer to the [examples document](examples/README.md)_ (it's a bit outdated but gives you a general idea)
 
 ## Future Improvements and Known Issues
 
@@ -43,6 +43,8 @@ Make sure that JokerDisplay.Definitions is loaded and add a new value with your 
 
 Example:
 ```lua
+--- It's recommended to keep any reminder text in line_2 and only use line_1 for modifiers with only numbers
+
 -- Adds +10 mult for every 6 played
 JokerDisplay.Definitions["j_my_custom"] = {
   line_1 = {
