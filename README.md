@@ -10,13 +10,18 @@ Simple Balatro mod that displays information such as modifiers or relevant hands
 
 Tested with Steamodded 0.9.8 and 1.0.0.
 
+## Usage
+
+* Right-click the display or a Joker to hide/unhide all displays (or use the back button on your controller over a Joker).
+* Left-click the display to hide/unhide the second row of text. (Mouse only)
+
 ## Examples
 
 ![Example 1](examples/example_1.png)
 ![Example 2](examples/example_2.png)
 ![Example 3](examples/example_3.png)
 
-_For information on all the Jokers, please refer to the [examples document](examples/README.md)_
+_For information on all the Jokers, please refer to the [examples document](examples/README.md)_ (it's a bit outdated but gives you a general idea)
 
 ## Future Improvements and Known Issues
 
@@ -41,9 +46,12 @@ Make sure that JokerDisplay.Definitions is loaded and add a new value with your 
 
 Example:
 ```lua
+--- It's recommended to keep any reminder text in line_2 and only use line_1 for modifiers with only numbers
+
+-- Adds +10 mult for every 6 played
 JokerDisplay.Definitions["j_my_custom"] = {
   line_1 = {
-    { text = " +",                             colour = G.C.MULT },
+    { text = "+",                             colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
   },
   line_2 = {
@@ -55,7 +63,8 @@ JokerDisplay.Definitions["j_my_custom"] = {
     local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
     for k, v in pairs(scoring_hand) do
       if not v.debuff and v:get_id() and v:get_id() == 6 then
-        local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+        local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown')
+                          and scoring_hand or nil)
         mult = mult + 10 * retriggers
       end
     end
@@ -65,6 +74,7 @@ JokerDisplay.Definitions["j_my_custom"] = {
 ```
 
 Check joker_definitions.lua for a hint on how to implement your own jokers (or modify vanilla ones). Complex custom Jokers might need to inject code into JokerDisplay's functions.
+I recommend keeping your definitions in a separate file as they can get quite long and bloat your code.
 
 ## Contributing
 
