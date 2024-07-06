@@ -422,8 +422,9 @@ return {
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
-            card.joker_display_values.loyalty_text = localize { type = 'variable', key = (card.ability.loyalty_remaining == 0 and 'loyalty_active' or 'loyalty_inactive'), vars = { card.ability.loyalty_remaining } }
-            card.joker_display_values.x_mult = (card.ability.loyalty_remaining == 0 and card.ability.extra.Xmult or 1)
+            local loyalty_remaining = card.ability.loyalty_remaining + (next(G.play.cards) and 1 or 0)
+            card.joker_display_values.loyalty_text = localize { type = 'variable', key = (loyalty_remaining%6 == 0 and 'loyalty_active' or 'loyalty_inactive'), vars = { loyalty_remaining } }
+            card.joker_display_values.x_mult = (loyalty_remaining%6 == 0 and card.ability.extra.Xmult or 1)
         end
     },
     j_8_ball = { -- 8 Ball
