@@ -852,7 +852,8 @@ return {
                     count = count + 1
                 end
             end
-            card.joker_display_values.dollars = count >= card.ability.extra.faces and card.ability.extra.dollars or 0
+            card.joker_display_values.dollars = G.GAME.current_round.discards_left > 0 and
+                count >= card.ability.extra.faces and card.ability.extra.dollars or 0
         end
     },
     j_green_joker = { -- Green Joker
@@ -1182,7 +1183,7 @@ return {
                     dollars = dollars + card.ability.extra
                 end
             end
-            card.joker_display_values.dollars = dollars
+            card.joker_display_values.dollars = G.GAME.current_round.discards_left > 0 and dollars or 0
             card.joker_display_values.mail_card_rank = localize(G.GAME.current_round.mail_card.rank, 'ranks')
         end
     },
@@ -1280,7 +1281,7 @@ return {
         },
         calc_function = function(card)
             local is_trading_card_discard = #G.hand.highlighted == 1
-            card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0
+            card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0
             card.joker_display_values.dollars = card.joker_display_values.active and
                 ("+" .. localize('$') .. (is_trading_card_discard and card.ability.extra or 0)) or "-"
         end,
@@ -2084,7 +2085,7 @@ return {
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
         },
         calc_function = function(card)
-            card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and localize("k_active_ex") or "Inactive")
+            card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0 and localize("k_active_ex") or "Inactive")
         end
     },
     j_bootstraps = { -- Bootstraps
