@@ -530,6 +530,7 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
             local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
             local retrigger_function = (joker_display_definition and joker_display_definition.retrigger_function) or
                 (v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key] and
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
 
             if retrigger_function then
