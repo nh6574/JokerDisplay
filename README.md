@@ -23,20 +23,6 @@ Tested with Steamodded 0.9.8 and 1.0.0.
 
 _For information on all the Jokers, please refer to the [examples document](examples/README.md)_ (it's a bit outdated but gives you a general idea)
 
-## Future Improvements and Known Issues
-
-- Blueprint and Brainstorm should display the information of the Joker they're copying.
-- Loyalty Card updates the multiplier at the same time you play the last hand it's active in so it displays X1 instead of X4 like it should.
-- Some jokers starts on +0 on a reload. (Clicking on something fixes it)
-- Some cards might not update properly when Vampire is used on a Stone Card.
-- Matador doesn't calculate if the current hand triggers the Boss ability.
-- If you sell Oops! All 6s other Jokers affected by it won't reload.
-- Some Jokers display nothing when maybe they should (feel free to suggest).
-- I've tried to use native Balatro terms for localization but some Jokers might display information in English.
-- Text can get a bit tiny when there's too much information.
-- UI might be crappy in some places (or all places).
-- Held Planet cards could display their multiplier if the player has the Observatory voucher.
-
 Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for suggestions or bug reports.
 
 ## Mod Support
