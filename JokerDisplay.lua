@@ -53,6 +53,10 @@ function JokerDisplayBox:init(parent, func, args)
                 nodes = {
                     {
                         n = G.UIT.R,
+                        config = { id = "modifiers", ref_table = parent, align = "cm" },
+                    },
+                    {
+                        n = G.UIT.R,
                         config = { id = "extra", ref_table = parent, align = "cm" },
                     },
                     {
@@ -71,7 +75,7 @@ function JokerDisplayBox:init(parent, func, args)
     args.config = args.config or {}
     args.config.align = args.config.align or "bm"
     args.config.parent = parent
-    args.config.offset = {x = 0, y = -0.1}
+    args.config.offset = { x = 0, y = -0.1 }
 
     UIBox.init(self, args)
 
@@ -79,12 +83,14 @@ function JokerDisplayBox:init(parent, func, args)
     self.name = "JokerDisplay"
     self.can_collapse = true
 
-    self.text = self.UIRoot.children[1].children[2]
+    self.text = self.UIRoot.children[1].children[3]
     self.has_text = false
-    self.reminder_text = self.UIRoot.children[1].children[3]
+    self.reminder_text = self.UIRoot.children[1].children[4]
     self.has_reminder_text = false
-    self.extra = self.UIRoot.children[1].children[1]
+    self.extra = self.UIRoot.children[1].children[2]
     self.has_extra = false
+    self.modifier_row = self.UIRoot.children[1].children[1]
+    self.has_modifiers = false
 
     self.modifiers = {
         chips = nil,
@@ -92,7 +98,6 @@ function JokerDisplayBox:init(parent, func, args)
         mult = nil,
         x_mult = nil,
         dollars = nil,
-        odds = nil
     }
 end
 
@@ -122,7 +127,7 @@ end
 
 function JokerDisplayBox:add_extra(node_rows)
     self.has_extra = true
-    for i = 1, #node_rows do
+    for i = #node_rows, 1, -1 do
         local row_nodes = {}
         for j = 1, #node_rows[i] do
             table.insert(row_nodes, JokerDisplay.create_display_object(self.parent, node_rows[i][j]))
@@ -141,6 +146,132 @@ function JokerDisplayBox:remove_extra()
     self:remove_children(self.extra)
 end
 
+function JokerDisplayBox:change_modifiers(modifiers, reset)
+    local new_modifiers = {
+        chips = modifiers.chips or not reset and self.modifiers.chips or nil,
+        x_chips = modifiers.x_chips or not reset and self.modifiers.x_chips or nil,
+        mult = modifiers.mult or not reset and self.modifiers.mult or nil,
+        x_mult = modifiers.x_mult or not reset and self.modifiers.x_mult or nil,
+        dollars = modifiers.dollars or not reset and self.modifiers.dollars or nil,
+    }
+
+    local mod_keys = {"chips", "x_chips", "mult", "x_mult", "dollars"}
+    local modifiers_changed = false
+
+    for i = 1, #mod_keys do
+        if (not not self.modifiers[mod_keys[i]]) ~= (not not new_modifiers[mod_keys[i]]) then
+            modifiers_changed = true
+            break
+        end
+    end
+
+    if modifiers_changed then
+        self.modifiers = new_modifiers
+        self:remove_modifiers()
+        self:add_modifiers()
+    end
+end
+
+function JokerDisplayBox:add_modifiers()
+    self.has_modifiers = true
+
+    local mod_nodes = {}
+
+    if self.modifiers.chips then
+        local chip_node = {}
+        table.insert(chip_node, JokerDisplay.create_display_object(self.parent, { text = "+", colour = G.C.CHIPS }))
+        table.insert(chip_node,
+            JokerDisplay.create_display_object(self.parent,
+                { ref_table = "card.children.joker_display.modifiers", ref_value = "chips", colour = G.C.CHIPS }))
+        table.insert(mod_nodes, chip_node)
+    end
+
+    if self.modifiers.x_chips then
+        local xchip_node = {}
+        table.insert(xchip_node,
+            JokerDisplay.create_display_object(self.parent,
+                {
+                    border_nodes = { { text = "X" },
+                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_chips" } },
+                    border_colour = G.C.CHIPS
+                }))
+        table.insert(mod_nodes, xchip_node)
+    end
+
+    if self.modifiers.mult then
+        local mult_node = {}
+        table.insert(mult_node, JokerDisplay.create_display_object(self.parent, { text = "+", colour = G.C.MULT }))
+        table.insert(mult_node,
+            JokerDisplay.create_display_object(self.parent,
+                { ref_table = "card.children.joker_display.modifiers", ref_value = "mult", colour = G.C.MULT }))
+        table.insert(mod_nodes, mult_node)
+    end
+
+    if self.modifiers.x_mult then
+        local xmult_node = {}
+        table.insert(xmult_node,
+            JokerDisplay.create_display_object(self.parent,
+                {
+                    border_nodes = {
+                        { text = "X" },
+                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_mult" }
+                    }
+                }
+            ))
+        table.insert(mod_nodes, xmult_node)
+    end
+
+    if self.modifiers.dollars then
+        local dollars_node = {}
+        table.insert(dollars_node,
+            JokerDisplay.create_display_object(self.parent, { text = "+" .. localize('$'), colour = G.C.GOLD }))
+        table.insert(dollars_node,
+            JokerDisplay.create_display_object(self.parent,
+                { ref_table = "card.children.joker_display.modifiers", ref_value = "dollars", colour = G.C.GOLD }))
+        table.insert(mod_nodes, dollars_node)
+    end
+
+    for a, b in pairs(mod_nodes) do
+        if type(b) == "table" then
+            for k, v in pairs(b) do
+                if type(v) == "table" then
+                    for g, h in pairs(v) do
+                        sendDebugMessage(tostring(g) .. "  " .. tostring(h))
+                    end
+                end
+            end
+        end
+    end
+
+    local row_index = 1
+    local mod_rows = {}
+    for i = 1, #mod_nodes do
+        if mod_rows[row_index] and #mod_rows[row_index] >= 2 then
+            row_index = row_index + 1
+        end
+        if not mod_rows[row_index] then
+            mod_rows[row_index] = {}
+        end
+        for j = 1, #mod_nodes[i] do
+            table.insert(mod_rows[row_index], mod_nodes[i][j])
+        end
+    end
+
+    for i = 1, #mod_rows do
+        local extra_row = {
+            n = G.UIT.R,
+            config = { ref_table = parent, align = "cm", padding = 0.03 },
+            nodes = mod_rows[i]
+        }
+        self:add_child(extra_row, self.modifier_row)
+    end
+end
+
+function JokerDisplayBox:remove_modifiers()
+    self.has_modifiers = false
+    self:remove_children(self.modifier_row)
+end
+
 function JokerDisplayBox:remove_children(node)
     if not node.children then
         return
@@ -150,27 +281,27 @@ function JokerDisplayBox:remove_children(node)
     self:recalculate()
 end
 
-function JokerDisplayBox:change_modifiers(modifiers, reset)
-    self.modifiers = {
-        chips = modifiers.chips or not reset and self.modifiers.chips or nil,
-        x_chips = modifiers.x_chips or not reset and self.modifiers.x_chips or nil,
-        mult = modifiers.mult or not reset and self.modifiers.mult or nil,
-        x_mult = modifiers.x_mult or not reset and self.modifiers.x_mult or nil,
-        dollars = modifiers.dollars or not reset and self.modifiers.dollars or nil,
-        odds = modifiers.odds or not reset and self.modifiers.odds or nil,
-    }
-end
-
 function JokerDisplayBox:align_to_text()
-    local y_value = self.T.y - (self.has_text and self.text.T.y - 0.1 or self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y - 0.1 or self.UIRoot.T.y)
-        -- (self.has_text and self.text.T.y or
-        -- self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y or
-        -- self.has_reminder_text and self.reminder_text.T.y or
-    sendDebugMessage(self.T.y.. " ".. self.text.T.y.. " ".. y_value)
+    local y_value = self.T.y - (self.has_text and self.text.T.y - 0.1 or
+        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T.y - 0.1 or
+        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y - 0.1 or
+        self.UIRoot.T.y)
     self.UIRoot:align(0, y_value)
 end
 
 function JokerDisplayBox:recalculate()
+    if not (self.has_text or self.has_extra or self.has_modifiers) and self.has_reminder_text then
+        self.text.config.minh = 0.4
+    else
+        self.text.config.minh = nil
+    end
+
+    if self.has_text then
+        self.text.config.padding = 0.03
+    else
+        self.text.config.padding = nil
+    end
+
     UIBox.recalculate(self)
     self:align_to_text()
 end
@@ -406,9 +537,9 @@ end
 ---@param e table
 G.FUNCS.joker_display_style_override = function(e)
     local card = e.config.ref_table
-    local text = e.children and e.children[2] or nil
-    local reminder_text = e.children and e.children[3] or nil
-    local extra = e.children and e.children[1] or nil
+    local text = e.children and e.children[3] or nil
+    local reminder_text = e.children and e.children[4] or nil
+    local extra = e.children and e.children[2] or nil
 
     local joker_display_definition = JokerDisplay.Definitions[card.config.center.key]
     local style_function = joker_display_definition and joker_display_definition.style_function
@@ -654,15 +785,15 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                 local extra_mods = mod_function(card)
                 modifiers = {
                     chips = modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips or
-                    extra_mods.chips or modifiers.chips,
+                        extra_mods.chips or modifiers.chips,
                     x_chips = modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips ^ extra_mods.x_chips or
-                    extra_mods.x_chips or modifiers.x_chips,
+                        extra_mods.x_chips or modifiers.x_chips,
                     mult = modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult or
-                    extra_mods.mult or modifiers.mult,
+                        extra_mods.mult or modifiers.mult,
                     x_mult = modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult ^ extra_mods.x_mult or
-                    extra_mods.x_mult or modifiers.x_mult,
+                        extra_mods.x_mult or modifiers.x_mult,
                     dollars = modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars or
-                    extra_mods.dollars or modifiers.dollars,
+                        extra_mods.dollars or modifiers.dollars,
                 }
             end
         end
@@ -753,7 +884,7 @@ function Card:initialize_joker_display()
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local definiton_text = joker_display_definition and joker_display_definition.text or joker_display_definition.line_1
     local definiton_reminder_text = joker_display_definition and joker_display_definition.reminder_text or
-    joker_display_definition.line_2
+        joker_display_definition.line_2
     local definiton_extra = joker_display_definition and joker_display_definition.extra
 
     if definiton_text then
