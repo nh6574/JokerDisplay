@@ -9,6 +9,41 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
+---UTILITY FUNCTIONS
+
+--- Splits text by a separator.
+---@param str string String to split
+---@param sep string? Separator. Defauls to whitespace.
+---@return table split_text
+local function strsplit(str, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t = {}
+    for substr in string.gmatch(str, "([^" .. sep .. "]+)") do
+        table.insert(t, substr)
+    end
+    return t
+end
+
+--- Deep copies a table
+---@param orig table? Table to copy
+---@return table? copy
+local function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
 ---MOD INITIALIZATION
 
 JokerDisplay = {}
@@ -95,8 +130,10 @@ function JokerDisplayBox:init(parent, func, args)
     self.modifiers = {
         chips = nil,
         x_chips = nil,
+        x_chips_text = nil,
         mult = nil,
         x_mult = nil,
+        x_mult_text = nil,
         dollars = nil,
     }
 end
@@ -161,12 +198,18 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
     for i = 1, #mod_keys do
         if (not not self.modifiers[mod_keys[i]]) ~= (not not new_modifiers[mod_keys[i]]) then
             modifiers_changed = true
-            break
         end
+        self.modifiers[mod_keys[i]] = new_modifiers[mod_keys[i]]
+    end
+
+    self.modifiers.x_chips_text = self.modifiers.x_chips and tonumber(string.format("%.2f", self.modifiers.x_chips)) or nil
+    self.modifiers.x_mult_text = self.modifiers.x_mult and tonumber(string.format("%.2f", self.modifiers.x_mult)) or nil
+
+    for k,v in pairs(self.modifiers) do
+        sendDebugMessage(tostring(k).. " : ".. tostring(v))
     end
 
     if modifiers_changed then
-        self.modifiers = new_modifiers
         self:remove_modifiers()
         self:add_modifiers()
     end
@@ -192,7 +235,7 @@ function JokerDisplayBox:add_modifiers()
             JokerDisplay.create_display_object(self.parent,
                 {
                     border_nodes = { { text = "X" },
-                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_chips" } },
+                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_chips_text" } },
                     border_colour = G.C.CHIPS
                 }))
         table.insert(mod_nodes, xchip_node)
@@ -214,7 +257,7 @@ function JokerDisplayBox:add_modifiers()
                 {
                     border_nodes = {
                         { text = "X" },
-                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_mult" }
+                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_mult_text" }
                     }
                 }
             ))
@@ -231,18 +274,6 @@ function JokerDisplayBox:add_modifiers()
         table.insert(mod_nodes, dollars_node)
     end
 
-    for a, b in pairs(mod_nodes) do
-        if type(b) == "table" then
-            for k, v in pairs(b) do
-                if type(v) == "table" then
-                    for g, h in pairs(v) do
-                        sendDebugMessage(tostring(g) .. "  " .. tostring(h))
-                    end
-                end
-            end
-        end
-    end
-
     local row_index = 1
     local mod_rows = {}
     for i = 1, #mod_nodes do
@@ -252,9 +283,12 @@ function JokerDisplayBox:add_modifiers()
         if not mod_rows[row_index] then
             mod_rows[row_index] = {}
         end
-        for j = 1, #mod_nodes[i] do
-            table.insert(mod_rows[row_index], mod_nodes[i][j])
-        end
+        local mod_column = {
+            n = G.UIT.C,
+            config = { ref_table = parent, align = "cm", padding = 0.03 },
+            nodes = mod_nodes[i]
+        }
+        table.insert(mod_rows[row_index], mod_column)
     end
 
     for i = 1, #mod_rows do
@@ -554,39 +588,6 @@ end
 
 --HELPER FUNCTIONS
 
---- Splits text by a separator.
----@param str string String to split
----@param sep string? Separator. Defauls to whitespace.
----@return table split_text
-local function strsplit(str, sep)
-    if sep == nil then
-        sep = "%s"
-    end
-    local t = {}
-    for substr in string.gmatch(str, "([^" .. sep .. "]+)") do
-        table.insert(t, substr)
-    end
-    return t
-end
-
---- Deep copies a table
----@param orig table? Table to copy
----@return table? copy
-local function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
 ---Returns scoring information about a set of cards. Similar to _G.FUNCS.evaluate_play_.
 ---@param cards table Cards to calculate.
 ---@param count_facedowns boolean? If true, counts cards facing back.
@@ -786,11 +787,11 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                 modifiers = {
                     chips = modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips or
                         extra_mods.chips or modifiers.chips,
-                    x_chips = modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips ^ extra_mods.x_chips or
+                    x_chips = modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips * extra_mods.x_chips or
                         extra_mods.x_chips or modifiers.x_chips,
                     mult = modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult or
                         extra_mods.mult or modifiers.mult,
-                    x_mult = modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult ^ extra_mods.x_mult or
+                    x_mult = modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult * extra_mods.x_mult or
                         extra_mods.x_mult or modifiers.x_mult,
                     dollars = modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars or
                         extra_mods.dollars or modifiers.dollars,
