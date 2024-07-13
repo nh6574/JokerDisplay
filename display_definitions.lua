@@ -1392,15 +1392,6 @@ return {
             { ref_table = "card.ability", ref_value = "extra",           colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = "/10)",              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
-        extra = {
-            {
-                {
-                    border_nodes = {
-                        { text = "X4.3" },
-                    }
-                }
-            }
-        },
         retrigger_function = function(card, scoring_hand, held_in_hand)
             return 1
         end
