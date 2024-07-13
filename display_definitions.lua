@@ -40,17 +40,17 @@
 
 return {
     j_joker = { -- Joker
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_greedy_joker = { -- Greedy Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = { --
+        reminder_text = { --
             { text = "(", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             {
                 text = localize(G.P_CENTERS["j_greedy_joker"].config.extra.suit, 'suits_plural'),
@@ -75,11 +75,11 @@ return {
         end
     },
     j_lusty_joker = { -- Lusty Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                                      colour = G.C.UI.TEXT_INACTIVE,                                                              scale = 0.3 },
             { text = localize(G.P_CENTERS["j_lusty_joker"].config.extra.suit, 'suits_plural'), colour = lighten(loc_colour(G.P_CENTERS["j_lusty_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                      colour = G.C.UI.TEXT_INACTIVE,                                                              scale = 0.3 },
@@ -99,11 +99,11 @@ return {
         end
     },
     j_wrathful_joker = { -- Wrathful Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                                         colour = G.C.UI.TEXT_INACTIVE,                                                                 scale = 0.3 },
             { text = localize(G.P_CENTERS["j_wrathful_joker"].config.extra.suit, 'suits_plural'), colour = lighten(loc_colour(G.P_CENTERS["j_wrathful_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                         colour = G.C.UI.TEXT_INACTIVE,                                                                 scale = 0.3 },
@@ -123,11 +123,11 @@ return {
         end
     },
     j_gluttenous_joker = { -- Gluttonous Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                                           colour = G.C.UI.TEXT_INACTIVE,                                                                   scale = 0.3 },
             { text = localize(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit, 'suits_plural'), colour = lighten(loc_colour(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit:lower()), 0.35), scale = 0.3 },
             { text = ")",                                                                           colour = G.C.UI.TEXT_INACTIVE,                                                                   scale = 0.3 },
@@ -147,11 +147,11 @@ return {
         end
     },
     j_jolly = { -- Jolly Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_jolly"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -167,11 +167,11 @@ return {
         end
     },
     j_zany = { -- Zany Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_zany"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -187,11 +187,11 @@ return {
         end
     },
     j_mad = { -- Mad Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_mad"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -207,11 +207,11 @@ return {
         end
     },
     j_crazy = { -- Crazy Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_crazy"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -227,11 +227,11 @@ return {
         end
     },
     j_droll = { -- Droll Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_droll"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -247,11 +247,11 @@ return {
         end
     },
     j_sly = { -- Sly Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = " (",                                                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_sly"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -267,11 +267,11 @@ return {
         end
     },
     j_wily = { -- Wily Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = " (",                                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_wily"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -287,11 +287,11 @@ return {
         end
     },
     j_clever = { -- Clever Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = " (",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_clever"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -307,11 +307,11 @@ return {
         end
     },
     j_devious = { -- Devious Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = " (",                                                          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_devious"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                           colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -327,11 +327,11 @@ return {
         end
     },
     j_crafty = { -- Crafty Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = " (",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_crafty"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -347,7 +347,7 @@ return {
         end
     },
     j_half = { -- Half Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -361,7 +361,7 @@ return {
         end
     },
     j_stencil = { -- Joker Stencil
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -380,13 +380,13 @@ return {
     j_credit_card = { -- Credit Card
     },
     j_ceremonial = {  -- Ceremonial Dagger
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_banner = { -- Banner
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
@@ -396,7 +396,7 @@ return {
         end
     },
     j_mystic_summit = { -- Mystic Summit
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -408,7 +408,7 @@ return {
     j_marble = {       -- Marble Joker
     },
     j_loyalty_card = { -- Loyalty Card
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -416,23 +416,23 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "loyalty_text",    colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
             local loyalty_remaining = card.ability.loyalty_remaining + (next(G.play.cards) and 1 or 0)
-            card.joker_display_values.loyalty_text = localize { type = 'variable', key = (loyalty_remaining%6 == 0 and 'loyalty_active' or 'loyalty_inactive'), vars = { loyalty_remaining } }
-            card.joker_display_values.x_mult = (loyalty_remaining%6 == 0 and card.ability.extra.Xmult or 1)
+            card.joker_display_values.loyalty_text = localize { type = 'variable', key = (loyalty_remaining % 6 == 0 and 'loyalty_active' or 'loyalty_inactive'), vars = { loyalty_remaining } }
+            card.joker_display_values.x_mult = (loyalty_remaining % 6 == 0 and card.ability.extra.Xmult or 1)
         end
     },
     j_8_ball = { -- 8 Ball
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.SECONDARY_SET.Tarot },
             { ref_table = "card.joker_display_values", ref_value = "count",             colour = G.C.SECONDARY_SET.Tarot },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                   colour = G.C.GREEN, scale = 0.3 },
             { ref_table = "card.joker_display_values",                      ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
             { text = " in " .. G.P_CENTERS["j_8_ball"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
@@ -452,7 +452,7 @@ return {
         end
     },
     j_misprint = { -- Misprint
-        line_1 = {
+        text = {
             { text = "+", colour = G.C.MULT },
             {
                 dynatext = {
@@ -477,7 +477,7 @@ return {
         }
     },
     j_dusk = { -- Dusk
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "active",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -491,7 +491,7 @@ return {
         end
     },
     j_raised_fist = { -- Raised Fist
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -516,11 +516,11 @@ return {
     j_chaos = {     -- Chaos the Clown
     },
     j_fibonacci = { -- Fibonacci
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("Ace", "ranks") .. ",2,3,5,8)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
@@ -539,7 +539,7 @@ return {
         end
     },
     j_steel_joker = { -- Steel Joker
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -552,11 +552,11 @@ return {
         end
     },
     j_scary_face = { -- Scary Face
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("k_face_cards"), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -576,7 +576,7 @@ return {
         end
     },
     j_abstract = { -- Abstract Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -585,11 +585,11 @@ return {
         end
     },
     j_delayed_grat = { -- Delayed Gratification
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
@@ -597,7 +597,7 @@ return {
         end
     },
     j_hack = { -- Hack
-        line_2 = {
+        reminder_text = {
             { text = "(2,3,4,5)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         retrigger_function = function(card, scoring_hand, held_in_hand)
@@ -607,17 +607,17 @@ return {
     j_pareidolia = {  -- Pareidolia
     },
     j_gros_michel = { -- Gros Michel
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.MULT },
             { ref_table = "card.ability.extra", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_even_steven = { -- Even Steven
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(10,8,6,4,2)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
@@ -635,11 +635,11 @@ return {
         end
     },
     j_odd_todd = { -- Odd Todd
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("Ace", "ranks") .. ",9,7,5,3)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
@@ -658,13 +658,13 @@ return {
         end
     },
     j_scholar = { -- Scholar
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS },
             { text = " +",                             colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_aces") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
@@ -684,12 +684,12 @@ return {
         end
     },
     j_business = { -- Business Card
-        line_1 = {
+        text = {
             { ref_table = "card.joker_display_values", ref_value = "count" },
             { text = "x",                              scale = 0.35 },
             { text = localize('$') .. "2",             colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                     colour = G.C.GREEN, scale = 0.3 },
             { ref_table = "card.joker_display_values",                        ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
             { text = " in " .. G.P_CENTERS["j_business"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
@@ -709,7 +709,7 @@ return {
         end
     },
     j_supernova = { -- Supernova
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -721,7 +721,7 @@ return {
         end
     },
     j_ride_the_bus = { -- Ride the Bus
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
@@ -729,7 +729,7 @@ return {
     j_burglar = { -- Burglar
     },
     j_space = {   -- Space Joker
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                  colour = G.C.GREEN, scale = 0.3 },
             { ref_table = "card.joker_display_values",                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
             { text = " in " .. G.P_CENTERS["j_space"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
@@ -739,7 +739,7 @@ return {
         end
     },
     j_egg = { -- Egg
-        line_2 = {
+        reminder_text = {
             { text = "(",           colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
             { text = localize('$'), colour = G.C.GOLD,             scale = 0.35 },
             { ref_table = "card",   ref_value = "sell_cost",       colour = G.C.GOLD, scale = 0.35 },
@@ -747,7 +747,7 @@ return {
         }
     },
     j_blackboard = { -- Blackboard
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -772,19 +772,19 @@ return {
         end
     },
     j_runner = { -- Runner
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.CHIPS },
             { ref_table = "card.ability.extra", ref_value = "chips", colour = G.C.CHIPS }
         }
     },
     j_ice_cream = { -- Ice Cream
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.CHIPS },
             { ref_table = "card.ability.extra", ref_value = "chips", colour = G.C.CHIPS }
         }
     },
     j_dna = { -- DNA
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "active",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -796,7 +796,7 @@ return {
     j_splash = {     -- Splash
     },
     j_blue_joker = { -- Blue Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
@@ -805,10 +805,10 @@ return {
         end
     },
     j_sixth_sense = { -- Sixth Sense
-        line_1 = {
+        text = {
             { ref_table = "card.joker_display_values", ref_value = "active_text" }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(6)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
         },
         calc_function = function(card)
@@ -817,18 +817,18 @@ return {
             local sixth_sense_eval = #scoring_hand == 1 and scoring_hand[1]:get_id() == 6
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_played == 0
             card.joker_display_values.active_text = card.joker_display_values.active and
-            "+" .. tostring(sixth_sense_eval and 1 or 0) or "-"
+                "+" .. tostring(sixth_sense_eval and 1 or 0) or "-"
         end,
-        style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Spectral or
+        style_function = function(card, text, reminder_text, extra)
+            if text and text.children[1] then
+                text.children[1].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Spectral or
                     G.C.UI.TEXT_INACTIVE
             end
             return false
         end
     },
     j_constellation = { -- Constellation
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -840,7 +840,7 @@ return {
     j_hiker = {    -- Hiker
     },
     j_faceless = { -- Faceless Joker
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
@@ -857,17 +857,17 @@ return {
         end
     },
     j_green_joker = { -- Green Joker
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_superposition = { -- Superposition
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.SECONDARY_SET.Tarot },
             { ref_table = "card.joker_display_values", ref_value = "count",             colour = G.C.SECONDARY_SET.Tarot },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("Ace", "ranks"),            colour = G.C.ORANGE,           scale = 0.3 },
             { text = "+",                                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -890,11 +890,11 @@ return {
         end
     },
     j_todo_list = { -- To Do List
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "to_do_poker_hand", colour = G.C.ORANGE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
@@ -908,7 +908,7 @@ return {
         end
     },
     j_cavendish = { -- Cavendish
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -918,7 +918,7 @@ return {
         }
     },
     j_card_sharp = { -- Card Sharp
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -935,13 +935,13 @@ return {
         end
     },
     j_red_card = { -- Red Card
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_madness = { -- Madness
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -951,17 +951,17 @@ return {
         }
     },
     j_square = { -- Square Joker
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.CHIPS },
             { ref_table = "card.ability.extra", ref_value = "chips", colour = G.C.CHIPS }
         }
     },
     j_seance = { -- Séance
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.SECONDARY_SET.Spectral },
             { ref_table = "card.joker_display_values", ref_value = "count",                colour = G.C.SECONDARY_SET.Spectral },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_seance"].config.extra.poker_hand, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -976,7 +976,7 @@ return {
     j_riff_raff = { -- Riff-Raff
     },
     j_vampire = {   -- Vampire
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -988,7 +988,7 @@ return {
     j_shortcut = { -- Shortcut
     },
     j_hologram = { -- Hologram
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -998,7 +998,7 @@ return {
         }
     },
     j_vagabond = { -- Vagabond
-        line_1 = {
+        text = {
             { ref_table = "card.joker_display_values", ref_value = "active_text", colour = G.C.SECONDARY_SET.Tarot }
         },
         calc_function = function(card)
@@ -1007,7 +1007,7 @@ return {
         end
     },
     j_baron = { -- Baron
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1029,11 +1029,11 @@ return {
         end
     },
     j_cloud_9 = { -- Cloud 9
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
@@ -1041,16 +1041,16 @@ return {
         end
     },
     j_rocket = { -- Rocket
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),      colour = G.C.GOLD },
             { ref_table = "card.ability.extra", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
     },
     j_obelisk = { -- Obelisk
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1074,7 +1074,7 @@ return {
     j_midas_mask = { -- Midas Mask
     },
     j_luchador = {   -- Luchador
-        line_2 = {
+        reminder_text = {
             { ref_table = "card.joker_display_values", ref_value = "active_text", scale = 0.3 },
         },
         calc_function = function(card)
@@ -1083,17 +1083,17 @@ return {
             card.joker_display_values.active = disableable
             card.joker_display_values.active_text = localize(disableable and 'k_active' or 'ph_no_boss_active')
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 then
-                line_2.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
-                line_2.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[1] then
+                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
+                reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
             end
             return false
         end
     },
     j_photograph = { -- Photograph
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1101,7 +1101,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("k_face_cards"), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1124,14 +1124,14 @@ return {
     j_gift = {        -- Gift Card
     },
     j_turtle_bean = { -- Turtle Bean
-        line_2 = {
+        reminder_text = {
             { text = "(+",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
             { ref_table = "card.ability.extra", ref_value = "h_size",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
             { text = ")",                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
         }
     },
     j_erosion = { -- Erosion
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -1141,12 +1141,12 @@ return {
         end
     },
     j_reserved_parking = { -- Reserved Parking
-        line_1 = {
+        text = {
             { ref_table = "card.joker_display_values",                                        ref_value = "count" },
             { text = "x",                                                                     scale = 0.35 },
             { text = localize('$') .. G.P_CENTERS["j_reserved_parking"].config.extra.dollars, colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                                  colour = G.C.GREEN, scale = 0.3 },
             { ref_table = "card.joker_display_values",                                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
             { text = " in " .. G.P_CENTERS["j_reserved_parking"].config.extra.odds .. ")", colour = G.C.GREEN, scale = 0.3 },
@@ -1166,11 +1166,11 @@ return {
         end
     },
     j_mail = { -- Mail-In Rebate
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
             { ref_table = "card.joker_display_values", ref_value = "mail_card_rank",  colour = G.C.ORANGE, scale = 0.35 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 }
@@ -1188,11 +1188,11 @@ return {
         end
     },
     j_to_the_moon = { -- To the Moon
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
@@ -1203,7 +1203,7 @@ return {
     j_hallucination = {  -- Hallucination
     },
     j_fortune_teller = { -- Fortune Teller
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
@@ -1217,7 +1217,7 @@ return {
     j_drunkard = { -- Drunkard
     },
     j_stone = {    -- Stone Joker
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
@@ -1226,16 +1226,16 @@ return {
         end
     },
     j_golden = { -- Golden Joker
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'), colour = G.C.GOLD },
             { ref_table = "card.ability",  ref_value = "extra", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
     },
     j_lucky_cat = { -- Lucky Cat
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1245,7 +1245,7 @@ return {
         }
     },
     j_baseball = { -- Baseball Card
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "count",           colour = G.C.ORANGE, scale = 0.3 },
             { text = "x",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1262,10 +1262,13 @@ return {
                 end
             end
             card.joker_display_values.count = count
+        end,
+        mod_function = function(card)
+            return { x_mult = card.config.center.rarity == 2 and G.P_CENTERS["j_baseball"].config.extra or nil }
         end
     },
     j_bull = { -- Bull
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS }
         },
@@ -1276,43 +1279,44 @@ return {
     j_diet_cola = { -- Diet Cola
     },
     j_trading = {   -- Trading Card
-        line_1 = {
+        text = {
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
         calc_function = function(card)
             local is_trading_card_discard = #G.hand.highlighted == 1
-            card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0
+            card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0 and
+                G.GAME.current_round.discards_left > 0
             card.joker_display_values.dollars = card.joker_display_values.active and
                 ("+" .. localize('$') .. (is_trading_card_discard and card.ability.extra or 0)) or "-"
         end,
-        style_function = function(card, line_1, line_2)
-            if line_1 then
-                line_1.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
+        style_function = function(card, text, reminder_text, extra)
+            if text and text.children[1] then
+                text.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
                     G.C.UI.TEXT_INACTIVE
             end
             return false
         end
     },
     j_flash = { -- Flash Card
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_popcorn = { -- Popcorn
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_trousers = { -- Spare Trousers
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
     },
     j_ancient = { -- Ancient Joker
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1320,7 +1324,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,   scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "ancient_card_suit", scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,   scale = 0.3 }
@@ -1339,15 +1343,15 @@ return {
             card.joker_display_values.ancient_card_suit = localize(G.GAME.current_round.ancient_card.suit,
                 'suits_singular')
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 then
-                line_2.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.ancient_card.suit], 0.35)
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.ancient_card.suit], 0.35)
             end
             return false
         end
     },
     j_ramen = { -- Ramen
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1357,13 +1361,13 @@ return {
         }
     },
     j_walkie_talkie = { -- Walkie Talkie
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS },
             { text = " +",                             colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(10,4)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
@@ -1383,21 +1387,30 @@ return {
         end
     },
     j_selzer = { -- Seltzer
-        line_2 = {
+        reminder_text = {
             { text = "(",                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.ability", ref_value = "extra",           colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = "/10)",              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+        },
+        extra = {
+            {
+                {
+                    border_nodes = {
+                        { text = "X4.3" },
+                    }
+                }
+            }
         },
         retrigger_function = function(card, scoring_hand, held_in_hand)
             return 1
         end
     },
     j_castle = { -- Castle
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.CHIPS },
             { ref_table = "card.ability.extra", ref_value = "chips", colour = G.C.CHIPS },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "castle_card_suit", scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 }
@@ -1405,19 +1418,19 @@ return {
         calc_function = function(card)
             card.joker_display_values.castle_card_suit = localize(G.GAME.current_round.castle_card.suit, 'suits_singular')
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 then
-                line_2.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.castle_card.suit], 0.35)
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.castle_card.suit], 0.35)
             end
             return false
         end
     },
     j_smiley = { -- Smiley Face
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("k_face_cards"), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                      colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1437,7 +1450,7 @@ return {
         end
     },
     j_campfire = { -- Campfire
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1447,11 +1460,11 @@ return {
         }
     },
     j_ticket = { -- Golden Ticket
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("k_gold"), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1471,7 +1484,7 @@ return {
         end
     },
     j_mr_bones = { -- Mr. Bones
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "active",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1482,7 +1495,7 @@ return {
         end
     },
     j_acrobat = { -- Acrobat
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1501,7 +1514,7 @@ return {
         end
     },
     j_swashbuckler = { -- Swashbuckler
-        line_1 = {
+        text = {
             { text = "+",                 colour = G.C.MULT },
             { ref_table = "card.ability", ref_value = "mult", colour = G.C.MULT }
         }
@@ -1513,7 +1526,7 @@ return {
     j_smeared = {     -- Smeared Joker
     },
     j_throwback = {   -- Throwback
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1529,11 +1542,11 @@ return {
         end
     },
     j_rough_gem = { -- Rough Gem
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                  colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
             { text = localize("Diamonds", 'suits_plural'), colour = G.C.SUITS["Diamonds"], scale = 0.3 },
             { text = ")",                                  colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 }
@@ -1553,7 +1566,7 @@ return {
         end
     },
     j_bloodstone = { -- Bloodstone
-        line_1 = {
+        text = {
             { ref_table = "card.joker_display_values", ref_value = "count" },
             { text = "x",                              scale = 0.35 },
             {
@@ -1563,7 +1576,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                            colour = G.C.GREEN,            scale = 0.3 },
             { ref_table = "card.joker_display_values",                               ref_value = "odds",            colour = G.C.GREEN, scale = 0.3 },
             { text = " in " .. G.P_CENTERS["j_bloodstone"].config.extra.odds .. ")", colour = G.C.GREEN,            scale = 0.3 },
@@ -1586,11 +1599,11 @@ return {
         end
     },
     j_arrowhead = { -- Arrowhead
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("Spades", 'suits_plural'), colour = G.C.SUITS["Spades"],  scale = 0.3 },
             { text = ")",                                colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
@@ -1610,11 +1623,11 @@ return {
         end
     },
     j_onyx_agate = { -- Onyx Agate
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                               colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("Clubs", 'suits_plural'), colour = G.C.SUITS["Clubs"],   scale = 0.3 },
             { text = ")",                               colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
@@ -1634,7 +1647,7 @@ return {
         end
     },
     j_glass = { -- Glass Joker
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1646,7 +1659,7 @@ return {
     j_ring_master = { -- Showman
     },
     j_flower_pot = {  -- Flower Pot
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1654,7 +1667,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = "All Suits", colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
@@ -1700,7 +1713,7 @@ return {
         end
     },
     j_blueprint = { -- Blueprint
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "blueprint_ability_name_ui", colour = G.C.ORANGE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 }
@@ -1714,9 +1727,9 @@ return {
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 then
-                line_2.children[2].config.colour = card.joker_display_values
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values
                     .blueprint_ability_name and G.C.GREEN or
                     G.C.RED
             end
@@ -1724,7 +1737,7 @@ return {
         end
     },
     j_wee = { -- Wee Joker
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.CHIPS },
             { ref_table = "card.ability.extra", ref_value = "chips", colour = G.C.CHIPS },
         }
@@ -1734,7 +1747,7 @@ return {
     j_oops = {       -- Oops! All 6s
     },
     j_idol = {       -- The Idol
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1742,7 +1755,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "idol_card_rank",  colour = G.C.ORANGE, scale = 0.35 },
             { text = " of ",                           scale = 0.3 },
@@ -1763,15 +1776,15 @@ return {
             card.joker_display_values.idol_card_rank = localize(G.GAME.current_round.idol_card.rank, 'ranks')
             card.joker_display_values.idol_card_suit = localize(G.GAME.current_round.idol_card.suit, 'suits_plural')
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 and card.joker_display_values then
-                line_2.children[4].config.colour = lighten(G.C.SUITS[G.GAME.current_round.idol_card.suit], 0.35)
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[4] then
+                reminder_text.children[4].config.colour = lighten(G.C.SUITS[G.GAME.current_round.idol_card.suit], 0.35)
             end
             return false
         end
     },
     j_seeing_double = { -- Seeing Double
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1779,7 +1792,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                 colour = G.C.UI.TEXT_INACTIVE,              scale = 0.3 },
             { text = localize("Clubs", 'suits_singular'), colour = lighten(G.C.SUITS["Clubs"], 0.35), scale = 0.3 },
             { text = "+",                                 scale = 0.3 },
@@ -1827,8 +1840,8 @@ return {
         end
     },
     j_matador = { -- Matador
-        line_2 = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text", sclae = 0.3 },
+        reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "active_text", scale = 0.3 },
         },
         calc_function = function(card)
             local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
@@ -1837,18 +1850,18 @@ return {
             card.joker_display_values.active_text = card.joker_display_values.active and
                 ("+" .. localize('$') .. card.ability.extra .. "?") or localize('ph_no_boss_active')
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 and card.joker_display_values then
-                line_2.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[1] and card.joker_display_values then
+                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
                     G.C.RED
-                line_2.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
+                reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
             end
             return false
         end
     },
     j_hit_the_road = { -- Hit the Road
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1858,7 +1871,7 @@ return {
         }
     },
     j_duo = { -- The Duo
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1866,7 +1879,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_duo"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                       colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1882,7 +1895,7 @@ return {
         end
     },
     j_trio = { -- The Trio
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1890,7 +1903,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_trio"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1906,7 +1919,7 @@ return {
         end
     },
     j_family = { -- The Family
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1914,7 +1927,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_family"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1930,7 +1943,7 @@ return {
         end
     },
     j_order = { -- The Order
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1938,7 +1951,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_order"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1954,7 +1967,7 @@ return {
         end
     },
     j_tribe = { -- The Tribe
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -1962,7 +1975,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize(G.P_CENTERS["j_tribe"].config.type, 'poker_hands'), colour = G.C.ORANGE,           scale = 0.3 },
             { text = ")",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -1978,13 +1991,13 @@ return {
         end
     },
     j_stuntman = { -- Stuntman
-        line_1 = {
+        text = {
             { text = "+",                       colour = G.C.CHIPS },
             { ref_table = "card.ability.extra", ref_value = "chip_mod", colour = G.C.CHIPS },
         }
     },
     j_invisible = { -- Invisible Joker
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
             { ref_table = "card.joker_display_values", ref_value = "active",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.35 },
@@ -1996,7 +2009,7 @@ return {
         end
     },
     j_brainstorm = { -- Brainstorm
-        line_2 = {
+        reminder_text = {
             { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 },
             { ref_table = "card.joker_display_values", ref_value = "blueprint_ability_name_ui", colour = G.C.ORANGE, scale = 0.3 },
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 }
@@ -2010,21 +2023,20 @@ return {
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 then
-                line_2.children[2].config.colour = card.joker_display_values
-                    .blueprint_ability_name and G.C.GREEN or
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.blueprint_ability_name and G.C.GREEN or
                     G.C.RED
             end
             return false
         end
     },
     j_satellite = { -- Satellite
-        line_1 = {
+        text = {
             { text = "+" .. localize('$'),             colour = G.C.GOLD },
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
         },
-        line_2 = {
+        reminder_text = {
             { text = "(" .. localize("k_round") .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
         },
         calc_function = function(card)
@@ -2038,7 +2050,7 @@ return {
         end
     },
     j_shoot_the_moon = { -- Shoot the Moon
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
         },
@@ -2056,7 +2068,7 @@ return {
         end
     },
     j_drivers_license = { -- Driver's License
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -2064,7 +2076,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                 colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.ability", ref_value = "driver_tally",    colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = "/16)",              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -2079,17 +2091,17 @@ return {
     j_astronomer = {  -- Astronomer
     },
     j_burnt = {       -- Burnt Joker
-        line_2 = {
-            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
-            { ref_table = "card.joker_display_values", ref_value = "active",           colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
-            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,  scale = 0.3 },
+        reminder_text = {
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { ref_table = "card.joker_display_values", ref_value = "active",          colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
         },
         calc_function = function(card)
             card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0 and localize("k_active_ex") or "Inactive")
         end
     },
     j_bootstraps = { -- Bootstraps
-        line_1 = {
+        text = {
             { text = "+",                              colour = G.C.MULT },
             { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
         },
@@ -2100,7 +2112,7 @@ return {
         end
     },
     j_caino = { -- Canio
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -2110,7 +2122,7 @@ return {
         }
     },
     j_triboulet = { -- Triboulet
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -2118,7 +2130,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("King", "ranks"),  colour = G.C.ORANGE,           scale = 0.3 },
             { text = ",",                        colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -2139,7 +2151,7 @@ return {
         end
     },
     j_yorick = { -- Yorick
-        line_1 = {
+        text = {
             {
                 border_nodes = {
                     { text = "X" },
@@ -2147,7 +2159,7 @@ return {
                 }
             }
         },
-        line_2 = {
+        reminder_text = {
             { text = "(",                                                         colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { ref_table = "card.joker_display_values",                            ref_value = "yorick_discards", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = "/" .. G.P_CENTERS["j_yorick"].config.extra.discards .. ")", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
@@ -2157,7 +2169,7 @@ return {
         end
     },
     j_chicot = { -- Chicot
-        line_2 = {
+        reminder_text = {
             { ref_table = "card.joker_display_values", ref_value = "active_text", scale = 0.3 },
         },
         calc_function = function(card)
@@ -2165,11 +2177,11 @@ return {
             card.joker_display_values.active = disableable
             card.joker_display_values.active_text = localize(disableable and 'k_active' or 'ph_no_boss_active')
         end,
-        style_function = function(card, line_1, line_2)
-            if line_2 then
-                line_2.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[1] then
+                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.RED
-                line_2.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
+                reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
             end
             return false

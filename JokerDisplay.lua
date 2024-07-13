@@ -25,6 +25,156 @@ else -- 1.x
     JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
 end
 
+---DISPLAY BOX CLASS
+
+JokerDisplayBox = UIBox:extend()
+
+function JokerDisplayBox:init(parent, func, args)
+    args = args or {}
+
+    args.definition = args.definition or {
+        n = G.UIT.ROOT,
+        config = {
+            minh = 0.6,
+            minw = 2,
+            maxw = 2,
+            r = 0.001,
+            padding = 0.1,
+            align = 'cm',
+            colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+            shadow = true,
+            func = func,
+            ref_table = parent
+        },
+        nodes = {
+            {
+                n = G.UIT.R,
+                config = { ref_table = parent, align = "cm", func = "joker_display_style_override" },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { id = "extra", ref_table = parent, align = "cm" },
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { id = "text", ref_table = parent, align = "cm" },
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { id = "reminder_text", ref_table = parent, align = "cm" },
+                    }
+                }
+            },
+        }
+    }
+
+    args.config = args.config or {}
+    args.config.align = args.config.align or "bm"
+    args.config.parent = parent
+    args.config.offset = {x = 0, y = -0.1}
+
+    UIBox.init(self, args)
+
+    self.states.collide.can = true
+    self.name = "JokerDisplay"
+    self.can_collapse = true
+
+    self.text = self.UIRoot.children[1].children[2]
+    self.has_text = false
+    self.reminder_text = self.UIRoot.children[1].children[3]
+    self.has_reminder_text = false
+    self.extra = self.UIRoot.children[1].children[1]
+    self.has_extra = false
+
+    self.modifiers = {
+        chips = nil,
+        x_chips = nil,
+        mult = nil,
+        x_mult = nil,
+        dollars = nil,
+        odds = nil
+    }
+end
+
+function JokerDisplayBox:add_text(nodes)
+    self.has_text = true
+    for i = 1, #nodes do
+        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i]), self.text)
+    end
+end
+
+function JokerDisplayBox:remove_text()
+    self.has_text = false
+    self:remove_children(self.text)
+end
+
+function JokerDisplayBox:add_reminder_text(nodes)
+    self.has_reminder_text = true
+    for i = 1, #nodes do
+        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i]), self.reminder_text)
+    end
+end
+
+function JokerDisplayBox:remove_reminder_text()
+    self.has_reminder_text = false
+    self:remove_children(self.reminder_text)
+end
+
+function JokerDisplayBox:add_extra(node_rows)
+    self.has_extra = true
+    for i = 1, #node_rows do
+        local row_nodes = {}
+        for j = 1, #node_rows[i] do
+            table.insert(row_nodes, JokerDisplay.create_display_object(self.parent, node_rows[i][j]))
+        end
+        local extra_row = {
+            n = G.UIT.R,
+            config = { ref_table = parent, align = "cm", padding = 0.03 },
+            nodes = row_nodes
+        }
+        self:add_child(extra_row, self.extra)
+    end
+end
+
+function JokerDisplayBox:remove_extra()
+    self.has_extra = false
+    self:remove_children(self.extra)
+end
+
+function JokerDisplayBox:remove_children(node)
+    if not node.children then
+        return
+    end
+    remove_all(node.children)
+    node.children = {}
+    self:recalculate()
+end
+
+function JokerDisplayBox:change_modifiers(modifiers, reset)
+    self.modifiers = {
+        chips = modifiers.chips or not reset and self.modifiers.chips or nil,
+        x_chips = modifiers.x_chips or not reset and self.modifiers.x_chips or nil,
+        mult = modifiers.mult or not reset and self.modifiers.mult or nil,
+        x_mult = modifiers.x_mult or not reset and self.modifiers.x_mult or nil,
+        dollars = modifiers.dollars or not reset and self.modifiers.dollars or nil,
+        odds = modifiers.odds or not reset and self.modifiers.odds or nil,
+    }
+end
+
+function JokerDisplayBox:align_to_text()
+    local y_value = self.T.y - (self.has_text and self.text.T.y - 0.1 or self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y - 0.1 or self.UIRoot.T.y)
+        -- (self.has_text and self.text.T.y or
+        -- self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y or
+        -- self.has_reminder_text and self.reminder_text.T.y or
+    sendDebugMessage(self.T.y.. " ".. self.text.T.y.. " ".. y_value)
+    self.UIRoot:align(0, y_value)
+end
+
+function JokerDisplayBox:recalculate()
+    UIBox.recalculate(self)
+    self:align_to_text()
+end
+
 ---DISPLAY CONFIGURATION
 
 ---Updates the JokerDisplay and initializes it if necessary.
@@ -38,209 +188,54 @@ function Card:update_joker_display(from)
             self.joker_display_values.small = false
 
             --Regular Display
-            local joker_display_nodes = self:initialize_joker_display()
-            self.config.joker_display = {
-                n = G.UIT.ROOT,
-                config = {
-                    minh = 0.6,
-                    maxh = 1.2,
-                    minw = 2,
-                    maxw = 2,
-                    r = 0.001,
-                    padding = 0.1,
-                    align = 'cm',
-                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = true,
-                    func = 'joker_display_disable',
-                    ref_table = self
-                },
-                nodes = {
-                    {
-                        n = G.UIT.R,
-                        config = { ref_table = self, align = "cm", func = "joker_display_style_override" },
-                        nodes = joker_display_nodes
-                    }
+            self.children.joker_display = JokerDisplayBox(self, "joker_display_disable")
+            self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable")
+            self:initialize_joker_display()
 
-                }
-            }
+            -- --Debuff Display
+            -- self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff")
 
-            self.config.joker_display_config = {
-                align = "bm",
-                bond = 'Strong',
-                parent = self,
-                offset = { x = 0, y = -0.1 }
-            }
-            if self.config.joker_display then
-                self.children.joker_display = UIBox {
-                    definition = self.config.joker_display,
-                    config = self.config.joker_display_config,
-                }
-                self.children.joker_display.states.collide.can = true
-                self.children.joker_display.name = "JokerDisplay"
-                self.children.joker_display.can_collapse = true
-            end
+            -- self.children.joker_display_debuff:add_child({
+            --     n = G.UIT.R,
+            --     config = {
+            --         align = "cm"
+            --     },
+            --     nodes = {
+            --         JokerDisplay.create_display_text_object({
+            --             text = "" .. localize("k_debuffed"),
+            --             colour = G.C.UI.TEXT_INACTIVE
+            --         })
+            --     }
+            -- })
 
-            --Small Display
-            joker_display_nodes = self:initialize_joker_display()
-            self.config.joker_display_small = {
-                n = G.UIT.ROOT,
-                config = {
-                    minh = 0.6,
-                    maxh = 1.2,
-                    minw = 2,
-                    maxw = 2,
-                    r = 0.001,
-                    padding = 0.1,
-                    align = 'cm',
-                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = true,
-                    func = 'joker_display_small_enable',
-                    ref_table = self
-                },
-                nodes = {
-                    {
-                        n = G.UIT.R,
-                        config = { ref_table = self, align = "cm", func = "joker_display_style_override" },
-                        nodes = { joker_display_nodes[1] }
-                    }
+            -- --Debuff Display (with Baseball XMULT)
+            -- self.children.joker_display_debuff_baseball = JokerDisplayBox(self, "joker_display_debuff")
 
-                }
-            }
-
-            self.config.joker_display_small_config = {
-                align = "bm",
-                bond = 'Strong',
-                parent = self,
-                offset = { x = 0, y = -0.1 }
-            }
-            if self.config.joker_display_small then
-                self.children.joker_display_small = UIBox {
-                    definition = self.config.joker_display_small,
-                    config = self.config.joker_display_small_config,
-                }
-                self.children.joker_display_small.states.collide.can = true
-                self.children.joker_display_small.name = "JokerDisplay"
-                self.children.joker_display_small.can_collapse = true
-            end
-
-            --Debuff Display
-            self.config.joker_display_debuff = {
-                n = G.UIT.ROOT,
-                config = {
-                    minh = 0.6,
-                    maxh = 1.5,
-                    minw = 2,
-                    maxw = 2,
-                    r = 0.001,
-                    padding = 0.1,
-                    align = 'cm',
-                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = true,
-                    func = 'joker_display_debuff',
-                    ref_table = self
-                },
-                nodes = {
-                    {
-                        n = G.UIT.R,
-                        config = { align = "cm" },
-                        nodes = {
-                            {
-                                n = G.UIT.R,
-                                config = {
-                                    align = "cm"
-                                },
-                                nodes = {
-                                    JokerDisplay.create_display_text_object({
-                                        text = "" .. localize("k_debuffed"),
-                                        colour = G.C.UI.TEXT_INACTIVE
-                                    })
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            self.config.joker_display_debuff_config = {
-                align = "bm",
-                bond = 'Strong',
-                parent = self,
-                offset = { x = 0, y = -0.1 }
-            }
-            if self.config.joker_display_debuff then
-                self.children.joker_display_debuff = UIBox {
-                    definition = self.config.joker_display_debuff,
-                    config = self.config.joker_display_debuff_config,
-                }
-                self.children.joker_display_debuff.states.collide.can = true
-                self.children.joker_display_debuff.name = "JokerDisplay"
-            end
-
-            --Debuff Display (with Baseball XMULT)
-            self.config.joker_display_debuff_baseball = {
-                n = G.UIT.ROOT,
-                config = {
-                    minh = 0.6,
-                    maxh = 1.2,
-                    minw = 2,
-                    maxw = 2,
-                    r = 0.001,
-                    padding = 0.1,
-                    align = 'cm',
-                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = true,
-                    func = 'joker_display_debuff_baseball',
-                    ref_table = self
-                },
-                nodes = {
-                    {
-                        n = G.UIT.R,
-                        config = { align = "cm" },
-                        nodes = {
-                            {
-                                n = G.UIT.R,
-                                config = {
-                                    align = "cm"
-                                },
-                                nodes = {
-                                    JokerDisplay.create_display_text_object({
-                                        text = "" .. localize("k_debuffed") .. " (",
-                                        colour =
-                                            G.C.UI.TEXT_INACTIVE
-                                    }),
-                                    JokerDisplay.create_display_border_text_object(
-                                        { JokerDisplay.create_display_text_object({
-                                            ref_table = self
-                                                .joker_display_values,
-                                            ref_value = "x_mult_mod"
-                                        }) },
-                                        G.C.XMULT),
-                                    JokerDisplay.create_display_text_object({
-                                        text = ")",
-                                        colour =
-                                            G.C.UI.TEXT_INACTIVE
-                                    }),
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            self.config.joker_display_debuff_baseball_config = {
-                align = "bm",
-                bond = 'Strong',
-                parent = self,
-                offset = { x = 0, y = -0.1 }
-            }
-            if self.config.joker_display_debuff_baseball then
-                self.children.joker_display_debuff_baseball = UIBox {
-                    definition = self.config.joker_display_debuff_baseball,
-                    config = self.config.joker_display_debuff_baseball_config,
-                }
-                self.children.joker_display_debuff_baseball.states.collide.can = true
-                self.children.joker_display_debuff_baseball.name = "JokerDisplay"
-            end
+            -- self.children.joker_display_debuff_baseball:add_child({
+            --     n = G.UIT.R,
+            --     config = {
+            --         align = "cm"
+            --     },
+            --     nodes = {
+            --         JokerDisplay.create_display_text_object({
+            --             text = "" .. localize("k_debuffed") .. " (",
+            --             colour =
+            --                 G.C.UI.TEXT_INACTIVE
+            --         }),
+            --         JokerDisplay.create_display_border_text_object(
+            --             { JokerDisplay.create_display_text_object({
+            --                 ref_table = self
+            --                     .joker_display_values,
+            --                 ref_value = "x_mult_mod"
+            --             }) },
+            --             G.C.XMULT),
+            --         JokerDisplay.create_display_text_object({
+            --             text = ")",
+            --             colour =
+            --                 G.C.UI.TEXT_INACTIVE
+            --         }),
+            --     }
+            -- })
 
             --Perishable Display
             self.config.joker_display_perishable = {
@@ -335,6 +330,93 @@ function update_all_joker_display(from)
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
             v:update_joker_display(from)
+        end
+    end
+end
+
+---STYLE MOD FUNCTIONS
+G.FUNCS.joker_display_disable = function(e)
+    local card = e.config.ref_table
+    if card.facing == 'back' or card.debuff or card.joker_display_values.small then
+        e.states.visible = false
+        e.parent.states.collide.can = false
+    else
+        e.states.visible = JokerDisplay.visible
+        e.parent.states.collide.can = JokerDisplay.visible
+    end
+end
+
+G.FUNCS.joker_display_small_enable = function(e)
+    local card = e.config.ref_table
+    if card.facing == 'back' or card.debuff or not (card.joker_display_values.small) then
+        e.states.visible = false
+        e.parent.states.collide.can = false
+    else
+        e.states.visible = JokerDisplay.visible
+        e.parent.states.collide.can = JokerDisplay.visible
+    end
+end
+
+
+G.FUNCS.joker_display_debuff = function(e)
+    local card = e.config.ref_table
+    if not (card.facing == 'back') and (card.config.center.rarity ~= 2 or #JokerDisplay.find_joker_or_copy('Baseball Card') == 0) and card.debuff then
+        e.states.visible = JokerDisplay.visible
+        e.parent.states.collide.can = JokerDisplay.visible
+    else
+        e.states.visible = false
+        e.parent.states.collide.can = false
+    end
+end
+
+G.FUNCS.joker_display_debuff_baseball = function(e)
+    local card = e.config.ref_table
+    if not (card.facing == 'back') and card.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') > 0 and card.debuff then
+        e.states.visible = JokerDisplay.visible
+        e.parent.states.collide.can = JokerDisplay.visible
+    else
+        e.states.visible = false
+        e.parent.states.collide.can = false
+    end
+end
+
+G.FUNCS.joker_display_perishable = function(e)
+    local card = e.config.ref_table
+    if not (card.facing == 'back') and card.ability.perishable then
+        e.states.visible = JokerDisplay.visible
+        e.parent.states.collide.can = JokerDisplay.visible
+    else
+        e.states.visible = false
+        e.parent.states.collide.can = false
+    end
+end
+
+G.FUNCS.joker_display_rental = function(e)
+    local card = e.config.ref_table
+    if not (card.facing == 'back') and card.ability.rental then
+        e.states.visible = JokerDisplay.visible
+        e.parent.states.collide.can = JokerDisplay.visible
+    else
+        e.states.visible = false
+        e.parent.states.collide.can = false
+    end
+end
+
+---Modifies JokerDisplay's nodes style values dynamically
+---@param e table
+G.FUNCS.joker_display_style_override = function(e)
+    local card = e.config.ref_table
+    local text = e.children and e.children[2] or nil
+    local reminder_text = e.children and e.children[3] or nil
+    local extra = e.children and e.children[1] or nil
+
+    local joker_display_definition = JokerDisplay.Definitions[card.config.center.key]
+    local style_function = joker_display_definition and joker_display_definition.style_function
+
+    if style_function then
+        local recalculate = style_function(card, text, reminder_text, extra)
+        if recalculate then
+            e.UIBox:recalculate()
         end
     end
 end
@@ -544,6 +626,51 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
     return triggers
 end
 
+JokerDisplay.calculate_joker_modifiers = function(card)
+    local modifiers = {
+        chips = nil,
+        x_chips = nil,
+        mult = nil,
+        x_mult = nil,
+        dollars = nil
+    }
+    local joker_edition = card:get_edition()
+
+    if joker_edition and not card.debuff then
+        modifiers.chips = joker_edition.chip_mod
+        modifiers.mult = joker_edition.mult_mod
+        modifiers.x_mult = joker_edition.x_mult_mod
+    end
+
+    if G.jokers then
+        for k, v in pairs(G.jokers.cards) do
+            local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
+            local mod_function = (joker_display_definition and joker_display_definition.mod_function) or
+                (v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key] and
+                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].mod_function)
+
+            if mod_function then
+                local extra_mods = mod_function(card)
+                modifiers = {
+                    chips = modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips or
+                    extra_mods.chips or modifiers.chips,
+                    x_chips = modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips ^ extra_mods.x_chips or
+                    extra_mods.x_chips or modifiers.x_chips,
+                    mult = modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult or
+                    extra_mods.mult or modifiers.mult,
+                    x_mult = modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult ^ extra_mods.x_mult or
+                    extra_mods.x_mult or modifiers.x_mult,
+                    dollars = modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars or
+                    extra_mods.dollars or modifiers.dollars,
+                }
+            end
+        end
+    end
+
+    return modifiers
+end
+
 ---Creates an object with JokerDisplay configurations.
 ---@param card table Reference card
 ---@param config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?} Node configuration
@@ -617,239 +744,38 @@ JokerDisplay.create_display_border_text_object = function(nodes, border_color)
     }
 end
 
----Creates a G.UIT.R object with JokerDisplay configurations for displaying a row.
----@param node_rows table Nodes contained in the row.
----@return table
-JokerDisplay.create_display_row_objects = function(node_rows)
-    local row_nodes = {}
-
-    row_nodes[1] = { n = G.UIT.R, config = { align = "cm", minh = 0.4, maxw = 2 }, nodes = node_rows[1] }
-    row_nodes[2] = { n = G.UIT.R, config = { align = "cm", maxh = 0.3, maxw = 1.8 }, nodes = node_rows[2] }
-
-    return row_nodes
-end
-
----STYLE MOD FUNCTIONS
-G.FUNCS.joker_display_disable = function(e)
-    local card = e.config.ref_table
-    if card.facing == 'back' or card.debuff or card.joker_display_values.small then
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    else
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    end
-end
-
-G.FUNCS.joker_display_small_enable = function(e)
-    local card = e.config.ref_table
-    if card.facing == 'back' or card.debuff or not (card.joker_display_values.small) then
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    else
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    end
-end
-
-
-G.FUNCS.joker_display_debuff = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and (card.config.center.rarity ~= 2 or #JokerDisplay.find_joker_or_copy('Baseball Card') == 0) and card.debuff then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
-G.FUNCS.joker_display_debuff_baseball = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') > 0 and card.debuff then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
-G.FUNCS.joker_display_perishable = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
-G.FUNCS.joker_display_rental = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
----Modifies JokerDisplay's nodes style values dynamically
----@param e table
-G.FUNCS.joker_display_style_override = function(e)
-    local card = e.config.ref_table
-    local line_1 = e.children and e.children[1] or nil
-    local line_2 = e.children and e.children[2] or nil
-
-    local joker_display_definition = JokerDisplay.Definitions[card.config.center.key]
-    local style_function = joker_display_definition and joker_display_definition.style_function
-
-    if style_function then
-        local recalculate = style_function(card, line_1, line_2)
-        if recalculate then
-            e.UIBox:recalculate(true)
-        end
-    end
-end
-
 ---DISPLAY DEFINITION
 
 ---Initializes nodes for JokerDisplay.
----@return table # JokerDisplay nodes for the card.
 function Card:initialize_joker_display()
-    self.joker_display_values.is_empty = true
     self:calculate_joker_display()
 
-    local text_rows, first_line_empty = self:define_joker_display()
-    if not first_line_empty then
-        self.joker_display_values.is_empty = false
-        self.joker_display_values.mod_begin = (self.joker_display_values.has_mod and " " or "") ..
-            self.joker_display_values.mod_begin
-    end
-
-    table.insert(text_rows[1],
-        JokerDisplay.create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "mod_begin",
-            colour = G.C.UI
-                .TEXT_INACTIVE
-        }))
-    table.insert(text_rows[1],
-        JokerDisplay.create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "chips_mod",
-            colour =
-                G.C.CHIPS
-        }))
-    table.insert(text_rows[1],
-        JokerDisplay.create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "mult_mod",
-            colour =
-                G.C.MULT
-        }))
-    local xmult_border = JokerDisplay.create_display_border_text_object(
-        { JokerDisplay.create_display_text_object({ ref_table = self.joker_display_values, ref_value = "x_mult_mod" }) },
-        G.C.XMULT)
-    xmult_border.config.padding = 0
-    xmult_border.config.id = "xmult_mod"
-    table.insert(text_rows[1], xmult_border)
-    table.insert(text_rows[1],
-        JokerDisplay.create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "mod_end",
-            colour = G.C.UI
-                .TEXT_INACTIVE
-        }))
-
-    return JokerDisplay.create_display_row_objects(text_rows)
-end
-
----Defines nodes for the joker for JokerDisplay.
----@return table text_rows # JokerDisplay text nodes for the card.
----@return boolean first_line_empty # If the first line is empty
-function Card:define_joker_display()
-    local text_rows = {}
-
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
-    local line_1 = joker_display_definition and joker_display_definition.line_1
-    local line_2 = joker_display_definition and joker_display_definition.line_2
-    local first_line_empty = not line_1
+    local definiton_text = joker_display_definition and joker_display_definition.text or joker_display_definition.line_1
+    local definiton_reminder_text = joker_display_definition and joker_display_definition.reminder_text or
+    joker_display_definition.line_2
+    local definiton_extra = joker_display_definition and joker_display_definition.extra
 
-    if line_1 then
-        text_rows[1] = {}
-        for i = 1, #line_1 do
-            table.insert(text_rows[1], JokerDisplay.create_display_object(self, line_1[i]))
-        end
-    else
-        text_rows[1] = { JokerDisplay.create_display_text_object({
-            ref_table = self.joker_display_values,
-            ref_value = "empty",
-            colour =
-                G.C.UI.TEXT_INACTIVE
-        }) }
+    if definiton_text then
+        self.children.joker_display:add_text(definiton_text)
+        self.children.joker_display_small:add_text(definiton_text)
     end
-    if line_2 then
-        text_rows[2] = {}
-        for i = 1, #line_2 do
-            table.insert(text_rows[2], JokerDisplay.create_display_object(self, line_2[i]))
-        end
+    if definiton_reminder_text then
+        self.children.joker_display:add_reminder_text(definiton_reminder_text)
+    end
+    if definiton_extra then
+        self.children.joker_display:add_extra(definiton_extra)
     end
 
-    return text_rows, first_line_empty
+    self.children.joker_display:recalculate()
 end
 
 ---DISPLAY CALCULATION
 
 ---Calculates values for JokerDisplay. Saves them to Card.joker_display_values.
 function Card:calculate_joker_display()
-    self.joker_display_values.empty = "-"
-    self.joker_display_values.mod_begin = ""
-    self.joker_display_values.chips_mod = ""
-    self.joker_display_values.mult_mod = ""
-    self.joker_display_values.x_mult_mod = ""
-    self.joker_display_values.mod_end = ""
     self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
     self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
-    self.joker_display_values.has_mod = false
-
-    local joker_edition = self:get_edition()
-    local baseball_enhancements = (self.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') or 0)
-
-    if joker_edition and not self.debuff then
-        if joker_edition.chip_mod then
-            self.joker_display_values.chips_mod = "+" ..
-                joker_edition.chip_mod .. (((joker_edition.mult_mod or joker_edition.x_mult_mod) and " ") or "")
-        end
-        if joker_edition.mult_mod then
-            self.joker_display_values.mult_mod = "+" ..
-                joker_edition.mult_mod .. ((joker_edition.x_mult_mod and " ") or "")
-        end
-        if baseball_enhancements > 0 then
-            local baseball_xmult = find_joker('Baseball Card')[1].ability.extra ^ baseball_enhancements
-            baseball_xmult = tonumber(string.format("%.2f", baseball_xmult * (joker_edition.x_mult_mod or 1)))
-            self.joker_display_values.x_mult_mod = "X" .. baseball_xmult
-        elseif joker_edition.x_mult_mod then
-            self.joker_display_values.x_mult_mod = "X" .. joker_edition.x_mult_mod
-        end
-        if baseball_enhancements > 0 or joker_edition.chip_mod or joker_edition.mult_mod or joker_edition.x_mult_mod then
-            self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ") .. "("
-            self.joker_display_values.mod_end = ")"
-            self.joker_display_values.empty = ""
-            self.joker_display_values.has_mod = true
-        end
-    elseif baseball_enhancements > 0 then
-        local baseball_xmult = find_joker('Baseball Card')[1].ability.extra ^ baseball_enhancements
-        baseball_xmult = tonumber(string.format("%.2f", baseball_xmult))
-        self.joker_display_values.x_mult_mod = "X" .. baseball_xmult
-        self.joker_display_values.mod_begin = (self.joker_display_values.is_empty and "" or " ") .. "("
-        self.joker_display_values.mod_end = ")"
-        self.joker_display_values.empty = ""
-        self.joker_display_values.has_mod = true
-    end
 
     if self.ability.perishable then
         self.joker_display_values.perishable = (self.ability.perish_tally or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
@@ -858,6 +784,8 @@ function Card:calculate_joker_display()
     if self.ability.rental then
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
     end
+
+    self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local calc_function = joker_display_definition and joker_display_definition.calc_function
