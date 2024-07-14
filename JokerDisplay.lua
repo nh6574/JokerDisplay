@@ -332,10 +332,9 @@ end
 
 function JokerDisplayBox:align_to_text()
     local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
-        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y - 0.045 or
-        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y - 0.045 or
+        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y or
+        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
         (self.T.y - self.alignment.offset.y))
-    sendDebugMessage(self.parent.ability.name.. "/".. self.joker_display_type.. ": ".. tostring(y_value).. " = ".. tostring(self.has_text and self.text.T.y).. " | ".. tostring(self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y - 0.045).. " | ".. tostring(self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y - 0.045).. " | ".. tostring(self.alignment.offset.y))
     self.alignment.offset.y = y_value or self.alignment.offset.y
 end
 
