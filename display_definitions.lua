@@ -612,7 +612,17 @@ return {
         text = {
             { text = "+",                       colour = G.C.MULT },
             { ref_table = "card.ability.extra", ref_value = "mult", colour = G.C.MULT }
-        }
+        },
+        extra = {
+            {
+                { text = "(",                                                     colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                        ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_gros_michel"].config.extra.odds .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
+        },
+        calc_function = function(card)
+            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+        end
     },
     j_even_steven = { -- Even Steven
         text = {
@@ -921,7 +931,17 @@ return {
                     { ref_table = "card.ability.extra", ref_value = "Xmult" }
                 }
             }
-        }
+        },
+        extra = {
+            {
+                { text = "(",                                                     colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                        ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_cavendish"].config.extra.odds .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
+        },
+        calc_function = function(card)
+            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+        end
     },
     j_card_sharp = { -- Card Sharp
         text = {
@@ -1209,6 +1229,16 @@ return {
         end
     },
     j_hallucination = {  -- Hallucination
+        extra = {
+            {
+                { text = "(",                                                     colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                        ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_hallucination"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
+        },
+        calc_function = function(card)
+            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+        end
     },
     j_fortune_teller = { -- Fortune Teller
         text = {
