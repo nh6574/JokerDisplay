@@ -1264,7 +1264,7 @@ return {
             card.joker_display_values.count = count
         end,
         mod_function = function(card)
-            return { x_mult = card.config.center.rarity == 2 and G.P_CENTERS["j_baseball"].config.extra or nil }
+            return { x_mult = (card.config.center.rarity == 2 and G.P_CENTERS["j_baseball"].config.extra or nil) }
         end
     },
     j_bull = { -- Bull
@@ -1710,13 +1710,14 @@ return {
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 }
         },
         calc_function = function(card)
-            local ability_name, ability_key = JokerDisplay.calculate_blueprint_copy(card)
-            card.joker_display_values.blueprint_ability_name = ability_name
-            card.joker_display_values.blueprint_ability_key = ability_key
-            card.joker_display_values.blueprint_ability_name_ui = ability_key and
-                localize { type = 'name_text', key = ability_key, set = 'Joker' } or "-"
+            local copied_joker = JokerDisplay.calculate_blueprint_copy(card)
+            card.joker_display_values.blueprint_ability_name = copied_joker and copied_joker.ability.name
+            card.joker_display_values.blueprint_ability_key = copied_joker and copied_joker.config.center.key
+            card.joker_display_values.blueprint_ability_name_ui = card.joker_display_values.blueprint_ability_key and
+                localize { type = 'name_text', key = card.joker_display_values.blueprint_ability_key, set = 'Joker' } or "-"
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
+            card.joker_display_values.blueprint_debuff = copied_joker and copied_joker.debuff
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children[2] then
@@ -2006,13 +2007,14 @@ return {
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE,           scale = 0.3 }
         },
         calc_function = function(card)
-            local ability_name, ability_key = JokerDisplay.calculate_blueprint_copy(card)
-            card.joker_display_values.blueprint_ability_name = ability_name
-            card.joker_display_values.blueprint_ability_key = ability_key
-            card.joker_display_values.blueprint_ability_name_ui = ability_key and
-                localize { type = 'name_text', key = ability_key, set = 'Joker' } or "-"
+            local copied_joker = JokerDisplay.calculate_blueprint_copy(card)
+            card.joker_display_values.blueprint_ability_name = copied_joker and copied_joker.ability.name
+            card.joker_display_values.blueprint_ability_key = copied_joker and copied_joker.config.center.key
+            card.joker_display_values.blueprint_ability_name_ui = card.joker_display_values.blueprint_ability_key and
+                localize { type = 'name_text', key = card.joker_display_values.blueprint_ability_key, set = 'Joker' } or "-"
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
+            card.joker_display_values.blueprint_debuff = copied_joker and copied_joker.debuff
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children[2] then

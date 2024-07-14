@@ -138,6 +138,23 @@ function JokerDisplayBox:init(parent, func, args)
     }
 end
 
+function JokerDisplayBox:recalculate()
+    if not (self.has_text or self.has_extra or self.has_modifiers) and self.has_reminder_text then
+        self.text.config.minh = 0.4
+    else
+        self.text.config.minh = nil
+    end
+
+    if self.has_text then
+        self.text.config.padding = 0.03
+    else
+        self.text.config.padding = nil
+    end
+
+    UIBox.recalculate(self)
+    self:align_to_text()
+end
+
 function JokerDisplayBox:add_text(nodes)
     self.has_text = true
     for i = 1, #nodes do
@@ -205,10 +222,6 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
     self.modifiers.x_chips_text = self.modifiers.x_chips and tonumber(string.format("%.2f", self.modifiers.x_chips)) or nil
     self.modifiers.x_mult_text = self.modifiers.x_mult and tonumber(string.format("%.2f", self.modifiers.x_mult)) or nil
 
-    for k,v in pairs(self.modifiers) do
-        sendDebugMessage(tostring(k).. " : ".. tostring(v))
-    end
-
     if modifiers_changed then
         self:remove_modifiers()
         self:add_modifiers()
@@ -222,20 +235,20 @@ function JokerDisplayBox:add_modifiers()
 
     if self.modifiers.chips then
         local chip_node = {}
-        table.insert(chip_node, JokerDisplay.create_display_object(self.parent, { text = "+", colour = G.C.CHIPS }))
+        table.insert(chip_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.CHIPS }))
         table.insert(chip_node,
-            JokerDisplay.create_display_object(self.parent,
-                { ref_table = "card.children.joker_display.modifiers", ref_value = "chips", colour = G.C.CHIPS }))
+            JokerDisplay.create_display_object(self,
+                { ref_table = "card.modifiers", ref_value = "chips", colour = G.C.CHIPS }))
         table.insert(mod_nodes, chip_node)
     end
 
     if self.modifiers.x_chips then
         local xchip_node = {}
         table.insert(xchip_node,
-            JokerDisplay.create_display_object(self.parent,
+            JokerDisplay.create_display_object(self,
                 {
                     border_nodes = { { text = "X" },
-                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_chips_text" } },
+                        { ref_table = "card.modifiers", ref_value = "x_chips_text" } },
                     border_colour = G.C.CHIPS
                 }))
         table.insert(mod_nodes, xchip_node)
@@ -243,21 +256,21 @@ function JokerDisplayBox:add_modifiers()
 
     if self.modifiers.mult then
         local mult_node = {}
-        table.insert(mult_node, JokerDisplay.create_display_object(self.parent, { text = "+", colour = G.C.MULT }))
+        table.insert(mult_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.MULT }))
         table.insert(mult_node,
-            JokerDisplay.create_display_object(self.parent,
-                { ref_table = "card.children.joker_display.modifiers", ref_value = "mult", colour = G.C.MULT }))
+            JokerDisplay.create_display_object(self,
+                { ref_table = "card.modifiers", ref_value = "mult", colour = G.C.MULT }))
         table.insert(mod_nodes, mult_node)
     end
 
     if self.modifiers.x_mult then
         local xmult_node = {}
         table.insert(xmult_node,
-            JokerDisplay.create_display_object(self.parent,
+            JokerDisplay.create_display_object(self,
                 {
                     border_nodes = {
                         { text = "X" },
-                        { ref_table = "card.children.joker_display.modifiers", ref_value = "x_mult_text" }
+                        { ref_table = "card.modifiers", ref_value = "x_mult_text" }
                     }
                 }
             ))
@@ -267,10 +280,10 @@ function JokerDisplayBox:add_modifiers()
     if self.modifiers.dollars then
         local dollars_node = {}
         table.insert(dollars_node,
-            JokerDisplay.create_display_object(self.parent, { text = "+" .. localize('$'), colour = G.C.GOLD }))
+            JokerDisplay.create_display_object(self, { text = "+" .. localize('$'), colour = G.C.GOLD }))
         table.insert(dollars_node,
-            JokerDisplay.create_display_object(self.parent,
-                { ref_table = "card.children.joker_display.modifiers", ref_value = "dollars", colour = G.C.GOLD }))
+            JokerDisplay.create_display_object(self,
+                { ref_table = "card.modifiers", ref_value = "dollars", colour = G.C.GOLD }))
         table.insert(mod_nodes, dollars_node)
     end
 
@@ -321,23 +334,7 @@ function JokerDisplayBox:align_to_text()
         self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y - 0.1 or
         self.UIRoot.T.y)
     self.UIRoot:align(0, y_value)
-end
-
-function JokerDisplayBox:recalculate()
-    if not (self.has_text or self.has_extra or self.has_modifiers) and self.has_reminder_text then
-        self.text.config.minh = 0.4
-    else
-        self.text.config.minh = nil
-    end
-
-    if self.has_text then
-        self.text.config.padding = 0.03
-    else
-        self.text.config.padding = nil
-    end
-
-    UIBox.recalculate(self)
-    self:align_to_text()
+    sendDebugMessage(self.parent.ability.name.. " : ".. tostring(self.has_text).. " / ".. tostring(self.text.T.y))
 end
 
 ---DISPLAY CONFIGURATION
@@ -355,52 +352,9 @@ function Card:update_joker_display(from)
             --Regular Display
             self.children.joker_display = JokerDisplayBox(self, "joker_display_disable")
             self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable")
+            self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff")
+            self.children.joker_display_debuff:add_text({{text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE}})
             self:initialize_joker_display()
-
-            -- --Debuff Display
-            -- self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff")
-
-            -- self.children.joker_display_debuff:add_child({
-            --     n = G.UIT.R,
-            --     config = {
-            --         align = "cm"
-            --     },
-            --     nodes = {
-            --         JokerDisplay.create_display_text_object({
-            --             text = "" .. localize("k_debuffed"),
-            --             colour = G.C.UI.TEXT_INACTIVE
-            --         })
-            --     }
-            -- })
-
-            -- --Debuff Display (with Baseball XMULT)
-            -- self.children.joker_display_debuff_baseball = JokerDisplayBox(self, "joker_display_debuff")
-
-            -- self.children.joker_display_debuff_baseball:add_child({
-            --     n = G.UIT.R,
-            --     config = {
-            --         align = "cm"
-            --     },
-            --     nodes = {
-            --         JokerDisplay.create_display_text_object({
-            --             text = "" .. localize("k_debuffed") .. " (",
-            --             colour =
-            --                 G.C.UI.TEXT_INACTIVE
-            --         }),
-            --         JokerDisplay.create_display_border_text_object(
-            --             { JokerDisplay.create_display_text_object({
-            --                 ref_table = self
-            --                     .joker_display_values,
-            --                 ref_value = "x_mult_mod"
-            --             }) },
-            --             G.C.XMULT),
-            --         JokerDisplay.create_display_text_object({
-            --             text = ")",
-            --             colour =
-            --                 G.C.UI.TEXT_INACTIVE
-            --         }),
-            --     }
-            -- })
 
             --Perishable Display
             self.config.joker_display_perishable = {
@@ -525,18 +479,7 @@ end
 
 G.FUNCS.joker_display_debuff = function(e)
     local card = e.config.ref_table
-    if not (card.facing == 'back') and (card.config.center.rarity ~= 2 or #JokerDisplay.find_joker_or_copy('Baseball Card') == 0) and card.debuff then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
-G.FUNCS.joker_display_debuff_baseball = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.config.center.rarity == 2 and #JokerDisplay.find_joker_or_copy('Baseball Card') > 0 and card.debuff then
+    if not (card.facing == 'back') and card.debuff then
         e.states.visible = JokerDisplay.visible
         e.parent.states.collide.can = JokerDisplay.visible
     else
@@ -581,7 +524,7 @@ G.FUNCS.joker_display_style_override = function(e)
     if style_function then
         local recalculate = style_function(card, text, reminder_text, extra)
         if recalculate then
-            e.UIBox:recalculate()
+            JokerDisplay.recalculate(e.UIBox)
         end
     end
 end
@@ -646,11 +589,10 @@ end
 ---Returns what Joker the current card (i.e. Blueprint or Brainstorm) is copying.
 ---@param card table Blueprint or Brainstorm card to calculate copy.
 ---@param _cycle_count integer? Counts how many times the function has recurred to prevent loops.
----@return string|nil name Copied Joker's non-localized name if any.
----@return string|nil key Copied Joker's key if any.
+---@return table|nil name Copied Joker
 JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count)
     if _cycle_count and _cycle_count > #G.jokers.cards + 1 then
-        return nil, nil
+        return nil
     end
     local other_joker = nil
     if card.ability.name == "Blueprint" then
@@ -666,10 +608,10 @@ JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count)
         if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
             return JokerDisplay.calculate_blueprint_copy(other_joker, _cycle_count and _cycle_count + 1 or 1)
         else
-            return other_joker.ability.name, other_joker.config.center.key
+            return other_joker
         end
     end
-    return nil, nil
+    return nil
 end
 
 ---Returns all held instances of certain Joker, including Blueprint copies. Similar to _find_joker_.
@@ -742,8 +684,9 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
             local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
-            local retrigger_function = (joker_display_definition and joker_display_definition.retrigger_function) or
-                (v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+            local retrigger_function = (not v.debuff and joker_display_definition and joker_display_definition.retrigger_function) or
+                (not v.debuff and v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+                    not v.joker_display_values.blueprint_debuff and
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key] and
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
 
@@ -777,8 +720,9 @@ JokerDisplay.calculate_joker_modifiers = function(card)
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
             local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
-            local mod_function = (joker_display_definition and joker_display_definition.mod_function) or
-                (v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+            local mod_function = (not v.debuff and joker_display_definition and joker_display_definition.mod_function) or
+                (not v.debuff and v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+                    not v.joker_display_values.blueprint_debuff and
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key] and
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].mod_function)
 
@@ -883,9 +827,9 @@ function Card:initialize_joker_display()
     self:calculate_joker_display()
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
-    local definiton_text = joker_display_definition and joker_display_definition.text or joker_display_definition.line_1
-    local definiton_reminder_text = joker_display_definition and joker_display_definition.reminder_text or
-        joker_display_definition.line_2
+    local definiton_text = joker_display_definition and (joker_display_definition.text or joker_display_definition.line_1)
+    local definiton_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
+        joker_display_definition.line_2)
     local definiton_extra = joker_display_definition and joker_display_definition.extra
 
     if definiton_text then
@@ -918,6 +862,7 @@ function Card:calculate_joker_display()
     end
 
     self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+    self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local calc_function = joker_display_definition and joker_display_definition.calc_function
