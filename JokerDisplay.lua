@@ -525,7 +525,7 @@ G.FUNCS.joker_display_style_override = function(e)
     if style_function then
         local recalculate = style_function(card, text, reminder_text, extra)
         if recalculate then
-            JokerDisplay.recalculate(e.UIBox)
+            JokerDisplayBox.recalculate(e.UIBox)
         end
     end
 end
