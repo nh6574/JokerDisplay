@@ -156,10 +156,10 @@ function JokerDisplayBox:recalculate()
     self:align_to_text()
 end
 
-function JokerDisplayBox:add_text(nodes, config)
+function JokerDisplayBox:add_text(nodes, config, custom_parent)
     self.has_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i], config), self.text)
+        self:add_child(JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config), self.text)
     end
 end
 
@@ -168,10 +168,10 @@ function JokerDisplayBox:remove_text()
     self:remove_children(self.text)
 end
 
-function JokerDisplayBox:add_reminder_text(nodes, config)
+function JokerDisplayBox:add_reminder_text(nodes, config, custom_parent)
     self.has_reminder_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i], config), self.reminder_text)
+        self:add_child(JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config), self.reminder_text)
     end
 end
 
@@ -180,12 +180,12 @@ function JokerDisplayBox:remove_reminder_text()
     self:remove_children(self.reminder_text)
 end
 
-function JokerDisplayBox:add_extra(node_rows, config)
+function JokerDisplayBox:add_extra(node_rows, config, custom_parent)
     self.has_extra = true
     for i = #node_rows, 1, -1 do
         local row_nodes = {}
         for j = 1, #node_rows[i] do
-            table.insert(row_nodes, JokerDisplay.create_display_object(self.parent, node_rows[i][j], config))
+            table.insert(row_nodes, JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j], config))
         end
         local extra_row = {
             n = G.UIT.R,
@@ -519,7 +519,8 @@ G.FUNCS.joker_display_style_override = function(e)
     local reminder_text = e.children and e.children[4] or nil
     local extra = e.children and e.children[2] or nil
 
-    local joker_display_definition = JokerDisplay.Definitions[card.config.center.key]
+    local is_blueprint_copying = card.joker_display_values and card.joker_display_values.blueprint_ability_key
+    local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
     local style_function = joker_display_definition and joker_display_definition.style_function
 
     if style_function then
@@ -829,7 +830,7 @@ end
 ---DISPLAY DEFINITION
 
 ---Initializes nodes for JokerDisplay.
-function Card:initialize_joker_display()
+function Card:initialize_joker_display(custom_parent)
     self:calculate_joker_display()
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
@@ -843,8 +844,13 @@ function Card:initialize_joker_display()
     local extra_config = joker_display_definition and joker_display_definition.extra_config
 
     if definiton_text then
-        self.children.joker_display:add_text(definiton_text, text_config)
-        self.children.joker_display_small:add_text(definiton_text, text_config)
+        if custom_parent then
+            custom_parent.children.joker_display:add_text(definiton_text, text_config, self)
+            custom_parent.children.joker_display_small:add_text(definiton_text, text_config, self)
+        else
+            self.children.joker_display:add_text(definiton_text, text_config)
+            self.children.joker_display_small:add_text(definiton_text, text_config)
+        end
     end
     if definiton_reminder_text then
         if not reminder_text_config then
@@ -852,14 +858,27 @@ function Card:initialize_joker_display()
         end
         reminder_text_config.colour = G.C.UI.TEXT_INACTIVE
         reminder_text_config.scale = 0.3
-        self.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config)
+        if custom_parent then
+            custom_parent.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config, self)
+        else
+            self.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config)
+        end
     end
     if definiton_extra then
-        self.children.joker_display:add_extra(definiton_extra, extra_config)
+        if custom_parent then
+            custom_parent.children.joker_display:add_extra(definiton_extra, extra_config, self)
+        else
+            self.children.joker_display:add_extra(definiton_extra, extra_config)
+        end
     end
 
-    self.children.joker_display:recalculate()
-    self.children.joker_display_small:recalculate()
+    if custom_parent then
+        custom_parent.children.joker_display:recalculate()
+        custom_parent.children.joker_display_small:recalculate()
+    else
+        self.children.joker_display:recalculate()
+        self.children.joker_display_small:recalculate()
+    end
 end
 
 ---DISPLAY CALCULATION
