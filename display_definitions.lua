@@ -432,10 +432,12 @@ return {
             { text = "+",                              colour = G.C.SECONDARY_SET.Tarot },
             { ref_table = "card.joker_display_values", ref_value = "count",             colour = G.C.SECONDARY_SET.Tarot },
         },
-        reminder_text = {
-            { text = "(",                                                   colour = G.C.GREEN, scale = 0.3 },
-            { ref_table = "card.joker_display_values",                      ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
-            { text = " in " .. G.P_CENTERS["j_8_ball"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+        extra = {
+            {
+                { text = "(",                                                   colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                      ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_8_ball"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
         },
         calc_function = function(card)
             local count = 0
@@ -689,10 +691,12 @@ return {
             { text = "x",                              scale = 0.35 },
             { text = localize('$') .. "2",             colour = G.C.GOLD },
         },
-        reminder_text = {
-            { text = "(",                                                     colour = G.C.GREEN, scale = 0.3 },
-            { ref_table = "card.joker_display_values",                        ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
-            { text = " in " .. G.P_CENTERS["j_business"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+        extra = {
+            {
+                { text = "(",                                                     colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                        ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_business"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
         },
         calc_function = function(card)
             local count = 0
@@ -729,10 +733,12 @@ return {
     j_burglar = { -- Burglar
     },
     j_space = {   -- Space Joker
-        reminder_text = {
-            { text = "(",                                                  colour = G.C.GREEN, scale = 0.3 },
-            { ref_table = "card.joker_display_values",                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
-            { text = " in " .. G.P_CENTERS["j_space"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+        extra = {
+            {
+                { text = "(",                                                  colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_space"].config.extra .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
         },
         calc_function = function(card)
             card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
@@ -1146,10 +1152,12 @@ return {
             { text = "x",                                                                     scale = 0.35 },
             { text = localize('$') .. G.P_CENTERS["j_reserved_parking"].config.extra.dollars, colour = G.C.GOLD },
         },
-        reminder_text = {
-            { text = "(",                                                                  colour = G.C.GREEN, scale = 0.3 },
-            { ref_table = "card.joker_display_values",                                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
-            { text = " in " .. G.P_CENTERS["j_reserved_parking"].config.extra.odds .. ")", colour = G.C.GREEN, scale = 0.3 },
+        extra = {
+            {
+                { text = "(",                                                                  colour = G.C.GREEN, scale = 0.3 },
+                { ref_table = "card.joker_display_values",                                     ref_value = "odds", colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_reserved_parking"].config.extra.odds .. ")", colour = G.C.GREEN, scale = 0.3 },
+            }
         },
         calc_function = function(card)
             local playing_hand = next(G.play.cards)
@@ -1568,12 +1576,16 @@ return {
             }
         },
         reminder_text = {
-            { text = "(",                                                            colour = G.C.GREEN,            scale = 0.3 },
-            { ref_table = "card.joker_display_values",                               ref_value = "odds",            colour = G.C.GREEN, scale = 0.3 },
-            { text = " in " .. G.P_CENTERS["j_bloodstone"].config.extra.odds .. ")", colour = G.C.GREEN,            scale = 0.3 },
             { text = "(",                                                            colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 },
             { text = localize("Hearts", 'suits_plural'),                             colour = G.C.SUITS["Hearts"],  scale = 0.3 },
             { text = ")",                                                            colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+        },
+        extra = {
+            {
+                { text = "(",                                                            colour = G.C.GREEN,            scale = 0.3 },
+                { ref_table = "card.joker_display_values",                               ref_value = "odds",            colour = G.C.GREEN, scale = 0.3 },
+                { text = " in " .. G.P_CENTERS["j_bloodstone"].config.extra.odds .. ")", colour = G.C.GREEN,            scale = 0.3 },
+            }
         },
         calc_function = function(card)
             local count = 0
