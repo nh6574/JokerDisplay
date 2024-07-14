@@ -335,7 +335,6 @@ function JokerDisplayBox:align_to_text()
         self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
         self.UIRoot.T and self.UIRoot.T.y)
     self.alignment.offset.y = y_value - 0.1
-    sendDebugMessage(self.parent.ability.name .. " : " .. tostring(self.has_text) .. " / " .. tostring(self.text.T.y))
 end
 
 ---DISPLAY CONFIGURATION
