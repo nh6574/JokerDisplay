@@ -329,11 +329,11 @@ function JokerDisplayBox:remove_children(node)
 end
 
 function JokerDisplayBox:align_to_text()
-    local y_value = self.T.y - (self.has_text and self.text.T.y - 0.1 or
-        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T.y - 0.1 or
-        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T.y - 0.1 or
-        self.UIRoot.T.y)
-    self.UIRoot:align(0, y_value)
+    local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
+        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
+        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y or
+        self.UIRoot.T and self.UIRoot.T.y)
+    self.alignment.offset.y = y_value - 0.1
     sendDebugMessage(self.parent.ability.name.. " : ".. tostring(self.has_text).. " / ".. tostring(self.text.T.y))
 end
 
