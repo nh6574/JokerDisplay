@@ -1,42 +1,5 @@
 --- Joker Display Definitions
-
---- Format (All values are optional):
---- line_1 [table] | First line of the display.
---- line_2 [table] | Second line of the display.
---- --- Lines are composed of tables that specify how each block of text is displayed, with the following paramenters (All values are optional):
---- --- text [string] | Text to be displayed. (Ignored if ref_value exists)
---- --- colour [table] | Text colour. (Default = G.C.UI.TEXT_LIGHT)
---- --- scale [number] | Text size. (Default = 0.4) (For consistency: 0.4 normal, 0.35 smaller, 0.3 smallest)
---- --- ref_value [string] | Value to reference for the text.
---- --- ref_table [string] | Location of the reference table for ref_value. Use "card" to reference the card's table, otherwise it will check in the global scope. (Ignored if ref_value doesn't exist) (ex. "card.joker_display_values" or "card.ability")
---- --- border_nodes [table] | Ignore all previous parameters and creates a border object with the specified text blocks. (Used for X Mult. The text blocks use the parameters above)
---- --- border_colour [table] | Colour of the border around border_nodes. (Used for X Mult. Default = G.C.XMULT)
---- --- dynatext [table] | Ignore all previous parameters and use a dynatext with this configuration instead. (See Misprint for example)
---- calc_function [function] | Calculation function that will be called every time the display updates.
---- --- Arguments:
---- --- card [table] | Joker card.
---- --- Notes:
---- --- Use to keep track of values for the display. You can use the card.joker_display_values table to store them.
---- --- You should check if the value is being store somewhere else (for example "card.ability") to avoid unnecessary calculations.
---- --- Check the main JokerDisplay file for helper functions.
---- style_function [function] | Style modifying function for the display.
---- --- Arguments:
---- --- card [table] | Joker card.
---- --- line_1 [table] | First line object (the "children" table contains each text block).
---- --- line_2 [table] | Second line object (the "children" table contains each text block).
---- --- Returns:
---- --- recalculate [boolean] | Whether to recalculate the UI or not. (Generally return true if there's a change in scale, false otherwise)
---- --- Notes:
---- --- Use to change any style paramentes (like colour or scale) of the display.
---- --- If border_nodes is used, the text object is a child of that child.
---- --- (ex. line_1.children[1].colour changes the border color and line_1.children[1].children[1].colour changes the text colour)
---- retrigger_function [function] | Used for retrigger calculations in the helper functions.
---- --- Arguments:
---- --- card [table] | Card to calculate triggers for.
---- --- scoring_hand [table] | Scoring hand. nil if poker hand is unknown (i.e. there are facedowns) (This might change in the future).
---- --- held_in_hand [table] | If the card is held in hand and not a scoring card.
---- --- Returns:
---- --- triggers [integer] | Extra triggers (0 if none)
+--- Check Github Wiki for API details
 
 return {
     j_joker = { -- Joker
