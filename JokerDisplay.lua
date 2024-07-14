@@ -156,10 +156,10 @@ function JokerDisplayBox:recalculate()
     self:align_to_text()
 end
 
-function JokerDisplayBox:add_text(nodes)
+function JokerDisplayBox:add_text(nodes, config)
     self.has_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i]), self.text)
+        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i], config), self.text)
     end
 end
 
@@ -168,10 +168,10 @@ function JokerDisplayBox:remove_text()
     self:remove_children(self.text)
 end
 
-function JokerDisplayBox:add_reminder_text(nodes)
+function JokerDisplayBox:add_reminder_text(nodes, config)
     self.has_reminder_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i]), self.reminder_text)
+        self:add_child(JokerDisplay.create_display_object(self.parent, nodes[i], config), self.reminder_text)
     end
 end
 
@@ -180,12 +180,12 @@ function JokerDisplayBox:remove_reminder_text()
     self:remove_children(self.reminder_text)
 end
 
-function JokerDisplayBox:add_extra(node_rows)
+function JokerDisplayBox:add_extra(node_rows, config)
     self.has_extra = true
     for i = #node_rows, 1, -1 do
         local row_nodes = {}
         for j = 1, #node_rows[i] do
-            table.insert(row_nodes, JokerDisplay.create_display_object(self.parent, node_rows[i][j]))
+            table.insert(row_nodes, JokerDisplay.create_display_object(self.parent, node_rows[i][j], config))
         end
         local extra_row = {
             n = G.UIT.R,
@@ -751,29 +751,34 @@ end
 
 ---Creates an object with JokerDisplay configurations.
 ---@param card table Reference card
----@param config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?} Node configuration
+---@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?} Node configuration
+---@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects
 ---@return table
-JokerDisplay.create_display_object = function(card, config)
+JokerDisplay.create_display_object = function(card, display_config, defaults_config)
+
+    local default_text_colour = defaults_config and defaults_config.colour or G.C.UI.TEXT_LIGHT
+    local default_text_scale = defaults_config and defaults_config.scale or 0.4
+
     local node = {}
-    if config.dynatext then
+    if display_config.dynatext then
         return {
             n = G.UIT.O,
             config = {
                 object = DynaText(
-                    deepcopy(config.dynatext)
+                    deepcopy(display_config.dynatext)
                 )
             }
         }
     end
-    if config.border_nodes then
+    if display_config.border_nodes then
         local inside_nodes = {}
-        for i = 1, #config.border_nodes do
-            table.insert(inside_nodes, JokerDisplay.create_display_object(card, config.border_nodes[i]))
+        for i = 1, #display_config.border_nodes do
+            table.insert(inside_nodes, JokerDisplay.create_display_object(card, display_config.border_nodes[i], defaults_config))
         end
-        return JokerDisplay.create_display_border_text_object(inside_nodes, config.border_colour or G.C.XMULT)
+        return JokerDisplay.create_display_border_text_object(inside_nodes, display_config.border_colour or G.C.XMULT)
     end
-    if config.ref_value and config.ref_table then
-        local table_path = strsplit(config.ref_table, ".")
+    if display_config.ref_value and display_config.ref_table then
+        local table_path = strsplit(display_config.ref_table, ".")
         local ref_table = table_path[1] == "card" and card or _G[table_path[1]]
         for i = 2, #table_path do
             if ref_table[table_path[i]] then
@@ -782,16 +787,16 @@ JokerDisplay.create_display_object = function(card, config)
         end
         return JokerDisplay.create_display_text_object({
             ref_table = ref_table,
-            ref_value = config.ref_value,
-            colour = config.colour or G.C.UI.TEXT_LIGHT,
-            scale = config.scale or 0.4
+            ref_value = display_config.ref_value,
+            colour = display_config.colour or default_text_colour,
+            scale = display_config.scale or default_text_scale
         })
     end
-    if config.text then
+    if display_config.text then
         return JokerDisplay.create_display_text_object({
-            text = config.text,
-            colour = config.colour or G.C.UI.TEXT_LIGHT,
-            scale = config.scale or 0.4
+            text = display_config.text,
+            colour = display_config.colour or default_text_colour,
+            scale = display_config.scale or default_text_scale
         })
     end
     return node
@@ -831,19 +836,27 @@ function Card:initialize_joker_display()
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local definiton_text = joker_display_definition and
     (joker_display_definition.text or joker_display_definition.line_1)
+    local text_config = joker_display_definition and joker_display_definition.text_config
     local definiton_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
         joker_display_definition.line_2)
+    local reminder_text_config = joker_display_definition and joker_display_definition.reminder_text_config
     local definiton_extra = joker_display_definition and joker_display_definition.extra
+    local extra_config = joker_display_definition and joker_display_definition.extra_config
 
     if definiton_text then
-        self.children.joker_display:add_text(definiton_text)
-        self.children.joker_display_small:add_text(definiton_text)
+        self.children.joker_display:add_text(definiton_text, text_config)
+        self.children.joker_display_small:add_text(definiton_text, text_config)
     end
     if definiton_reminder_text then
-        self.children.joker_display:add_reminder_text(definiton_reminder_text)
+        if not reminder_text_config then
+            reminder_text_config = {}
+        end
+        reminder_text_config.colour = G.C.UI.TEXT_INACTIVE
+        reminder_text_config.scale = 0.3
+        self.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config)
     end
     if definiton_extra then
-        self.children.joker_display:add_extra(definiton_extra)
+        self.children.joker_display:add_extra(definiton_extra, extra_config)
     end
 
     self.children.joker_display:recalculate()
