@@ -209,7 +209,7 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
         dollars = modifiers.dollars or not reset and self.modifiers.dollars or nil,
     }
 
-    local mod_keys = {"chips", "x_chips", "mult", "x_mult", "dollars"}
+    local mod_keys = { "chips", "x_chips", "mult", "x_mult", "dollars" }
     local modifiers_changed = false
 
     for i = 1, #mod_keys do
@@ -219,7 +219,8 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
         self.modifiers[mod_keys[i]] = new_modifiers[mod_keys[i]]
     end
 
-    self.modifiers.x_chips_text = self.modifiers.x_chips and tonumber(string.format("%.2f", self.modifiers.x_chips)) or nil
+    self.modifiers.x_chips_text = self.modifiers.x_chips and tonumber(string.format("%.2f", self.modifiers.x_chips)) or
+    nil
     self.modifiers.x_mult_text = self.modifiers.x_mult and tonumber(string.format("%.2f", self.modifiers.x_mult)) or nil
 
     if modifiers_changed then
@@ -330,11 +331,11 @@ end
 
 function JokerDisplayBox:align_to_text()
     local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
-        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
         self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y or
+        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
         self.UIRoot.T and self.UIRoot.T.y)
     self.alignment.offset.y = y_value - 0.1
-    sendDebugMessage(self.parent.ability.name.. " : ".. tostring(self.has_text).. " / ".. tostring(self.text.T.y))
+    sendDebugMessage(self.parent.ability.name .. " : " .. tostring(self.has_text) .. " / " .. tostring(self.text.T.y))
 end
 
 ---DISPLAY CONFIGURATION
@@ -353,7 +354,7 @@ function Card:update_joker_display(from)
             self.children.joker_display = JokerDisplayBox(self, "joker_display_disable")
             self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable")
             self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff")
-            self.children.joker_display_debuff:add_text({{text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE}})
+            self.children.joker_display_debuff:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
             self:initialize_joker_display()
 
             --Perishable Display
@@ -827,7 +828,8 @@ function Card:initialize_joker_display()
     self:calculate_joker_display()
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
-    local definiton_text = joker_display_definition and (joker_display_definition.text or joker_display_definition.line_1)
+    local definiton_text = joker_display_definition and
+    (joker_display_definition.text or joker_display_definition.line_1)
     local definiton_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
         joker_display_definition.line_2)
     local definiton_extra = joker_display_definition and joker_display_definition.extra
