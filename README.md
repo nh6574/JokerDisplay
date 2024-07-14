@@ -32,16 +32,17 @@ Make sure that JokerDisplay.Definitions is loaded and add a new value with your 
 
 Example:
 ```lua
---- It's recommended to keep any reminder text in line_2 and only use line_1 for modifiers with only numbers
+--- It's recommended to keep any reminder text in reminder_text and only use text for modifiers with numbers/symbols only
 
 -- Adds +10 mult for every 6 played
 JokerDisplay.Definitions["j_my_custom"] = {
-  line_1 = {
-    { text = "+",                             colour = G.C.MULT },
-    { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
+  text = {
+    { text = "+" },
+    { ref_table = "card.joker_display_values", ref_value = "mult" }
   },
-  line_2 = {
-    { text = "(6)", colour = G.C.UI.TEXT_INACTIVE, scale = 0.3 }
+  text_config = { colour = G.C.MULT }
+  reminder_text = {
+    { text = "(6)" }
   },
   calc_function = function(card)
     local mult = 0
