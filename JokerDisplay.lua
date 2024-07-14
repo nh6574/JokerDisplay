@@ -116,6 +116,7 @@ function JokerDisplayBox:init(parent, func, args)
 
     self.states.collide.can = true
     self.name = "JokerDisplay"
+    self.joker_display_type = args.type or "NORMAL"
     self.can_collapse = true
 
     self.text = self.UIRoot.children[1].children[3]
@@ -333,7 +334,8 @@ function JokerDisplayBox:align_to_text()
     local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
         self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y - 0.045 or
         self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y - 0.045 or
-        self.UIRoot.T and self.UIRoot.T.y)
+        (self.T.y - self.alignment.offset.y))
+    sendDebugMessage(self.parent.ability.name.. "/".. self.joker_display_type.. ": ".. tostring(y_value).. " = ".. tostring(self.has_text and self.text.T.y).. " | ".. tostring(self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y - 0.045).. " | ".. tostring(self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y - 0.045).. " | ".. tostring(self.alignment.offset.y))
     self.alignment.offset.y = y_value or self.alignment.offset.y
 end
 
@@ -350,9 +352,9 @@ function Card:update_joker_display(from)
             self.joker_display_values.small = false
 
             --Regular Display
-            self.children.joker_display = JokerDisplayBox(self, "joker_display_disable")
-            self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable")
-            self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff")
+            self.children.joker_display = JokerDisplayBox(self, "joker_display_disable", {type = "NORMAL"})
+            self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", {type = "SMALL"})
+            self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff", {type = "DEBUFF"})
             self.children.joker_display_debuff:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
             self:initialize_joker_display()
 
@@ -845,6 +847,7 @@ function Card:initialize_joker_display()
     end
 
     self.children.joker_display:recalculate()
+    self.children.joker_display_small:recalculate()
 end
 
 ---DISPLAY CALCULATION
