@@ -110,7 +110,7 @@ function JokerDisplayBox:init(parent, func, args)
     args.config = args.config or {}
     args.config.align = args.config.align or "bm"
     args.config.parent = parent
-    args.config.offset = { x = 0, y = -0.1 }
+    args.config.offset = { x = 0, y = -0.1}
 
     UIBox.init(self, args)
 
@@ -331,10 +331,10 @@ end
 
 function JokerDisplayBox:align_to_text()
     local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
-        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y or
-        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
+        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y - 0.045 or
+        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y - 0.045 or
         self.UIRoot.T and self.UIRoot.T.y)
-    self.alignment.offset.y = y_value - 0.1
+    self.alignment.offset.y = y_value or self.alignment.offset.y
 end
 
 ---DISPLAY CONFIGURATION
