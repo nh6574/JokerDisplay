@@ -20,6 +20,7 @@ Tested with Steamodded 0.9.8 and 1.0.0.
 ![Example 1](examples/example_1.png)
 ![Example 2](examples/example_2.png)
 ![Example 3](examples/example_3.png)
+![Example 4](examples/example_4.png)
 
 _For information on all the Jokers, please refer to the [examples document](examples/README.md)_ (it's a bit outdated but gives you a general idea)
 
