@@ -9,6 +9,9 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
+local lovely = require("lovely")
+local nativefs = require("nativefs")
+
 ---UTILITY FUNCTIONS
 
 --- Splits text by a separator.
@@ -985,6 +988,118 @@ function Controller:button_press_update(button, dt)
         JokerDisplay.visible = not JokerDisplay.visible
     end
 end
+
+--------- SETTINGS MENU --------------------------------------------------------------------------------------
+
+-- The options for the different display variants in k/v pairs
+JokerDisplay.DisplaySettingsOptions = {
+    ["Default"] = 1,
+    ["Small"] = 2,
+    ["Both"] = 3,
+}
+
+-- The table that stores the keys for the display options
+local displaySettingsOptions = {}
+for key in pairs(JokerDisplay.DisplaySettingsOptions) do
+    table.insert(displaySettingsOptions, key)
+end
+
+-- Loads the settings.lua file into JokerDisplay.SETTINGS
+if nativefs.getInfo(lovely.mod_dir .. "/JokerDisplay/settings.lua") then
+    local settings_file = STR_UNPACK(nativefs.read((lovely.mod_dir .. "/JokerDisplay/settings.lua")))
+    if settings_file ~= nil then
+        JokerDisplay.SETTINGS = settings_file
+    end
+end
+
+
+JokerDisplay.G_FUNCS_options_ref = G.FUNCS.options
+G.FUNCS.options = function(e)
+    JokerDisplay.G_FUNCS_options_ref(e)
+end
+
+-- The functions to update the value of the respective display settings
+G.FUNCS.change_modifier_option = function(x)
+    JokerDisplay.SETTINGS.modifiers = x.to_key
+    nativefs.write(lovely.mod_dir .. "/JokerDisplay/settings.lua", STR_PACK(JokerDisplay.SETTINGS))
+end
+
+G.FUNCS.change_extended_option = function(x)
+    JokerDisplay.SETTINGS.extended = x.to_key
+    nativefs.write(lovely.mod_dir .. "/JokerDisplay/settings.lua", STR_PACK(JokerDisplay.SETTINGS))
+end
+
+G.FUNCS.change_reminder_option = function(x)
+    JokerDisplay.SETTINGS.reminder = x.to_key
+    nativefs.write(lovely.mod_dir .. "/JokerDisplay/settings.lua", STR_PACK(JokerDisplay.SETTINGS))
+end
+
+-- Creates the tab in the settings menu
+local ct = create_tabs
+function create_tabs(args)
+    if args and args.tab_h == 7.05 then
+        args.tabs[#args.tabs + 1] = {
+            label = "JokerDisplay",
+            tab_definition_function = function()
+                return {
+                    n = G.UIT.ROOT,
+                    config = {
+                        align = "cm",
+                        padding = 0.05,
+                        colour = G.C.CLEAR,
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = "JokerDisplay Enabled",
+                            ref_table = JokerDisplay.SETTINGS,
+                            ref_value = "joker_display_enabled",
+                            callback = function(_set_toggle)
+                                nativefs.write(lovely.mod_dir .. "/JokerDisplay/settings.lua", STR_PACK(JokerDisplay.SETTINGS))
+                            end
+                        }),
+                        create_toggle({
+                            label = "Hide all displays with no info",
+                            ref_table = JokerDisplay.SETTINGS,
+                            ref_value = "hide_no_info",
+                            callback = function(_set_toggle)
+                                nativefs.write(lovely.mod_dir .. "/JokerDisplay/settings.lua", STR_PACK(JokerDisplay.SETTINGS))
+                            end
+                        }),
+                        create_option_cycle({
+                            label = "Modifiers",
+                            scale = 0.8,
+                            w = 4,
+                            options = displaySettingsOptions,
+                            opt_callback = "change_modifier_option",
+                            current_option = JokerDisplay.SETTINGS.modifiers
+                        }),
+                        create_option_cycle({
+                            label = "Extended",
+                            scale = 0.8,
+                            w = 4,
+                            options = displaySettingsOptions,
+                            opt_callback = "change_extended_option",
+                            current_option = JokerDisplay.SETTINGS.extended
+                        }),
+                        create_option_cycle({
+                            label = "Reminder",
+                            scale = 0.8,
+                            w = 4,
+                            options = displaySettingsOptions,
+                            opt_callback = "change_reminder_option",
+                            current_option = JokerDisplay.SETTINGS.reminder
+                        }),
+                    }
+                }
+            end,
+            tab_definition_function_args = "JokerDisplay"
+        }
+    end
+    return ct(args)
+end
+
+--------- SETTINGS MENU --------------------------------------------------------------------------------------
+
 
 ----------------------------------------------
 ------------MOD CODE END----------------------
