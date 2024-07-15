@@ -492,11 +492,12 @@ return {
         calc_function = function(card)
             local temp_Mult, temp_ID = 15, 15
             local temp_card = nil
+            local retriggers = 1
             for i = 1, #G.hand.cards do
                 if not G.hand.cards[i].highlighted and temp_ID >= G.hand.cards[i].base.id
                     and G.hand.cards[i].ability.effect ~= 'Stone Card' then
-                    temp_Mult = G.hand.cards[i].base.nominal *
-                        JokerDisplay.calculate_card_triggers(G.hand.cards[i], nil, true)
+                    retriggers = JokerDisplay.calculate_card_triggers(G.hand.cards[i], nil, true)
+                    temp_Mult = G.hand.cards[i].base.nominal
                     temp_ID = G.hand.cards[i].base.id
                     temp_card = G.hand.cards[i]
                 end
@@ -504,7 +505,7 @@ return {
             if not temp_card or temp_card.debuff or temp_card.facing == 'back' then
                 temp_Mult = 0
             end
-            card.joker_display_values.mult = (temp_Mult < 15 and temp_Mult * 2 or 0)
+            card.joker_display_values.mult = (temp_Mult < 15 and temp_Mult * 2 * retriggers or 0)
         end
     },
     j_chaos = {     -- Chaos the Clown
