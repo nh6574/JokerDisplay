@@ -1844,7 +1844,7 @@ return {
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
             card.joker_display_values.blueprint_debuff = copied_joker and copied_joker.debuff
-            card.joker_display_values.blueprint_loaded = false
+
             if changed or not card.joker_display_values.blueprint_loaded then
                 card.children.joker_display:remove_text()
                 card.children.joker_display:remove_reminder_text()
@@ -2160,7 +2160,7 @@ return {
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
             card.joker_display_values.blueprint_debuff = copied_joker and copied_joker.debuff
-            card.joker_display_values.blueprint_loaded = false
+
             if changed or not card.joker_display_values.blueprint_loaded then
                 card.children.joker_display:remove_text()
                 card.children.joker_display:remove_reminder_text()
