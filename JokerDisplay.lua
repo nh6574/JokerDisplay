@@ -47,7 +47,21 @@ end
 ---MOD INITIALIZATION
 
 JokerDisplay = {}
-JokerDisplay.visible = true
+JokerDisplay.SETTINGS = {
+    enabled = true,     -- Show/Hide all displays
+    hide_empty = false, -- Hide all displays with no information
+    default_rows = {    -- Default Display
+        modifiers = true,
+        reminder = true,
+        extra = true
+    },
+    small_rows = { -- Small Display (after left click)
+        modifiers = true,
+        reminder = false,
+        extra = false
+    },
+    reload = false, -- Set to true after changing display rows
+}
 
 if SMODS["INIT"] then -- 0.9.x
     local init = SMODS["INIT"]
@@ -110,7 +124,7 @@ function JokerDisplayBox:init(parent, func, args)
     args.config = args.config or {}
     args.config.align = args.config.align or "bm"
     args.config.parent = parent
-    args.config.offset = { x = 0, y = -0.1}
+    args.config.offset = { x = 0, y = -0.1 }
 
     UIBox.init(self, args)
 
@@ -171,7 +185,8 @@ end
 function JokerDisplayBox:add_reminder_text(nodes, config, custom_parent)
     self.has_reminder_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config), self.reminder_text)
+        self:add_child(JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config),
+            self.reminder_text)
     end
 end
 
@@ -185,7 +200,8 @@ function JokerDisplayBox:add_extra(node_rows, config, custom_parent)
     for i = #node_rows, 1, -1 do
         local row_nodes = {}
         for j = 1, #node_rows[i] do
-            table.insert(row_nodes, JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j], config))
+            table.insert(row_nodes,
+                JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j], config))
         end
         local extra_row = {
             n = G.UIT.R,
@@ -212,21 +228,27 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
 
     local mod_keys = { "chips", "x_chips", "mult", "x_mult", "dollars" }
     local modifiers_changed = false
+    local has_modifiers = false
 
     for i = 1, #mod_keys do
         if (not not self.modifiers[mod_keys[i]]) ~= (not not new_modifiers[mod_keys[i]]) then
             modifiers_changed = true
         end
         self.modifiers[mod_keys[i]] = new_modifiers[mod_keys[i]]
+        if self.modifiers[mod_keys[i]] then
+            has_modifiers = true
+        end
     end
 
     self.modifiers.x_chips_text = self.modifiers.x_chips and tonumber(string.format("%.2f", self.modifiers.x_chips)) or
-    nil
+        nil
     self.modifiers.x_mult_text = self.modifiers.x_mult and tonumber(string.format("%.2f", self.modifiers.x_mult)) or nil
 
     if modifiers_changed then
         self:remove_modifiers()
-        self:add_modifiers()
+        if has_modifiers then
+            self:add_modifiers()
+        end
     end
 end
 
@@ -338,6 +360,10 @@ function JokerDisplayBox:align_to_text()
     self.alignment.offset.y = y_value or self.alignment.offset.y
 end
 
+function JokerDisplayBox:has_info()
+    return self.has_text or self.has_extra or self.has_modifiers or self.has_reminder_text
+end
+
 ---DISPLAY CONFIGURATION
 
 ---Updates the JokerDisplay and initializes it if necessary.
@@ -351,10 +377,9 @@ function Card:update_joker_display(from)
             self.joker_display_values.small = false
 
             --Regular Display
-            self.children.joker_display = JokerDisplayBox(self, "joker_display_disable", {type = "NORMAL"})
-            self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", {type = "SMALL"})
-            self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff", {type = "DEBUFF"})
-            self.children.joker_display_debuff:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
+            self.children.joker_display = JokerDisplayBox(self, "joker_display_disable", { type = "NORMAL" })
+            self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", { type = "SMALL" })
+            self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff", { type = "DEBUFF" })
             self:initialize_joker_display()
 
             --Perishable Display
@@ -439,7 +464,12 @@ function Card:update_joker_display(from)
                 self.children.joker_display_rental.name = "JokerDisplay"
             end
         else
-            self:calculate_joker_display()
+            if JokerDisplay.SETTINGS.reload then
+                self:initialize_joker_display()
+                JokerDisplay.SETTINGS.reload = false
+            else
+                self:calculate_joker_display()
+            end
         end
     end
 end
@@ -454,26 +484,33 @@ function update_all_joker_display(from)
     end
 end
 
+function Card:joker_display_has_info()
+    return (self.children.joker_display and self.children.joker_display:has_info()) or
+        (self.children.joker_display_small and self.children.joker_display_small:has_info())
+end
+
 ---STYLE MOD FUNCTIONS
 G.FUNCS.joker_display_disable = function(e)
     local card = e.config.ref_table
-    if card.facing == 'back' or card.debuff or card.joker_display_values.small then
+    if card.facing == 'back' or card.debuff or card.joker_display_values.small or
+        (not card:joker_display_has_info() and JokerDisplay.SETTINGS.hide_empty) then
         e.states.visible = false
         e.parent.states.collide.can = false
     else
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
+        e.states.visible = JokerDisplay.SETTINGS.enabled
+        e.parent.states.collide.can = JokerDisplay.SETTINGS.enabled
     end
 end
 
 G.FUNCS.joker_display_small_enable = function(e)
     local card = e.config.ref_table
-    if card.facing == 'back' or card.debuff or not (card.joker_display_values.small) then
+    if card.facing == 'back' or card.debuff or not (card.joker_display_values.small) or
+        (not card:joker_display_has_info() and JokerDisplay.SETTINGS.hide_empty) then
         e.states.visible = false
         e.parent.states.collide.can = false
     else
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
+        e.states.visible = JokerDisplay.SETTINGS.enabled
+        e.parent.states.collide.can = JokerDisplay.SETTINGS.enabled
     end
 end
 
@@ -481,8 +518,8 @@ end
 G.FUNCS.joker_display_debuff = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.debuff then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
+        e.states.visible = JokerDisplay.SETTINGS.enabled
+        e.parent.states.collide.can = JokerDisplay.SETTINGS.enabled
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -492,8 +529,8 @@ end
 G.FUNCS.joker_display_perishable = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
+        e.states.visible = JokerDisplay.SETTINGS.enabled
+        e.parent.states.collide.can = JokerDisplay.SETTINGS.enabled
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -503,8 +540,8 @@ end
 G.FUNCS.joker_display_rental = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = JokerDisplay.visible
-        e.parent.states.collide.can = JokerDisplay.visible
+        e.states.visible = JokerDisplay.SETTINGS.enabled
+        e.parent.states.collide.can = JokerDisplay.SETTINGS.enabled
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -755,7 +792,6 @@ end
 ---@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects
 ---@return table
 JokerDisplay.create_display_object = function(card, display_config, defaults_config)
-
     local default_text_colour = defaults_config and defaults_config.colour or G.C.UI.TEXT_LIGHT
     local default_text_scale = defaults_config and defaults_config.scale or 0.4
 
@@ -773,7 +809,8 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
     if display_config.border_nodes then
         local inside_nodes = {}
         for i = 1, #display_config.border_nodes do
-            table.insert(inside_nodes, JokerDisplay.create_display_object(card, display_config.border_nodes[i], defaults_config))
+            table.insert(inside_nodes,
+                JokerDisplay.create_display_object(card, display_config.border_nodes[i], defaults_config))
         end
         return JokerDisplay.create_display_border_text_object(inside_nodes, display_config.border_colour or G.C.XMULT)
     end
@@ -831,11 +868,26 @@ end
 
 ---Initializes nodes for JokerDisplay.
 function Card:initialize_joker_display(custom_parent)
+    if not custom_parent then
+        self.children.joker_display:remove_text()
+        self.children.joker_display:remove_reminder_text()
+        self.children.joker_display:remove_extra()
+        self.children.joker_display:remove_modifiers()
+        self.children.joker_display_small:remove_text()
+        self.children.joker_display_small:remove_reminder_text()
+        self.children.joker_display_small:remove_extra()
+        self.children.joker_display_small:remove_modifiers()
+        self.children.joker_display_debuff:remove_text()
+        self.children.joker_display_debuff:remove_modifiers()
+
+        self.children.joker_display_debuff:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
+    end
+
     self:calculate_joker_display()
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local definiton_text = joker_display_definition and
-    (joker_display_definition.text or joker_display_definition.line_1)
+        (joker_display_definition.text or joker_display_definition.line_1)
     local text_config = joker_display_definition and joker_display_definition.text_config
     local definiton_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
         joker_display_definition.line_2)
@@ -858,17 +910,37 @@ function Card:initialize_joker_display(custom_parent)
         end
         reminder_text_config.colour = G.C.UI.TEXT_INACTIVE
         reminder_text_config.scale = 0.3
-        if custom_parent then
-            custom_parent.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config, self)
-        else
-            self.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config)
+        if JokerDisplay.SETTINGS.default_rows.reminder then
+            if custom_parent then
+                custom_parent.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config,
+                    self)
+            else
+                self.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config)
+            end
+        end
+        if JokerDisplay.SETTINGS.small_rows.reminder then
+            if custom_parent then
+                custom_parent.children.joker_display_small:add_reminder_text(definiton_reminder_text,
+                    reminder_text_config, self)
+            else
+                self.children.joker_display_small:add_reminder_text(definiton_reminder_text, reminder_text_config)
+            end
         end
     end
     if definiton_extra then
-        if custom_parent then
-            custom_parent.children.joker_display:add_extra(definiton_extra, extra_config, self)
-        else
-            self.children.joker_display:add_extra(definiton_extra, extra_config)
+        if JokerDisplay.SETTINGS.default_rows.extra then
+            if custom_parent then
+                custom_parent.children.joker_display:add_extra(definiton_extra, extra_config, self)
+            else
+                self.children.joker_display:add_extra(definiton_extra, extra_config)
+            end
+        end
+        if JokerDisplay.SETTINGS.small_rows.extra then
+            if custom_parent then
+                custom_parent.children.joker_display_small:add_extra(definiton_extra, extra_config, self)
+            else
+                self.children.joker_display_small:add_extra(definiton_extra, extra_config)
+            end
         end
     end
 
@@ -896,8 +968,14 @@ function Card:calculate_joker_display()
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
     end
 
-    self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
-    self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+    if JokerDisplay.SETTINGS.default_rows.modifiers then
+        self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+        self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+    end
+
+    if JokerDisplay.SETTINGS.small_rows.modifiers then
+        self.children.joker_display_small:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+    end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local calc_function = joker_display_definition and joker_display_definition.calc_function
@@ -961,7 +1039,7 @@ function Controller:queue_R_cursor_press(x, y)
         local press_node = self.hovering.target or self.focused.target
         if press_node and G.jokers and ((press_node.area and press_node.area == G.jokers)
                 or (press_node.name and press_node.name == "JokerDisplay")) then
-            JokerDisplay.visible = not JokerDisplay.visible
+            JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
         end
     end
 end
@@ -982,7 +1060,7 @@ function Controller:button_press_update(button, dt)
     controller_button_press_update_ref(self, button, dt)
 
     if button == 'b' and G.jokers and self.focused.target and self.focused.target.area == G.jokers then
-        JokerDisplay.visible = not JokerDisplay.visible
+        JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
     end
 end
 
