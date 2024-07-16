@@ -4,7 +4,7 @@
 --- MOD_AUTHOR: [nh6574]
 --- MOD_DESCRIPTION: Display information underneath Jokers
 --- PRIORITY: -100000
---- VERSION: 1.5.1
+--- VERSION: 1.5.2
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
