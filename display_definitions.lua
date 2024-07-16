@@ -1101,7 +1101,7 @@ return {
     },
     j_cloud_9 = { -- Cloud 9
         text = {
-            { text = "+$"},
+            { text = "+$" },
             { ref_table = "card.joker_display_values", ref_value = "dollars" },
         },
         text_config = { colour = G.C.GOLD },
@@ -1122,7 +1122,7 @@ return {
         reminder_text = {
             { ref_table = "card.joker_display_values", ref_value = "localized_text" },
         },
-        calc_function = function (card)
+        calc_function = function(card)
             card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
         end
     },
@@ -1197,7 +1197,7 @@ return {
                 (card.ability.extra ^ JokerDisplay.calculate_card_triggers(first_face, not (text == 'Unknown') and scoring_hand or nil)) or
                 1
             card.joker_display_values.localized_text = localize("k_face_cards")
-            end
+        end
     },
     j_gift = {        -- Gift Card
     },
@@ -1222,8 +1222,8 @@ return {
     },
     j_reserved_parking = { -- Reserved Parking
         text = {
-            { ref_table = "card.joker_display_values",                                        ref_value = "count" },
-            { text = "x",                                                                     scale = 0.35 },
+            { ref_table = "card.joker_display_values",                              ref_value = "count" },
+            { text = "x",                                                           scale = 0.35 },
             { text = "$" .. G.P_CENTERS["j_reserved_parking"].config.extra.dollars, colour = G.C.GOLD },
         },
         extra = {
@@ -1285,7 +1285,7 @@ return {
             card.joker_display_values.dollars = G.GAME and G.GAME.dollars and
                 math.max(math.min(math.floor(G.GAME.dollars / 5), G.GAME.interest_cap / 5), 0) * card.ability.extra
             card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
-            end
+        end
     },
     j_hallucination = { -- Hallucination
         extra = {
@@ -1334,7 +1334,7 @@ return {
         reminder_text = {
             { ref_table = "card.joker_display_values", ref_value = "localized_text" },
         },
-        calc_function = function (card)
+        calc_function = function(card)
             card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
         end
     },
@@ -1351,9 +1351,9 @@ return {
     j_baseball = { -- Baseball Card
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "count", colour = G.C.ORANGE },
+            { ref_table = "card.joker_display_values", ref_value = "count",          colour = G.C.ORANGE },
             { text = "x" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text",           colour = G.C.GREEN },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.GREEN },
             { text = ")" },
         },
         calc_function = function(card)
@@ -1926,7 +1926,7 @@ return {
             { text = "(" },
             { ref_table = "card.joker_display_values", ref_value = "localized_text_clubs", colour = lighten(G.C.SUITS["Clubs"], 0.35) },
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text_other",                 colour = G.C.ORANGE },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text_other", colour = G.C.ORANGE },
             { text = ")" },
         },
         calc_function = function(card)
