@@ -13,7 +13,7 @@ Tested with Steamodded 0.9.8 and 1.0.0.
 ## Usage
 
 * Right-click the display or a Joker to hide/unhide all displays (or use the back button on your controller over a Joker).
-* Left-click the display to hide/unhide the second row of text. (Mouse only)
+* Left-click the display to hide/unhide extra rows of text. (Mouse only)
 
 ## Examples
 
