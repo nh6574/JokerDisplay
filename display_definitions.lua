@@ -498,6 +498,7 @@ return {
                 localize("k_active_ex") or "Inactive"
         end,
         retrigger_function = function(card, scoring_hand, held_in_hand)
+            if held_in_hand then return 0 end
             return G.GAME and G.GAME.current_round.hands_left <= 1 and 1 or 0
         end
     },
@@ -621,6 +622,7 @@ return {
             { text = "(2,3,4,5)" },
         },
         retrigger_function = function(card, scoring_hand, held_in_hand)
+            if held_in_hand then return 0 end
             return (card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and 1 or 0
         end
     },
@@ -1502,6 +1504,7 @@ return {
             { text = "/10)" }
         },
         retrigger_function = function(card, scoring_hand, held_in_hand)
+            if held_in_hand then return 0 end
             return 1
         end
     },
@@ -1615,6 +1618,7 @@ return {
     },
     j_sock_and_buskin = { -- Sock and Buskin
         retrigger_function = function(card, scoring_hand, held_in_hand)
+            if held_in_hand then return 0 end
             return card:is_face() and 1 or 0
         end
     },
@@ -1643,6 +1647,7 @@ return {
     },
     j_hanging_chad = { -- Hanging Chad
         retrigger_function = function(card, scoring_hand, held_in_hand)
+            if held_in_hand then return 0 end
             local first_card = scoring_hand and JokerDisplay.calculate_leftmost_card(scoring_hand)
             return first_card and card == first_card and 2 or 0
         end
