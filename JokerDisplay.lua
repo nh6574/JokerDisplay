@@ -72,10 +72,10 @@ if SMODS["INIT"] then -- 0.9.x
 else -- 1.x
     if SMODS.Atlas then
         SMODS.Atlas({
-          key = "modicon",
-          path = "icon.png",
-          px = 32,
-          py = 32
+            key = "modicon",
+            path = "icon.png",
+            px = 32,
+            py = 32
         })
     end
     JokerDisplay.Path = SMODS.current_mod.path
@@ -378,7 +378,6 @@ end
 ---@param force_update boolean? Force update even if disabled.
 function Card:update_joker_display(force_update)
     if (JokerDisplay.SETTINGS.enabled or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
-
         if not self.children.joker_display then
             self.joker_display_values = {}
             self.joker_display_values.small = false
@@ -577,7 +576,7 @@ G.FUNCS.joker_display_style_override = function(e)
     end
 end
 
-JokerDisplay.enable_disable = function ()
+JokerDisplay.enable_disable = function()
     if not JokerDisplay.SETTINGS.enabled then
         update_all_joker_display(true)
     end
@@ -600,7 +599,7 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
         return "Unknown", {}, {}
     end
     for i = 1, #cards do
-        if not type(cards[i]) == "table" or cards[i].area ~= G.hand then
+        if not type(cards[i]) == "table" or not (cards[i].area == G.hand or cards[i].area == G.play) then
             return "Unknown", {}, {}
         end
     end
@@ -1059,7 +1058,7 @@ function Controller:queue_R_cursor_press(x, y)
         local press_node = self.hovering.target or self.focused.target
         if press_node and G.jokers and ((press_node.area and press_node.area == G.jokers)
                 or (press_node.name and press_node.name == "JokerDisplay")) then
-                JokerDisplay.enable_disable()
+            JokerDisplay.enable_disable()
         end
     end
 end
