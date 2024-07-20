@@ -30,8 +30,6 @@ This mod only supports vanilla jokers but you can add support for it in your mod
 
 Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API documentation.
 
-
-
 | Mods with JokerDisplay support |
 |---|
 | [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
