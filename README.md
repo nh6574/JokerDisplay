@@ -15,54 +15,29 @@ Tested with Steamodded 0.9.8 and 1.0.0.
 * Right-click the display or a Joker to hide/unhide all displays (or use the back button on your controller over a Joker).
 * Left-click the display to hide/unhide extra rows of text. (Mouse only)
 
-## Examples
+Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for suggestions or bug reports.
+
+## Screenshots
 
 ![Example 1](examples/example_1.png)
 ![Example 2](examples/example_2.png)
 ![Example 3](examples/example_3.png)
 ![Example 4](examples/example_4.png)
 
-_For information on all the Jokers, please refer to the [examples document](examples/README.md)_ (it's a bit outdated but gives you a general idea)
-
-Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for suggestions or bug reports.
-
 ## Mod Support
 
 This mod only supports vanilla jokers but you can add support for it in your mod by defining how the display should look.
-Make sure that JokerDisplay.Definitions is loaded and add a new value with your joker key (ex. JokerDisplay.Definitions\["j_my_custom"\])
 
-Example:
-```lua
---- It's recommended to keep any reminder text in reminder_text and only use text for modifiers with numbers/symbols only
+Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API documentation.
 
--- Adds +10 mult for every 6 played
-JokerDisplay.Definitions["j_my_custom"] = {
-  text = {
-    { text = "+" },
-    { ref_table = "card.joker_display_values", ref_value = "mult" }
-  },
-  text_config = { colour = G.C.MULT }
-  reminder_text = {
-    { text = "(6)" }
-  },
-  calc_function = function(card)
-    local mult = 0
-    local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-    local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-    for k, v in pairs(scoring_hand) do
-      if not v.debuff and v:get_id() and v:get_id() == 6 then
-        local retriggers = JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown')
-                          and scoring_hand or nil)
-        mult = mult + 10 * retriggers
-      end
-    end
-    card.joker_display_values.mult = mult
-  end
-}
-```
 
-Check joker_definitions.lua for a hint on how to implement your own jokers (or modify vanilla ones). Complex custom Jokers might need to inject code into JokerDisplay's functions.
-I recommend keeping your definitions in a separate file as they can get quite long and bloat your code.
+
+| Mods with JokerDisplay support |
+|---|
+| [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
+| [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
+| [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
+| [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
 
 ## Contributing
 
