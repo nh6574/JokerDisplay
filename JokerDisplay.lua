@@ -70,6 +70,14 @@ if SMODS["INIT"] then -- 0.9.x
         JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
     end
 else -- 1.x
+    if SMODS.Atlas then
+        SMODS.Atlas({
+          key = "modicon",
+          path = "icon.png",
+          px = 32,
+          py = 32
+        })
+    end
     JokerDisplay.Path = SMODS.current_mod.path
     JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
 end
