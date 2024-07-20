@@ -1909,7 +1909,7 @@ return {
                         JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
                 end
             end
-            card.joker_display_values.x_mult = card.ability.extra ^ count
+            card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
             card.joker_display_values.idol_card_rank = localize(G.GAME.current_round.idol_card.rank, 'ranks')
             card.joker_display_values.idol_card_suit = localize(G.GAME.current_round.idol_card.suit, 'suits_plural')
         end,
