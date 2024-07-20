@@ -628,10 +628,12 @@ end
 ---Returns what Joker the current card (i.e. Blueprint or Brainstorm) is copying.
 ---@param card table Blueprint or Brainstorm card to calculate copy.
 ---@param _cycle_count integer? Counts how many times the function has recurred to prevent loops.
+---@param _cycle_debuff boolean? Saves debuffed state on recursion.
 ---@return table|nil name Copied Joker
-JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count)
+---@return boolean debuff If the copied joker (or any in the chain) is debuffed
+JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debuff)
     if _cycle_count and _cycle_count > #G.jokers.cards + 1 then
-        return nil
+        return nil, false
     end
     local other_joker = nil
     if card.ability.name == "Blueprint" then
@@ -645,12 +647,14 @@ JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count)
     end
     if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
         if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
-            return JokerDisplay.calculate_blueprint_copy(other_joker, _cycle_count and _cycle_count + 1 or 1)
+            return JokerDisplay.calculate_blueprint_copy(other_joker,
+                _cycle_count and _cycle_count + 1 or 1,
+                _cycle_debuff or other_joker.debuff)
         else
-            return other_joker
+            return other_joker, (_cycle_debuff or other_joker.debuff)
         end
     end
-    return nil
+    return nil, false
 end
 
 ---Returns all held instances of certain Joker, including Blueprint copies. Similar to _find_joker_.
