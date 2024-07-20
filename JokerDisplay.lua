@@ -375,10 +375,9 @@ end
 ---DISPLAY CONFIGURATION
 
 ---Updates the JokerDisplay and initializes it if necessary.
----@param from string? Optional string with information of where the call is from. For debug purposes.
-function Card:update_joker_display(from)
-    if self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
-        --sendDebugMessage(self.ability.name .. ((" " .. from) or ""))
+---@param force_update boolean? Force update even if disabled.
+function Card:update_joker_display(force_update)
+    if (JokerDisplay.SETTINGS.enabled or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
 
         if not self.children.joker_display then
             self.joker_display_values = {}
@@ -483,11 +482,11 @@ function Card:update_joker_display(from)
 end
 
 ---Updates the JokerDisplay for all jokers and initializes it if necessary.
----@param from string? Optional string with information of where the call is from. For debug purposes.
-function update_all_joker_display(from)
+---@param force_update boolean? Force update even if disabled.
+function update_all_joker_display(force_update)
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
-            v:update_joker_display(from)
+            v:update_joker_display(force_update)
         end
     end
 end
@@ -559,21 +558,30 @@ end
 ---Modifies JokerDisplay's nodes style values dynamically
 ---@param e table
 G.FUNCS.joker_display_style_override = function(e)
-    local card = e.config.ref_table
-    local text = e.children and e.children[3] or nil
-    local reminder_text = e.children and e.children[4] or nil
-    local extra = e.children and e.children[2] or nil
+    if JokerDisplay.SETTINGS.enabled then
+        local card = e.config.ref_table
+        local text = e.children and e.children[3] or nil
+        local reminder_text = e.children and e.children[4] or nil
+        local extra = e.children and e.children[2] or nil
 
-    local is_blueprint_copying = card.joker_display_values and card.joker_display_values.blueprint_ability_key
-    local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
-    local style_function = joker_display_definition and joker_display_definition.style_function
+        local is_blueprint_copying = card.joker_display_values and card.joker_display_values.blueprint_ability_key
+        local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
+        local style_function = joker_display_definition and joker_display_definition.style_function
 
-    if style_function then
-        local recalculate = style_function(card, text, reminder_text, extra)
-        if recalculate then
-            JokerDisplayBox.recalculate(e.UIBox)
+        if style_function then
+            local recalculate = style_function(card, text, reminder_text, extra)
+            if recalculate then
+                JokerDisplayBox.recalculate(e.UIBox)
+            end
         end
     end
+end
+
+JokerDisplay.enable_disable = function ()
+    if not JokerDisplay.SETTINGS.enabled then
+        update_all_joker_display(true)
+    end
+    JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
 end
 
 --HELPER FUNCTIONS
@@ -1051,7 +1059,7 @@ function Controller:queue_R_cursor_press(x, y)
         local press_node = self.hovering.target or self.focused.target
         if press_node and G.jokers and ((press_node.area and press_node.area == G.jokers)
                 or (press_node.name and press_node.name == "JokerDisplay")) then
-            JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
+                JokerDisplay.enable_disable()
         end
     end
 end
@@ -1072,7 +1080,7 @@ function Controller:button_press_update(button, dt)
     controller_button_press_update_ref(self, button, dt)
 
     if button == 'b' and G.jokers and self.focused.target and self.focused.target.area == G.jokers then
-        JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
+        JokerDisplay.enable_disable()
     end
 end
 
