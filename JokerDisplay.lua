@@ -470,9 +470,7 @@ function Card:update_joker_display(force_update)
                 self.children.joker_display_rental.name = "JokerDisplay"
             end
         else
-            sendDebugMessage("HERE")
             if JokerDisplay.SETTINGS.reload then
-                sendDebugMessage("NOT HERE")
                 initialize_all_joker_display()
                 JokerDisplay.SETTINGS.reload = false
             else
@@ -1079,11 +1077,7 @@ function Controller:queue_L_cursor_press(x, y)
     if not G.SETTINGS.paused then
         local press_node = self.hovering.target or self.focused.target
         if press_node and press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
-            --press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
-            JokerDisplay.SETTINGS.default_rows.reminder = not JokerDisplay.SETTINGS.default_rows.reminder
-            JokerDisplay.SETTINGS.default_rows.modifiers = not JokerDisplay.SETTINGS.default_rows.modifiers
-            sendDebugMessage(tostring(JokerDisplay.SETTINGS.default_rows.modifiers))
-            JokerDisplay.SETTINGS.reload = true
+            press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
         end
     end
 end
