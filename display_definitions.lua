@@ -144,7 +144,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -166,7 +166,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -188,7 +188,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -210,7 +210,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -232,7 +232,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -254,7 +254,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -276,7 +276,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -298,7 +298,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -320,7 +320,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -342,7 +342,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -936,7 +936,7 @@ return {
                     has_ace = true
                 end
             end
-            if next(poker_hands["Straight"]) then
+            if poker_hands["Straight"] and next(poker_hands["Straight"]) then
                 has_straight = true
             end
             card.joker_display_values.count = has_ace and has_straight and 1 or 0
@@ -2025,7 +2025,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2050,7 +2050,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2075,7 +2075,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2100,7 +2100,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2125,7 +2125,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult

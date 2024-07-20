@@ -584,7 +584,7 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
         return "Unknown", {}, {}
     end
     for i = 1, #cards do
-        if not type(cards[i]) == "table" then
+        if not type(cards[i]) == "table" or cards[i].area ~= G.hand then
             return "Unknown", {}, {}
         end
     end
