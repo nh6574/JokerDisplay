@@ -2,7 +2,7 @@
 --- MOD_NAME: JokerDisplay
 --- MOD_ID: JokerDisplay
 --- MOD_AUTHOR: [nh6574]
---- MOD_DESCRIPTION: Display useful information under Jokers. Right-click on a Joker to hide/show. Left-click on a display to collapse/expand.
+--- MOD_DESCRIPTION: Display useful information under Jokers. Right-click on a Joker/Display to hide/show. Left-click on a display to collapse/expand.
 --- PRIORITY: -100000
 --- VERSION: 1.5.2
 
@@ -70,6 +70,14 @@ if SMODS["INIT"] then -- 0.9.x
         JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
     end
 else -- 1.x
+    if SMODS.Atlas then
+        SMODS.Atlas({
+          key = "modicon",
+          path = "icon.png",
+          px = 32,
+          py = 32
+        })
+    end
     JokerDisplay.Path = SMODS.current_mod.path
     JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
 end
@@ -367,10 +375,9 @@ end
 ---DISPLAY CONFIGURATION
 
 ---Updates the JokerDisplay and initializes it if necessary.
----@param from string? Optional string with information of where the call is from. For debug purposes.
-function Card:update_joker_display(from)
-    if self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
-        --sendDebugMessage(self.ability.name .. ((" " .. from) or ""))
+---@param force_update boolean? Force update even if disabled.
+function Card:update_joker_display(force_update)
+    if (JokerDisplay.SETTINGS.enabled or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
 
         if not self.children.joker_display then
             self.joker_display_values = {}
@@ -475,11 +482,11 @@ function Card:update_joker_display(from)
 end
 
 ---Updates the JokerDisplay for all jokers and initializes it if necessary.
----@param from string? Optional string with information of where the call is from. For debug purposes.
-function update_all_joker_display(from)
+---@param force_update boolean? Force update even if disabled.
+function update_all_joker_display(force_update)
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
-            v:update_joker_display(from)
+            v:update_joker_display(force_update)
         end
     end
 end
@@ -551,21 +558,30 @@ end
 ---Modifies JokerDisplay's nodes style values dynamically
 ---@param e table
 G.FUNCS.joker_display_style_override = function(e)
-    local card = e.config.ref_table
-    local text = e.children and e.children[3] or nil
-    local reminder_text = e.children and e.children[4] or nil
-    local extra = e.children and e.children[2] or nil
+    if JokerDisplay.SETTINGS.enabled then
+        local card = e.config.ref_table
+        local text = e.children and e.children[3] or nil
+        local reminder_text = e.children and e.children[4] or nil
+        local extra = e.children and e.children[2] or nil
 
-    local is_blueprint_copying = card.joker_display_values and card.joker_display_values.blueprint_ability_key
-    local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
-    local style_function = joker_display_definition and joker_display_definition.style_function
+        local is_blueprint_copying = card.joker_display_values and card.joker_display_values.blueprint_ability_key
+        local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
+        local style_function = joker_display_definition and joker_display_definition.style_function
 
-    if style_function then
-        local recalculate = style_function(card, text, reminder_text, extra)
-        if recalculate then
-            JokerDisplayBox.recalculate(e.UIBox)
+        if style_function then
+            local recalculate = style_function(card, text, reminder_text, extra)
+            if recalculate then
+                JokerDisplayBox.recalculate(e.UIBox)
+            end
         end
     end
+end
+
+JokerDisplay.enable_disable = function ()
+    if not JokerDisplay.SETTINGS.enabled then
+        update_all_joker_display(true)
+    end
+    JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
 end
 
 --HELPER FUNCTIONS
@@ -584,7 +600,7 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
         return "Unknown", {}, {}
     end
     for i = 1, #cards do
-        if not type(cards[i]) == "table" then
+        if not type(cards[i]) == "table" or cards[i].area ~= G.hand then
             return "Unknown", {}, {}
         end
     end
@@ -628,10 +644,12 @@ end
 ---Returns what Joker the current card (i.e. Blueprint or Brainstorm) is copying.
 ---@param card table Blueprint or Brainstorm card to calculate copy.
 ---@param _cycle_count integer? Counts how many times the function has recurred to prevent loops.
+---@param _cycle_debuff boolean? Saves debuffed state on recursion.
 ---@return table|nil name Copied Joker
-JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count)
+---@return boolean debuff If the copied joker (or any in the chain) is debuffed
+JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debuff)
     if _cycle_count and _cycle_count > #G.jokers.cards + 1 then
-        return nil
+        return nil, false
     end
     local other_joker = nil
     if card.ability.name == "Blueprint" then
@@ -645,12 +663,14 @@ JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count)
     end
     if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
         if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
-            return JokerDisplay.calculate_blueprint_copy(other_joker, _cycle_count and _cycle_count + 1 or 1)
+            return JokerDisplay.calculate_blueprint_copy(other_joker,
+                _cycle_count and _cycle_count + 1 or 1,
+                _cycle_debuff or other_joker.debuff)
         else
-            return other_joker
+            return other_joker, (_cycle_debuff or other_joker.debuff)
         end
     end
-    return nil
+    return nil, false
 end
 
 ---Returns all held instances of certain Joker, including Blueprint copies. Similar to _find_joker_.
@@ -1039,7 +1059,7 @@ function Controller:queue_R_cursor_press(x, y)
         local press_node = self.hovering.target or self.focused.target
         if press_node and G.jokers and ((press_node.area and press_node.area == G.jokers)
                 or (press_node.name and press_node.name == "JokerDisplay")) then
-            JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
+                JokerDisplay.enable_disable()
         end
     end
 end
@@ -1060,7 +1080,7 @@ function Controller:button_press_update(button, dt)
     controller_button_press_update_ref(self, button, dt)
 
     if button == 'b' and G.jokers and self.focused.target and self.focused.target.area == G.jokers then
-        JokerDisplay.SETTINGS.enabled = not JokerDisplay.SETTINGS.enabled
+        JokerDisplay.enable_disable()
     end
 end
 

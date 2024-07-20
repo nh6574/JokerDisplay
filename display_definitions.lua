@@ -144,7 +144,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -166,7 +166,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -188,7 +188,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -210,7 +210,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -232,7 +232,7 @@ return {
             local mult = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
             card.joker_display_values.mult = mult
@@ -254,7 +254,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -276,7 +276,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -298,7 +298,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -320,7 +320,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -342,7 +342,7 @@ return {
             local chips = 0
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
             card.joker_display_values.chips = chips
@@ -936,7 +936,7 @@ return {
                     has_ace = true
                 end
             end
-            if next(poker_hands["Straight"]) then
+            if poker_hands["Straight"] and next(poker_hands["Straight"]) then
                 has_straight = true
             end
             card.joker_display_values.count = has_ace and has_straight and 1 or 0
@@ -1837,7 +1837,7 @@ return {
     },
     j_blueprint = { -- Blueprint
         calc_function = function(card)
-            local copied_joker = JokerDisplay.calculate_blueprint_copy(card)
+            local copied_joker, copied_debuff = JokerDisplay.calculate_blueprint_copy(card)
             local changed = not (copied_joker == card.joker_display_values.blueprint_ability_joker) or
                 copied_joker and not (card.joker_display_values.blueprint_debuff == copied_joker.debuff)
             card.joker_display_values.blueprint_ability_joker = copied_joker
@@ -1848,7 +1848,7 @@ return {
                 "-"
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
-            card.joker_display_values.blueprint_debuff = copied_joker and copied_joker.debuff
+            card.joker_display_values.blueprint_debuff = copied_debuff or copied_joker and copied_joker.debuff
 
             if changed or not card.joker_display_values.blueprint_loaded then
                 card.children.joker_display:remove_text()
@@ -1866,6 +1866,8 @@ return {
                     else
                         card.joker_display_values.blueprint_loaded = false
                     end
+                else
+                    card.children.joker_display:add_reminder_text({ { text = "(".. card.joker_display_values.blueprint_compat.. ")", colour = G.C.RED } })
                 end
             end
         end
@@ -2025,7 +2027,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2050,7 +2052,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2075,7 +2077,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2100,7 +2102,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2125,7 +2127,7 @@ return {
             local x_mult = 1
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
             local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
-            if next(poker_hands[card.ability.type]) then
+            if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
             card.joker_display_values.x_mult = x_mult
@@ -2153,7 +2155,7 @@ return {
     },
     j_brainstorm = { -- Brainstorm
         calc_function = function(card)
-            local copied_joker = JokerDisplay.calculate_blueprint_copy(card)
+            local copied_joker, copied_debuff = JokerDisplay.calculate_blueprint_copy(card)
             local changed = not (copied_joker == card.joker_display_values.blueprint_ability_joker) or
                 copied_joker and not (card.joker_display_values.blueprint_debuff == copied_joker.debuff)
             card.joker_display_values.blueprint_ability_joker = copied_joker
@@ -2164,7 +2166,7 @@ return {
                 "-"
             card.joker_display_values.blueprint_compat = localize('k_' ..
                 (card.joker_display_values.blueprint_ability_name and "compatible" or "incompatible"))
-            card.joker_display_values.blueprint_debuff = copied_joker and copied_joker.debuff
+            card.joker_display_values.blueprint_debuff = copied_debuff or copied_joker and copied_joker.debuff
 
             if changed or not card.joker_display_values.blueprint_loaded then
                 card.children.joker_display:remove_text()
@@ -2182,6 +2184,8 @@ return {
                     else
                         card.joker_display_values.blueprint_loaded = false
                     end
+                else
+                    card.children.joker_display:add_reminder_text({ { text = "(".. card.joker_display_values.blueprint_compat.. ")", colour = G.C.RED } })
                 end
             end
         end
