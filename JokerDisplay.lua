@@ -227,15 +227,15 @@ end
 
 function JokerDisplayBox:change_modifiers(modifiers, reset)
     local new_modifiers = {
-        chips = modifiers.chips or not reset and self.modifiers.chips or nil,
-        x_chips = modifiers.x_chips or not reset and self.modifiers.x_chips or nil,
-        mult = modifiers.mult or not reset and self.modifiers.mult or nil,
-        x_mult = modifiers.x_mult or not reset and self.modifiers.x_mult or nil,
-        dollars = modifiers.dollars or not reset and self.modifiers.dollars or nil,
+        chips = modifiers.chips, --or not reset and self.modifiers.chips or nil,
+        x_chips = modifiers.x_chips, --or not reset and self.modifiers.x_chips or nil,
+        mult = modifiers.mult, --or not reset and self.modifiers.mult or nil,
+        x_mult = modifiers.x_mult, --or not reset and self.modifiers.x_mult or nil,
+        dollars = modifiers.dollars, -- not reset and self.modifiers.dollars or nil,
     }
 
     local mod_keys = { "chips", "x_chips", "mult", "x_mult", "dollars" }
-    local modifiers_changed = false
+    local modifiers_changed = reset or false
     local has_modifiers = false
 
     for i = 1, #mod_keys do
@@ -470,8 +470,10 @@ function Card:update_joker_display(force_update)
                 self.children.joker_display_rental.name = "JokerDisplay"
             end
         else
+            sendDebugMessage("HERE")
             if JokerDisplay.SETTINGS.reload then
-                self:initialize_joker_display()
+                sendDebugMessage("NOT HERE")
+                initialize_all_joker_display()
                 JokerDisplay.SETTINGS.reload = false
             else
                 self:calculate_joker_display()
@@ -486,6 +488,14 @@ function update_all_joker_display(force_update)
     if G.jokers then
         for k, v in pairs(G.jokers.cards) do
             v:update_joker_display(force_update)
+        end
+    end
+end
+
+function initialize_all_joker_display()
+    if G.jokers then
+        for k, v in pairs(G.jokers.cards) do
+            v:initialize_joker_display()
         end
     end
 end
@@ -1069,7 +1079,11 @@ function Controller:queue_L_cursor_press(x, y)
     if not G.SETTINGS.paused then
         local press_node = self.hovering.target or self.focused.target
         if press_node and press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
-            press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
+            --press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
+            JokerDisplay.SETTINGS.default_rows.reminder = not JokerDisplay.SETTINGS.default_rows.reminder
+            JokerDisplay.SETTINGS.default_rows.modifiers = not JokerDisplay.SETTINGS.default_rows.modifiers
+            sendDebugMessage(tostring(JokerDisplay.SETTINGS.default_rows.modifiers))
+            JokerDisplay.SETTINGS.reload = true
         end
     end
 end
