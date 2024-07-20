@@ -1704,13 +1704,17 @@ return {
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
             local count = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
-            for k, v in pairs(scoring_hand) do
-                if v:is_suit("Hearts") then
-                    count = count +
-                        JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+            if G.play then
+                local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
+                local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+                for k, v in pairs(scoring_hand) do
+                    if v:is_suit("Hearts") then
+                        count = count +
+                            JokerDisplay.calculate_card_triggers(v, not (text == 'Unknown') and scoring_hand or nil)
+                    end
                 end
+            else
+                count = 3
             end
             card.joker_display_values.count = count
             card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
