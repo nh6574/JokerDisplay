@@ -908,8 +908,8 @@ function Card:initialize_joker_display(custom_parent)
         if not reminder_text_config then
             reminder_text_config = {}
         end
-        reminder_text_config.colour = G.C.UI.TEXT_INACTIVE
-        reminder_text_config.scale = 0.3
+        reminder_text_config.colour = reminder_text_config.colour or G.C.UI.TEXT_INACTIVE
+        reminder_text_config.scale = reminder_text_config.scale or 0.3
         if JokerDisplay.SETTINGS.default_rows.reminder then
             if custom_parent then
                 custom_parent.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config,
