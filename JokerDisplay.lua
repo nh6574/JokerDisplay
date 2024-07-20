@@ -212,10 +212,10 @@ end
 
 function JokerDisplayBox:change_modifiers(modifiers, reset)
     local new_modifiers = {
-        chips = modifiers.chips, --or not reset and self.modifiers.chips or nil,
+        chips = modifiers.chips,     --or not reset and self.modifiers.chips or nil,
         x_chips = modifiers.x_chips, --or not reset and self.modifiers.x_chips or nil,
-        mult = modifiers.mult, --or not reset and self.modifiers.mult or nil,
-        x_mult = modifiers.x_mult, --or not reset and self.modifiers.x_mult or nil,
+        mult = modifiers.mult,       --or not reset and self.modifiers.mult or nil,
+        x_mult = modifiers.x_mult,   --or not reset and self.modifiers.x_mult or nil,
         dollars = modifiers.dollars, -- not reset and self.modifiers.dollars or nil,
     }
 
@@ -362,9 +362,10 @@ end
 ---Updates the JokerDisplay and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
 function Card:update_joker_display(force_update)
-    if (mod.config.enabled or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
+    if (mod.config.enabled and (self:joker_display_has_info() or not mod.config.hide_empty) or not (self.joker_display_values and self.joker_display_values.disabled) or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
         if not self.children.joker_display then
             self.joker_display_values = {}
+            self.joker_display_values.disabled = false
             self.joker_display_values.small = false
 
             --Regular Display
@@ -496,8 +497,8 @@ G.FUNCS.joker_display_disable = function(e)
         e.states.visible = false
         e.parent.states.collide.can = false
     else
-        e.states.visible = mod.config.enabled
-        e.parent.states.collide.can = mod.config.enabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
     end
 end
 
@@ -508,8 +509,8 @@ G.FUNCS.joker_display_small_enable = function(e)
         e.states.visible = false
         e.parent.states.collide.can = false
     else
-        e.states.visible = mod.config.enabled
-        e.parent.states.collide.can = mod.config.enabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
     end
 end
 
@@ -517,8 +518,8 @@ end
 G.FUNCS.joker_display_debuff = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.debuff then
-        e.states.visible = mod.config.enabled
-        e.parent.states.collide.can = mod.config.enabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -528,8 +529,8 @@ end
 G.FUNCS.joker_display_perishable = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = mod.config.enabled
-        e.parent.states.collide.can = mod.config.enabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -539,8 +540,8 @@ end
 G.FUNCS.joker_display_rental = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = mod.config.enabled
-        e.parent.states.collide.can = mod.config.enabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -550,8 +551,8 @@ end
 ---Modifies JokerDisplay's nodes style values dynamically
 ---@param e table
 G.FUNCS.joker_display_style_override = function(e)
-    if mod.config.enabled then
-        local card = e.config.ref_table
+    local card = e.config.ref_table
+    if mod.config.enabled and (card.joker_display_values and not card.joker_display_values.disabled) then
         local text = e.children and e.children[3] or nil
         local reminder_text = e.children and e.children[4] or nil
         local extra = e.children and e.children[2] or nil
@@ -569,11 +570,11 @@ G.FUNCS.joker_display_style_override = function(e)
     end
 end
 
-JokerDisplay.enable_disable = function()
-    if not mod.config.enabled then
-        update_all_joker_display(true)
+function Card:enable_disable()
+    if self.joker_display_values.disabled then
+        self:update_joker_display(true)
     end
-    mod.config.enabled = not mod.config.enabled
+    self.joker_display_values.disabled = not self.joker_display_values.disabled
 end
 
 --HELPER FUNCTIONS
@@ -1051,23 +1052,27 @@ function Controller:queue_R_cursor_press(x, y)
     if not G.SETTINGS.paused then
         if press_node and G.jokers and ((press_node.area and press_node.area == G.jokers)
                 or (press_node.name and press_node.name == "JokerDisplay")) then
-            JokerDisplay.enable_disable()
+            if press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
+                press_node.parent:enable_disable()
+            end
+            if press_node.ability and press_node.ability.set == 'Joker' then
+                press_node:enable_disable()
+            end
         end
     else
         if press_node and (press_node.area or (press_node.name and press_node.name == "JokerDisplay")) then
             JokerDisplay.visible = not JokerDisplay.visible
-        end 
+        end
     end
 end
 
 local controller_queue_L_cursor_press_ref = Controller.queue_L_cursor_press
 function Controller:queue_L_cursor_press(x, y)
     controller_queue_L_cursor_press_ref(self, x, y)
-        local press_node = self.hovering.target or self.focused.target
-        if press_node and press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
-            press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
-        end
-    
+    local press_node = self.hovering.target or self.focused.target
+    if press_node and press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
+        press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
+    end
 end
 
 local controller_button_press_update_ref = Controller.button_press_update
@@ -1075,54 +1080,147 @@ function Controller:button_press_update(button, dt)
     controller_button_press_update_ref(self, button, dt)
 
     if button == 'b' and G.jokers and self.focused.target and self.focused.target.area == G.jokers then
-        JokerDisplay.enable_disable()
+        local press_node = self.hovering.target or self.focused.target
+        press_node:enable_disable()
     end
 end
 
 SMODS.current_mod.config_tab = function()
     -- Create a card area that will display an example joker
     G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
-                            {card_limit = 1, type = 'title', highlight_limit = 0,})
-        local center = G.P_CENTERS['j_bloodstone']
-        local card = Card(G.config_card_area.T.x + G.config_card_area.T.w/2, G.config_card_area.T.y, G.CARD_W, G.CARD_H, nil, center)
-        card:set_edition('e_foil', true, true)
-        G.config_card_area:emplace(card)
-        G.config_card_area.cards[1]:update_joker_display()
+        { card_limit = 1, type = 'title', highlight_limit = 0, })
+    local center = G.P_CENTERS['j_bloodstone']
+    local card = Card(G.config_card_area.T.x + G.config_card_area.T.w / 2, G.config_card_area.T.y, G.CARD_W, G.CARD_H,
+        nil, center)
+    card:set_edition('e_foil', true, true)
+    G.config_card_area:emplace(card)
+    G.config_card_area.cards[1]:update_joker_display()
 
-    return {n = G.UIT.ROOT, config = {r = 0.1, minw = 8, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
-            {n = G.UIT.R, config = {align = "cm", padding = 0.07}, nodes = {
-                create_toggle({label = localize('jdis_enabled'), ref_table = mod.config, ref_value = 'enabled'})
-            }},
-            {n = G.UIT.R, config = {padding = 0.2, align = "cm"}, nodes = {
-                create_toggle({label = localize('jdis_hide_display'), ref_table = mod.config, ref_value = 'hide_empty'})
-            }},
-            {n = G.UIT.R, config = {padding = 0.2}, nodes = {
-                {n = G.UIT.C, config = {align = "cm"}, nodes = {
-                    {n = G.UIT.R, config = {align = "cm"}, nodes = {
-                        {n = G.UIT.C, config = {align = "cr", padding = 0.2}, nodes = {
-                            {n = G.UIT.R, config = {align = "cm"}, nodes = {
-                                {n = G.UIT.T, config = {text = localize('jdis_default_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr"}},
-                            }},
-                            create_toggle({label = localize('jdis_modifiers'), ref_table = mod.config.default_rows, callback = update_display, ref_value = 'modifiers', w = 2}),
-                            create_toggle({label = localize('jdis_reminders'), ref_table = mod.config.default_rows, callback = update_display, ref_value = 'reminder', w = 2}),
-                            create_toggle({label = localize('jdis_extras'), ref_table = mod.config.default_rows, callback = update_display, ref_value = 'extra', w = 2})
-                        }},
-                        {n = G.UIT.C, config = {align = "cr", padding = 0.2}, nodes = {
-                            {n = G.UIT.R, config = {align = "cm"}, nodes = {
-                                {n = G.UIT.T, config = {text = localize('jdis_small_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr"}},
-                            }},
-                            create_toggle({label = localize('jdis_modifiers'), ref_table = mod.config.small_rows, callback = update_display, ref_value = 'modifiers', w = 2}),
-                            create_toggle({label = localize('jdis_reminders'), ref_table = mod.config.small_rows, callback = update_display, ref_value = 'reminder', w = 2}),
-                            create_toggle({label = localize('jdis_extras'), ref_table = mod.config.small_rows, callback = update_display, ref_value = 'extra', w = 2})
-                        }}
-                    }}
-                }},
-                {n = G.UIT.C, config = {align = "tm", padding = 0.1, no_fill = true}, nodes = {
-                    {n = G.UIT.O, config = {object = G.config_card_area}}
-                }}            
-            }},
-            {n = G.UIT.R, config = {minh = 0.5}}
-        }}
+    return {
+        n = G.UIT.ROOT,
+        config = { r = 0.1, minw = 8, align = "tm", padding = 0.2, colour = G.C.BLACK },
+        nodes = {
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0.07 },
+                nodes = {
+                    create_toggle({ label = localize('jdis_enabled'), ref_table = mod.config, ref_value = 'enabled' })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.2, align = "cm" },
+                nodes = {
+                    create_toggle({
+                        label = localize('jdis_hide_display'),
+                        ref_table = mod.config,
+                        ref_value =
+                        'hide_empty'
+                    })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.2 },
+                nodes = {
+                    {
+                        n = G.UIT.C,
+                        config = { align = "cm" },
+                        nodes = {
+                            {
+                                n = G.UIT.R,
+                                config = { align = "cm" },
+                                nodes = {
+                                    {
+                                        n = G.UIT.C,
+                                        config = { align = "cr", padding = 0.2 },
+                                        nodes = {
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cm" },
+                                                nodes = {
+                                                    { n = G.UIT.T, config = { text = localize('jdis_default_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
+                                                }
+                                            },
+                                            create_toggle({
+                                                label = localize('jdis_modifiers'),
+                                                ref_table = mod.config
+                                                    .default_rows,
+                                                callback = update_display,
+                                                ref_value = 'modifiers',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_reminders'),
+                                                ref_table = mod.config
+                                                    .default_rows,
+                                                callback = update_display,
+                                                ref_value = 'reminder',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_extras'),
+                                                ref_table = mod.config
+                                                    .default_rows,
+                                                callback = update_display,
+                                                ref_value = 'extra',
+                                                w = 2
+                                            })
+                                        }
+                                    },
+                                    {
+                                        n = G.UIT.C,
+                                        config = { align = "cr", padding = 0.2 },
+                                        nodes = {
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cm" },
+                                                nodes = {
+                                                    { n = G.UIT.T, config = { text = localize('jdis_small_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
+                                                }
+                                            },
+                                            create_toggle({
+                                                label = localize('jdis_modifiers'),
+                                                ref_table = mod.config
+                                                    .small_rows,
+                                                callback = update_display,
+                                                ref_value = 'modifiers',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_reminders'),
+                                                ref_table = mod.config
+                                                    .small_rows,
+                                                callback = update_display,
+                                                ref_value = 'reminder',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_extras'),
+                                                ref_table = mod.config
+                                                    .small_rows,
+                                                callback = update_display,
+                                                ref_value = 'extra',
+                                                w = 2
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        n = G.UIT.C,
+                        config = { align = "tm", padding = 0.1, no_fill = true },
+                        nodes = {
+                            { n = G.UIT.O, config = { object = G.config_card_area } }
+                        }
+                    }
+                }
+            },
+            { n = G.UIT.R, config = { minh = 0.5 } }
+        }
+    }
 end
 
 -- Callback function for config toggles, updates the example joker and any current jokers if a game is being played
