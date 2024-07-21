@@ -45,42 +45,18 @@ local function deepcopy(orig)
 end
 
 ---MOD INITIALIZATION
-local mod = {}
-JokerDisplay = {}
 
-if SMODS["INIT"] then -- 0.9.x
-    mod.config = {
-        ["default_rows"] = {
-            ["reminder"] = true,
-            ["extra"] = true,
-            ["modifiers"] = true,
-        },
-        ["reload"] = false,
-        ["hide_empty"] = false,
-        ["small_rows"] = {
-            ["reminder"] = false,
-            ["extra"] = false,
-            ["modifiers"] = true,
-        },
-        ["enabled"] = true,
-    }
-    local init = SMODS["INIT"]
-    function init.JokerDisplay()
-        JokerDisplay.Path = (SMODS.findModByID and SMODS.findModByID('JokerDisplay').path)
-        JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
-    end
-else -- 1.x
-    mod = SMODS.current_mod
-    if SMODS.Atlas then
-        SMODS.Atlas({
-            key = "modicon",
-            path = "icon.png",
-            px = 32,
-            py = 32
-        })
-    end
-    JokerDisplay.Path = SMODS.current_mod.path
-    JokerDisplay.Definitions = NFS.load(JokerDisplay.Path .. "display_definitions.lua")() or {}
+local mod = SMODS.current_mod
+JokerDisplay = {}
+JokerDisplay.Definitions = NFS.load(mod.path .. "display_definitions.lua")() or {}
+
+if SMODS.Atlas then
+    SMODS.Atlas({
+        key = "modicon",
+        path = "icon.png",
+        px = 32,
+        py = 32
+    })
 end
 
 ---DISPLAY BOX CLASS
@@ -1101,145 +1077,142 @@ function Controller:button_press_update(button, dt)
     end
 end
 
-if SMODS.current_mod then
-    SMODS.current_mod.config_tab = function()
-        -- Create a card area that will display an example joker
-        G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
-            { card_limit = 1, type = 'title', highlight_limit = 0, })
-        local center = G.P_CENTERS['j_bloodstone']
-        local card = Card(G.config_card_area.T.x + G.config_card_area.T.w / 2, G.config_card_area.T.y, G.CARD_W, G
-            .CARD_H,
-            nil, center)
-        card:set_edition('e_foil', true, true)
-        G.config_card_area:emplace(card)
-        G.config_card_area.cards[1]:update_joker_display()
+SMODS.current_mod.config_tab = function()
+    -- Create a card area that will display an example joker
+    G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
+        { card_limit = 1, type = 'title', highlight_limit = 0, })
+    local center = G.P_CENTERS['j_bloodstone']
+    local card = Card(G.config_card_area.T.x + G.config_card_area.T.w / 2, G.config_card_area.T.y, G.CARD_W, G.CARD_H,
+        nil, center)
+    card:set_edition('e_foil', true, true)
+    G.config_card_area:emplace(card)
+    G.config_card_area.cards[1]:update_joker_display()
 
-        return {
-            n = G.UIT.ROOT,
-            config = { r = 0.1, minw = 8, align = "tm", padding = 0.2, colour = G.C.BLACK },
-            nodes = {
-                {
-                    n = G.UIT.R,
-                    config = { align = "cm", padding = 0.07 },
-                    nodes = {
-                        create_toggle({ label = localize('jdis_enabled'), ref_table = mod.config, ref_value = 'enabled' })
-                    }
-                },
-                {
-                    n = G.UIT.R,
-                    config = { padding = 0.2, align = "cm" },
-                    nodes = {
-                        create_toggle({
-                            label = localize('jdis_hide_display'),
-                            ref_table = mod.config,
-                            ref_value =
-                            'hide_empty'
-                        })
-                    }
-                },
-                {
-                    n = G.UIT.R,
-                    config = { padding = 0.2 },
-                    nodes = {
-                        {
-                            n = G.UIT.C,
-                            config = { align = "cm" },
-                            nodes = {
-                                {
-                                    n = G.UIT.R,
-                                    config = { align = "cm" },
-                                    nodes = {
-                                        {
-                                            n = G.UIT.C,
-                                            config = { align = "cr", padding = 0.2 },
-                                            nodes = {
-                                                {
-                                                    n = G.UIT.R,
-                                                    config = { align = "cm" },
-                                                    nodes = {
-                                                        { n = G.UIT.T, config = { text = localize('jdis_default_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
-                                                    }
-                                                },
-                                                create_toggle({
-                                                    label = localize('jdis_modifiers'),
-                                                    ref_table = mod.config
-                                                        .default_rows,
-                                                    callback = update_display,
-                                                    ref_value = 'modifiers',
-                                                    w = 2
-                                                }),
-                                                create_toggle({
-                                                    label = localize('jdis_reminders'),
-                                                    ref_table = mod.config
-                                                        .default_rows,
-                                                    callback = update_display,
-                                                    ref_value = 'reminder',
-                                                    w = 2
-                                                }),
-                                                create_toggle({
-                                                    label = localize('jdis_extras'),
-                                                    ref_table = mod.config
-                                                        .default_rows,
-                                                    callback = update_display,
-                                                    ref_value = 'extra',
-                                                    w = 2
-                                                })
-                                            }
-                                        },
-                                        {
-                                            n = G.UIT.C,
-                                            config = { align = "cr", padding = 0.2 },
-                                            nodes = {
-                                                {
-                                                    n = G.UIT.R,
-                                                    config = { align = "cm" },
-                                                    nodes = {
-                                                        { n = G.UIT.T, config = { text = localize('jdis_small_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
-                                                    }
-                                                },
-                                                create_toggle({
-                                                    label = localize('jdis_modifiers'),
-                                                    ref_table = mod.config
-                                                        .small_rows,
-                                                    callback = update_display,
-                                                    ref_value = 'modifiers',
-                                                    w = 2
-                                                }),
-                                                create_toggle({
-                                                    label = localize('jdis_reminders'),
-                                                    ref_table = mod.config
-                                                        .small_rows,
-                                                    callback = update_display,
-                                                    ref_value = 'reminder',
-                                                    w = 2
-                                                }),
-                                                create_toggle({
-                                                    label = localize('jdis_extras'),
-                                                    ref_table = mod.config
-                                                        .small_rows,
-                                                    callback = update_display,
-                                                    ref_value = 'extra',
-                                                    w = 2
-                                                })
-                                            }
+    return {
+        n = G.UIT.ROOT,
+        config = { r = 0.1, minw = 8, align = "tm", padding = 0.2, colour = G.C.BLACK },
+        nodes = {
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0.07 },
+                nodes = {
+                    create_toggle({ label = localize('jdis_enabled'), ref_table = mod.config, ref_value = 'enabled' })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.2, align = "cm" },
+                nodes = {
+                    create_toggle({
+                        label = localize('jdis_hide_display'),
+                        ref_table = mod.config,
+                        ref_value =
+                        'hide_empty'
+                    })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.2 },
+                nodes = {
+                    {
+                        n = G.UIT.C,
+                        config = { align = "cm" },
+                        nodes = {
+                            {
+                                n = G.UIT.R,
+                                config = { align = "cm" },
+                                nodes = {
+                                    {
+                                        n = G.UIT.C,
+                                        config = { align = "cr", padding = 0.2 },
+                                        nodes = {
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cm" },
+                                                nodes = {
+                                                    { n = G.UIT.T, config = { text = localize('jdis_default_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
+                                                }
+                                            },
+                                            create_toggle({
+                                                label = localize('jdis_modifiers'),
+                                                ref_table = mod.config
+                                                    .default_rows,
+                                                callback = update_display,
+                                                ref_value = 'modifiers',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_reminders'),
+                                                ref_table = mod.config
+                                                    .default_rows,
+                                                callback = update_display,
+                                                ref_value = 'reminder',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_extras'),
+                                                ref_table = mod.config
+                                                    .default_rows,
+                                                callback = update_display,
+                                                ref_value = 'extra',
+                                                w = 2
+                                            })
+                                        }
+                                    },
+                                    {
+                                        n = G.UIT.C,
+                                        config = { align = "cr", padding = 0.2 },
+                                        nodes = {
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cm" },
+                                                nodes = {
+                                                    { n = G.UIT.T, config = { text = localize('jdis_small_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
+                                                }
+                                            },
+                                            create_toggle({
+                                                label = localize('jdis_modifiers'),
+                                                ref_table = mod.config
+                                                    .small_rows,
+                                                callback = update_display,
+                                                ref_value = 'modifiers',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_reminders'),
+                                                ref_table = mod.config
+                                                    .small_rows,
+                                                callback = update_display,
+                                                ref_value = 'reminder',
+                                                w = 2
+                                            }),
+                                            create_toggle({
+                                                label = localize('jdis_extras'),
+                                                ref_table = mod.config
+                                                    .small_rows,
+                                                callback = update_display,
+                                                ref_value = 'extra',
+                                                w = 2
+                                            })
                                         }
                                     }
                                 }
                             }
-                        },
-                        {
-                            n = G.UIT.C,
-                            config = { align = "tm", padding = 0.1, no_fill = true },
-                            nodes = {
-                                { n = G.UIT.O, config = { object = G.config_card_area } }
-                            }
+                        }
+                    },
+                    {
+                        n = G.UIT.C,
+                        config = { align = "tm", padding = 0.1, no_fill = true },
+                        nodes = {
+                            { n = G.UIT.O, config = { object = G.config_card_area } }
                         }
                     }
-                },
-                { n = G.UIT.R, config = { minh = 0.5 } }
-            }
+                }
+            },
+            { n = G.UIT.R, config = { minh = 0.5 } }
         }
-    end
+    }
 end
 
 -- Callback function for config toggles, updates the example joker and any current jokers if a game is being played
