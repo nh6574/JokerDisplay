@@ -4,7 +4,7 @@
 --- MOD_AUTHOR: [nh6574]
 --- MOD_DESCRIPTION: Display useful information under Jokers. Right-click on a Joker/Display to hide/show. Left-click on a Display to collapse/expand.
 --- PRIORITY: -100000
---- VERSION: 1.6.0
+--- VERSION: 1.6.1
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
