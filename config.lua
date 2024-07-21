@@ -5,6 +5,7 @@ return {
 		["modifiers"] = true,
 	},
 	["reload"] = false,
+	["hide_by_default"] = false,
 	["hide_empty"] = false,
 	["small_rows"] = {
 		["reminder"] = false,

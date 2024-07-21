@@ -357,7 +357,7 @@ function Card:update_joker_display(force_update)
     if (mod.config.enabled and (self:joker_display_has_info() or not mod.config.hide_empty) or not (self.joker_display_values and self.joker_display_values.disabled) or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
         if not self.children.joker_display then
             self.joker_display_values = {}
-            self.joker_display_values.disabled = false
+            self.joker_display_values.disabled = mod.config.hide_by_default
             self.joker_display_values.small = false
 
             --Regular Display
@@ -1104,7 +1104,19 @@ SMODS.current_mod.config_tab = function()
                 config = { padding = 0.2, align = "cm" },
                 nodes = {
                     create_toggle({
-                        label = localize('jdis_hide_display'),
+                        label = localize('jdis_hide_by_default'),
+                        ref_table = mod.config,
+                        ref_value =
+                        'hide_by_default'
+                    })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.2, align = "cm" },
+                nodes = {
+                    create_toggle({
+                        label = localize('jdis_hide_empty'),
                         ref_table = mod.config,
                         ref_value =
                         'hide_empty'
