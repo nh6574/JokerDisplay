@@ -1063,7 +1063,9 @@ function Controller:queue_L_cursor_press(x, y)
     controller_queue_L_cursor_press_ref(self, x, y)
     local press_node = self.hovering.target or self.focused.target
     if press_node and press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
-        press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
+        if not mod.config.disable_collapse then
+            press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
+        end
     end
 end
 
@@ -1094,14 +1096,14 @@ SMODS.current_mod.config_tab = function()
         nodes = {
             {
                 n = G.UIT.R,
-                config = { align = "cm", padding = 0.07 },
+                config = { align = "cm", padding = 0.01 },
                 nodes = {
                     create_toggle({ label = localize('jdis_enabled'), ref_table = mod.config, ref_value = 'enabled' })
                 }
             },
             {
                 n = G.UIT.R,
-                config = { padding = 0.2, align = "cm" },
+                config = { padding = 0.01, align = "cm" },
                 nodes = {
                     create_toggle({
                         label = localize('jdis_hide_by_default'),
@@ -1113,13 +1115,25 @@ SMODS.current_mod.config_tab = function()
             },
             {
                 n = G.UIT.R,
-                config = { padding = 0.2, align = "cm" },
+                config = { padding = 0.01, align = "cm" },
                 nodes = {
                     create_toggle({
                         label = localize('jdis_hide_empty'),
                         ref_table = mod.config,
                         ref_value =
                         'hide_empty'
+                    })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.01, align = "cm" },
+                nodes = {
+                    create_toggle({
+                        label = localize('jdis_disable_collapse'),
+                        ref_table = mod.config,
+                        ref_value =
+                        'disable_collapse'
                     })
                 }
             },
