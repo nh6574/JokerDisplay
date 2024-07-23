@@ -377,7 +377,7 @@ return {
     j_four_fingers = { -- Four Fingers
     },
     j_mime = {         -- Mime
-        retrigger_function = function(card, scoring_hand, held_in_hand)
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             return held_in_hand and 1 or 0
         end
     },
@@ -497,7 +497,7 @@ return {
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_left <= 1 and
                 localize("k_active_ex") or "Inactive"
         end,
-        retrigger_function = function(card, scoring_hand, held_in_hand)
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
             return G.GAME and G.GAME.current_round.hands_left <= 1 and 1 or 0
         end
@@ -621,9 +621,9 @@ return {
         reminder_text = {
             { text = "(2,3,4,5)" },
         },
-        retrigger_function = function(card, scoring_hand, held_in_hand)
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return (card:get_id() == 2 or card:get_id() == 3 or card:get_id() == 4 or card:get_id() == 5) and 1 or 0
+            return (playing_card:get_id() == 2 or playing_card:get_id() == 3 or playing_card:get_id() == 4 or playing_card:get_id() == 5) and 1 or 0
         end
     },
     j_pareidolia = {  -- Pareidolia
@@ -1503,7 +1503,7 @@ return {
             { ref_table = "card.ability", ref_value = "extra" },
             { text = "/10)" }
         },
-        retrigger_function = function(card, scoring_hand, held_in_hand)
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
             return 1
         end
@@ -1617,9 +1617,9 @@ return {
         end
     },
     j_sock_and_buskin = { -- Sock and Buskin
-        retrigger_function = function(card, scoring_hand, held_in_hand)
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return card:is_face() and 1 or 0
+            return playing_card:is_face() and 1 or 0
         end
     },
     j_swashbuckler = { -- Swashbuckler
@@ -1646,10 +1646,10 @@ return {
         }
     },
     j_hanging_chad = { -- Hanging Chad
-        retrigger_function = function(card, scoring_hand, held_in_hand)
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
             local first_card = scoring_hand and JokerDisplay.calculate_leftmost_card(scoring_hand)
-            return first_card and card == first_card and 2 or 0
+            return first_card and playing_card == first_card and 2 or 0
         end
     },
     j_rough_gem = { -- Rough Gem
