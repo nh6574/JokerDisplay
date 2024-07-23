@@ -34,6 +34,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 |---|
 | [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
 | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
+| [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
 | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
 | [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
 
