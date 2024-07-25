@@ -32,6 +32,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 
 | Mods with JokerDisplay support |
 |---|
+| [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
 | [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
 | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
 | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
@@ -43,7 +44,6 @@ I have another repo to add support for some specific mods. Please don't ask me f
 
 | Mods supported through [JokerDisplayModSupport](https://github.com/nh6574/JokerDisplayModSupport) |
 |---|
-| [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
 | [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
 | [Jimbo's New Pack](https://github.com/art-muncher/Jimbo-s-Pack) |
 | [Pampa Joker Pack](https://batabata3.github.io/balatro-pampa-joker-pack/) |
