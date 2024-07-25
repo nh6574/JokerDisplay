@@ -38,6 +38,16 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
 | [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
 
+I have another repo to add support for some specific mods. Please don't ask me for mod support outside of these, go bother the devs instead :).
+
+| Mods supported through [JokerDisplayModSupport](https://github.com/nh6574/JokerDisplayModSupport) |
+|---|
+| [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
+| [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
+| [Jimbo's New Pack](https://github.com/art-muncher/Jimbo-s-Pack) |
+| [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
+| [Pampa Joker Pack](https://batabata3.github.io/balatro-pampa-joker-pack/) |
+
 ## Contributing
 
 I don't know how much time I'm going to dedicate to this (I'm not really _that_ into Balatro), so please feel free to fork or do PRs if you feel like you can improve on this or fix any of the problems above!
