@@ -8,6 +8,8 @@ return {
 	["hide_by_default"] = false,
 	["hide_empty"] = false,
 	["disable_collapse"] = false,
+	["disable_perishable"] = false,
+	["disable_rental"] = false,
 	["small_rows"] = {
 		["reminder"] = false,
 		["extra"] = false,
