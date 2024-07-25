@@ -45,6 +45,13 @@ local function deepcopy(orig)
     return copy
 end
 
+-- Talisman Compat
+if not _G["to_big"] then
+    to_big = function(x)
+        return x
+    end
+end
+
 ---MOD INITIALIZATION
 
 local mod = SMODS.current_mod
@@ -522,8 +529,10 @@ end
 G.FUNCS.joker_display_perishable = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_perishable
-        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_perishable
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and
+        not mod.config.disable_perishable
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and
+        not mod.config.disable_perishable
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -533,8 +542,10 @@ end
 G.FUNCS.joker_display_rental = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_rental
-        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_rental
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and
+        not mod.config.disable_rental
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and
+        not mod.config.disable_rental
     else
         e.states.visible = false
         e.parent.states.collide.can = false

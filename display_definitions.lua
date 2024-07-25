@@ -623,7 +623,8 @@ return {
         },
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return (playing_card:get_id() == 2 or playing_card:get_id() == 3 or playing_card:get_id() == 4 or playing_card:get_id() == 5) and 1 or 0
+            return (playing_card:get_id() == 2 or playing_card:get_id() == 3 or playing_card:get_id() == 4 or playing_card:get_id() == 5) and
+            1 or 0
         end
     },
     j_pareidolia = {  -- Pareidolia
@@ -1598,8 +1599,10 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
+            -- Talisman compatibility
+            local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
             card.joker_display_values.active = G.GAME and G.GAME.chips and G.GAME.blind.chips and
-                G.GAME.chips / G.GAME.blind.chips >= 0.25 and localize("k_active_ex") or "Inactive"
+                blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) and localize("k_active_ex") or "Inactive"
         end
     },
     j_acrobat = { -- Acrobat
@@ -1871,7 +1874,7 @@ return {
                         card.joker_display_values.blueprint_loaded = false
                     end
                 else
-                    card.children.joker_display:add_reminder_text({ { text = "(".. card.joker_display_values.blueprint_compat.. ")", colour = G.C.RED } })
+                    card.children.joker_display:add_reminder_text({ { text = "(" .. card.joker_display_values.blueprint_compat .. ")", colour = G.C.RED } })
                 end
             end
         end
@@ -2189,7 +2192,7 @@ return {
                         card.joker_display_values.blueprint_loaded = false
                     end
                 else
-                    card.children.joker_display:add_reminder_text({ { text = "(".. card.joker_display_values.blueprint_compat.. ")", colour = G.C.RED } })
+                    card.children.joker_display:add_reminder_text({ { text = "(" .. card.joker_display_values.blueprint_compat .. ")", colour = G.C.RED } })
                 end
             end
         end
