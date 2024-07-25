@@ -1042,7 +1042,7 @@ return {
             local is_seance_hand = text == card.ability.extra.poker_hand
 
             card.joker_display_values.count = is_seance_hand and 1 or 0
-            card.joker_display_values.localized_text = localize(G.P_CENTERS["j_seance"].config.extra.poker_hand,
+            card.joker_display_values.localized_text = localize(card.ability.extra.poker_hand,
                 'poker_hands')
         end
     },
@@ -1370,8 +1370,8 @@ return {
             card.joker_display_values.count = count
             card.joker_display_values.localized_text = localize("k_uncommon")
         end,
-        mod_function = function(card)
-            return { x_mult = (card.config.center.rarity == 2 and G.P_CENTERS["j_baseball"].config.extra or nil) }
+        mod_function = function(card, mod_joker)
+            return { x_mult = (card.config.center.rarity == 2 and mod_joker.ability.extra or nil) }
         end
     },
     j_bull = { -- Bull

@@ -735,7 +735,9 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
 
             if retrigger_function then
-                triggers = triggers + retrigger_function(card, scoring_hand, held_in_hand, v.joker_display_values and v.joker_display_values.blueprint_ability_joker or v)
+                triggers = triggers +
+                    retrigger_function(card, scoring_hand, held_in_hand,
+                        v.joker_display_values and v.joker_display_values.blueprint_ability_joker or v)
             end
         end
     end
@@ -771,7 +773,8 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                     JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].mod_function)
 
             if mod_function then
-                local extra_mods = mod_function(card)
+                local extra_mods = mod_function(card,
+                    v.joker_display_values and v.joker_display_values.blueprint_ability_joker or v)
                 modifiers = {
                     chips = modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips or
                         extra_mods.chips or modifiers.chips,
@@ -1157,7 +1160,10 @@ SMODS.current_mod.config_tab = function()
                                                 n = G.UIT.R,
                                                 config = { align = "cm" },
                                                 nodes = {
-                                                    { n = G.UIT.T, config = { text = localize('jdis_default_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
+                                                    {
+                                                        n = G.UIT.T,
+                                                        config = { text = localize('jdis_default_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" }
+                                                    },
                                                 }
                                             },
                                             create_toggle({
