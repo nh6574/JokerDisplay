@@ -522,8 +522,8 @@ end
 G.FUNCS.joker_display_perishable = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
-        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_perishable
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_perishable
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -533,8 +533,8 @@ end
 G.FUNCS.joker_display_rental = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled
-        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled
+        e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_rental
+        e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and not mod.config.disable_rental
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -1091,6 +1091,8 @@ SMODS.current_mod.config_tab = function()
     local card = Card(G.config_card_area.T.x + G.config_card_area.T.w / 2, G.config_card_area.T.y, G.CARD_W, G.CARD_H,
         nil, center)
     card:set_edition('e_foil', true, true)
+    card:set_perishable(true)
+    card:set_rental(true)
     G.config_card_area:emplace(card)
     G.config_card_area.cards[1]:update_joker_display()
 
@@ -1100,45 +1102,91 @@ SMODS.current_mod.config_tab = function()
         nodes = {
             {
                 n = G.UIT.R,
-                config = { align = "cm", padding = 0.01 },
+                config = { padding = 0.2 },
                 nodes = {
-                    create_toggle({ label = localize('jdis_enabled'), ref_table = mod.config, ref_value = 'enabled' })
-                }
-            },
-            {
-                n = G.UIT.R,
-                config = { padding = 0.01, align = "cm" },
-                nodes = {
-                    create_toggle({
-                        label = localize('jdis_hide_by_default'),
-                        ref_table = mod.config,
-                        ref_value =
-                        'hide_by_default'
-                    })
-                }
-            },
-            {
-                n = G.UIT.R,
-                config = { padding = 0.01, align = "cm" },
-                nodes = {
-                    create_toggle({
-                        label = localize('jdis_hide_empty'),
-                        ref_table = mod.config,
-                        ref_value =
-                        'hide_empty'
-                    })
-                }
-            },
-            {
-                n = G.UIT.R,
-                config = { padding = 0.01, align = "cm" },
-                nodes = {
-                    create_toggle({
-                        label = localize('jdis_disable_collapse'),
-                        ref_table = mod.config,
-                        ref_value =
-                        'disable_collapse'
-                    })
+                    {
+                        n = G.UIT.C,
+                        config = { align = "cm" },
+                        nodes = {
+                            {
+                                n = G.UIT.R,
+                                config = { align = "cm", padding = 0.01 },
+                                nodes = {
+                                    create_toggle({
+                                        label = localize('jdis_enabled'),
+                                        ref_table = mod.config,
+                                        ref_value = 'enabled'
+                                    })
+                                }
+                            },
+                            {
+                                n = G.UIT.R,
+                                config = { padding = 0.01, align = "cm" },
+                                nodes = {
+                                    create_toggle({
+                                        label = localize('jdis_hide_by_default'),
+                                        ref_table = mod.config,
+                                        ref_value =
+                                        'hide_by_default'
+                                    })
+                                }
+                            },
+                            {
+                                n = G.UIT.R,
+                                config = { padding = 0.01, align = "cm" },
+                                nodes = {
+                                    create_toggle({
+                                        label = localize('jdis_hide_empty'),
+                                        ref_table = mod.config,
+                                        ref_value =
+                                        'hide_empty'
+                                    })
+                                }
+                            },
+                        }
+                    },
+                    {
+                        n = G.UIT.C,
+                        config = { align = "cm" },
+                        nodes = {
+                            {
+                                n = G.UIT.R,
+                                config = { padding = 0.01, align = "cm" },
+                                nodes = {
+                                    create_toggle({
+                                        label = localize('jdis_disable_collapse'),
+                                        ref_table = mod.config,
+                                        ref_value =
+                                        'disable_collapse'
+                                    })
+                                }
+                            },
+                            {
+                                n = G.UIT.R,
+                                config = { padding = 0.01, align = "cm" },
+                                nodes = {
+                                    create_toggle({
+                                        label = localize('jdis_disable_perishable'),
+                                        ref_table = mod.config,
+                                        ref_value =
+                                        'disable_perishable'
+                                    })
+                                }
+                            },
+                            {
+                                n = G.UIT.R,
+                                config = { padding = 0.01, align = "cm" },
+                                nodes = {
+                                    create_toggle({
+                                        label = localize('jdis_disable_rental'),
+                                        ref_table = mod.config,
+                                        ref_value =
+                                        'disable_rental'
+                                    })
+                                }
+                            },
+                        }
+                    },
                 }
             },
             {
