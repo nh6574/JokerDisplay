@@ -32,6 +32,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 
 | Mods with JokerDisplay support |
 |---|
+| [Bird Jokers](https://github.com/JustinBanzon/Bird-Jokers) |
 | [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
 | [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
 | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
