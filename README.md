@@ -12,7 +12,7 @@ Support for Steamodded <=0.9.8 was dropped in v1.6.1. Please use [version v1.6.0
 
 ## Usage
 
-* Right-click the display or a Joker to hide/unhide all displays (or use the back button on your controller over a Joker). This will disable all calculations.
+* Right-click the display or a Joker to hide/unhide displays (or use the back button on your controller over a Joker). This will disable all calculations for that joker (in case of crashes).
 * Left-click the display to hide/unhide extra rows of text. (Mouse only)
 
 Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for suggestions or bug reports.
