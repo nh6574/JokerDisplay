@@ -19,10 +19,10 @@ Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for 
 
 ## Screenshots
 
-![Example 1](examples/example_1.png)
-![Example 2](examples/example_2.png)
-![Example 3](examples/example_3.png)
-![Example 4](examples/example_4.png)
+<img src="examples/example_1.png" alt="Example 1" width="500">
+<img src="examples/example_2.png" alt="Example 2" width="500">
+<img src="examples/example_3.png" alt="Example 3" width="500">
+<img src="examples/example_4.png" alt="Example 4" width="500">
 
 ## Mod Support
 
