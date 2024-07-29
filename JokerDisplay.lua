@@ -361,8 +361,12 @@ end
 
 ---Updates the JokerDisplay and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
-function Card:update_joker_display(force_update)
-    if (mod.config.enabled and (self:joker_display_has_info() or not mod.config.hide_empty) or not (self.joker_display_values and self.joker_display_values.disabled) or force_update) and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle then
+function Card:update_joker_display(force_update, _from)
+    if force_update or (mod.config.enabled and
+            (self:joker_display_has_info() or not mod.config.hide_empty)
+            and (not self.joker_display_values and true or not self.joker_display_values.disabled)
+            and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle) then
+        --sendDebugMessage(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
             self.joker_display_values = {}
             self.joker_display_values.disabled = mod.config.hide_by_default
@@ -468,10 +472,10 @@ end
 
 ---Updates the JokerDisplay for all jokers and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
-function update_all_joker_display(force_update)
-    if G.jokers then
+function update_all_joker_display(force_update, _from)
+    if G.jokers and not G.SETTINGS.paused then
         for k, v in pairs(G.jokers.cards) do
-            v:update_joker_display(force_update)
+            v:update_joker_display(force_update, _from)
         end
     end
 end
@@ -530,9 +534,9 @@ G.FUNCS.joker_display_perishable = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.perishable then
         e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and
-        not mod.config.disable_perishable
+            not mod.config.disable_perishable
         e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and
-        not mod.config.disable_perishable
+            not mod.config.disable_perishable
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -543,9 +547,9 @@ G.FUNCS.joker_display_rental = function(e)
     local card = e.config.ref_table
     if not (card.facing == 'back') and card.ability.rental then
         e.states.visible = mod.config.enabled and not card.joker_display_values.disabled and
-        not mod.config.disable_rental
+            not mod.config.disable_rental
         e.parent.states.collide.can = mod.config.enabled and not card.joker_display_values.disabled and
-        not mod.config.disable_rental
+            not mod.config.disable_rental
     else
         e.states.visible = false
         e.parent.states.collide.can = false
@@ -1007,47 +1011,74 @@ end
 
 --- UPDATE CONDITIONS
 
-local node_stop_drag_ref = Node.stop_drag
-function Node:stop_drag()
-    node_stop_drag_ref(self)
-    update_all_joker_display("Node.stop_drag")
-end
+-- local node_stop_drag_ref = Node.stop_drag
+-- function Node:stop_drag()
+--     node_stop_drag_ref(self)
+--     update_all_joker_display(false, "Node:stop_drag()")
+-- end
 
-local cardarea_emplace_ref = CardArea.emplace
-function CardArea:emplace(card, location, stay_flipped)
-    cardarea_emplace_ref(self, card, location, stay_flipped)
-    update_all_joker_display("CardArea.emplace")
-end
+-- local cardarea_emplace_ref = CardArea.emplace
+-- function CardArea:emplace(card, location, stay_flipped)
+--     cardarea_emplace_ref(self, card, location, stay_flipped)
+--     update_all_joker_display(false, "CardArea:emplace")
+-- end
 
-local cardarea_load_ref = CardArea.load
-function CardArea:load(cardAreaTable)
-    cardarea_load_ref(self, cardAreaTable)
-    if self == G.jokers then
-        update_all_joker_display("CardArea.load")
+-- local cardarea_load_ref = CardArea.load
+-- function CardArea:load(cardAreaTable)
+--     cardarea_load_ref(self, cardAreaTable)
+--     if self == G.jokers then
+--         update_all_joker_display(false, "CardArea:load")
+--     end
+-- end
+
+-- local cardarea_parse_highlighted_ref = CardArea.parse_highlighted
+-- function CardArea:parse_highlighted()
+--     cardarea_parse_highlighted_ref(self)
+--     update_all_joker_display(false, "CardArea:parse_highlighted")
+-- end
+
+-- local cardarea_remove_card_ref = CardArea.remove_card
+-- function CardArea:remove_card(card, discarded_only)
+--     local t = cardarea_remove_card_ref(self, card, discarded_only)
+--     update_all_joker_display(false, "CardArea:remove_card")
+--     return t
+-- end
+
+-- local card_calculate_joker_ref = Card.calculate_joker
+-- function Card:calculate_joker(context)
+--     local t = card_calculate_joker_ref(self, context)
+
+--     if G.jokers and self.area == G.jokers then
+--         self:update_joker_display(false, "Card:calculate_joker")
+--     end
+--     return t
+-- end
+
+local card_update_ref = Card.update
+function Card:update(dt)
+    card_update_ref(self, dt)
+    if mod.config.enabled and
+        G.jokers and self.area == G.jokers and
+        (self:joker_display_has_info() or not mod.config.hide_empty)
+        and (not self.joker_display_values and true or not self.joker_display_values.disabled) then
+        if not self.joker_display_last_update_time then
+            self.joker_display_last_update_time = 0
+            self.joker_display_next_update_time = 0.5
+            self.joker_display_update_time_variance = math.random()
+        elseif self.joker_display_values and G.real_dt > 0.05 then
+            self.joker_display_values.disabled = true
+        else
+            self.joker_display_last_update_time = self.joker_display_last_update_time + dt
+            if self.joker_display_last_update_time > self.joker_display_next_update_time then
+                --sendDebugMessage(self.joker_display_last_update_time)
+                self.joker_display_last_update_time = 0
+                local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
+                self.joker_display_next_update_time = joker_number_delta_variance / 2 +
+                    joker_number_delta_variance / 2 * self.joker_display_update_time_variance
+                self:update_joker_display(false, "Card:update")
+            end
+        end
     end
-end
-
-local cardarea_parse_highlighted_ref = CardArea.parse_highlighted
-function CardArea:parse_highlighted()
-    cardarea_parse_highlighted_ref(self)
-    update_all_joker_display("CardArea.parse_highlighted")
-end
-
-local cardarea_remove_card_ref = CardArea.remove_card
-function CardArea:remove_card(card, discarded_only)
-    local t = cardarea_remove_card_ref(self, card, discarded_only)
-    update_all_joker_display("CardArea.remove_card")
-    return t
-end
-
-local card_calculate_joker_ref = Card.calculate_joker
-function Card:calculate_joker(context)
-    local t = card_calculate_joker_ref(self, context)
-
-    if G.jokers and self.area == G.jokers then
-        self:update_joker_display("Card.calculate_joker")
-    end
-    return t
 end
 
 --- CONTROLLER INPUT
@@ -1093,6 +1124,8 @@ function Controller:button_press_update(button, dt)
         press_node:enable_disable()
     end
 end
+
+--- MOD CONFIG
 
 SMODS.current_mod.config_tab = function()
     -- Create a card area that will display an example joker
@@ -1310,11 +1343,11 @@ end
 -- Callback function for config toggles, updates the example joker and any current jokers if a game is being played
 function update_display(value)
     mod.config.reload = true
-    G.config_card_area.cards[1]:update_joker_display()
+    G.config_card_area.cards[1]:update_joker_display(false, "config_update")
     if G.jokers then
         for _, joker in pairs(G.jokers.cards) do
             mod.config.reload = true
-            joker:update_joker_display()
+            joker:update_joker_display(false, "config_update")
         end
     end
 end
