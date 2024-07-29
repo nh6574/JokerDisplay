@@ -1011,49 +1011,6 @@ end
 
 --- UPDATE CONDITIONS
 
--- local node_stop_drag_ref = Node.stop_drag
--- function Node:stop_drag()
---     node_stop_drag_ref(self)
---     update_all_joker_display(false, "Node:stop_drag()")
--- end
-
--- local cardarea_emplace_ref = CardArea.emplace
--- function CardArea:emplace(card, location, stay_flipped)
---     cardarea_emplace_ref(self, card, location, stay_flipped)
---     update_all_joker_display(false, "CardArea:emplace")
--- end
-
--- local cardarea_load_ref = CardArea.load
--- function CardArea:load(cardAreaTable)
---     cardarea_load_ref(self, cardAreaTable)
---     if self == G.jokers then
---         update_all_joker_display(false, "CardArea:load")
---     end
--- end
-
--- local cardarea_parse_highlighted_ref = CardArea.parse_highlighted
--- function CardArea:parse_highlighted()
---     cardarea_parse_highlighted_ref(self)
---     update_all_joker_display(false, "CardArea:parse_highlighted")
--- end
-
--- local cardarea_remove_card_ref = CardArea.remove_card
--- function CardArea:remove_card(card, discarded_only)
---     local t = cardarea_remove_card_ref(self, card, discarded_only)
---     update_all_joker_display(false, "CardArea:remove_card")
---     return t
--- end
-
--- local card_calculate_joker_ref = Card.calculate_joker
--- function Card:calculate_joker(context)
---     local t = card_calculate_joker_ref(self, context)
-
---     if G.jokers and self.area == G.jokers then
---         self:update_joker_display(false, "Card:calculate_joker")
---     end
---     return t
--- end
-
 local card_update_ref = Card.update
 function Card:update(dt)
     card_update_ref(self, dt)
@@ -1063,8 +1020,10 @@ function Card:update(dt)
         and (not self.joker_display_values and true or not self.joker_display_values.disabled) then
         if not self.joker_display_last_update_time then
             self.joker_display_last_update_time = 0
-            self.joker_display_next_update_time = 0.5
             self.joker_display_update_time_variance = math.random()
+            local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
+            self.joker_display_next_update_time = joker_number_delta_variance / 2 +
+                joker_number_delta_variance / 2 * self.joker_display_update_time_variance
         elseif self.joker_display_values and G.real_dt > 0.05 then
             self.joker_display_values.disabled = true
         else
