@@ -362,10 +362,7 @@ end
 ---Updates the JokerDisplay and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
 function Card:update_joker_display(force_update, _from)
-    if force_update or (mod.config.enabled and
-            (self:joker_display_has_info() or not mod.config.hide_empty)
-            and (not self.joker_display_values and true or not self.joker_display_values.disabled)
-            and self.ability and self.ability.set == 'Joker' and not self.no_ui and not G.debug_tooltip_toggle) then
+    if self.ability and self.ability.set == 'Joker' then
         --sendDebugMessage(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
             self.joker_display_values = {}
@@ -460,11 +457,15 @@ function Card:update_joker_display(force_update, _from)
                 self.children.joker_display_rental.name = "JokerDisplay"
             end
         else
-            if mod.config.reload then
-                self:initialize_joker_display()
-                mod.config.reload = false
-            else
-                self:calculate_joker_display()
+            if force_update or (mod.config.enabled and
+                    (self:joker_display_has_info() or not mod.config.hide_empty)
+                    and (not self.joker_display_values.disabled)) then
+                if mod.config.reload then
+                    self:initialize_joker_display()
+                    mod.config.reload = false
+                else
+                    self:calculate_joker_display()
+                end
             end
         end
     end
@@ -1030,17 +1031,14 @@ end
 local card_update_ref = Card.update
 function Card:update(dt)
     card_update_ref(self, dt)
-    if mod.config.enabled and
-        G.jokers and self.area == G.jokers and
-        (self:joker_display_has_info() or not mod.config.hide_empty)
-        and (not self.joker_display_values and true or not self.joker_display_values.disabled) then
+    if mod.config.enabled and G.jokers and self.area == G.jokers then
         if not self.joker_display_last_update_time then
             self.joker_display_last_update_time = 0
             self.joker_display_update_time_variance = math.random()
             local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
             self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                 joker_number_delta_variance / 2 * self.joker_display_update_time_variance
-        elseif self.joker_display_values and G.real_dt > 0.05 then
+        elseif self.joker_display_values and G.real_dt > 0.05 and #G.jokers.cards > 20 then
             self.joker_display_values.disabled = true
         else
             self.joker_display_last_update_time = self.joker_display_last_update_time + dt
