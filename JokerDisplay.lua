@@ -580,6 +580,7 @@ G.FUNCS.joker_display_style_override = function(e)
 end
 
 function Card:enable_disable()
+    if not self.joker_display_values then return end
     if self.joker_display_values.disabled then
         self:update_joker_display(true)
     end
