@@ -361,7 +361,7 @@ end
 
 ---Updates the JokerDisplay and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
-function Card:update_joker_display(force_update, _from)
+function Card:update_joker_display(force_update, force_reload, _from)
     if self.ability and self.ability.set == 'Joker' then
         --sendDebugMessage(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
@@ -460,9 +460,8 @@ function Card:update_joker_display(force_update, _from)
             if force_update or (mod.config.enabled and
                     (self:joker_display_has_info() or not mod.config.hide_empty)
                     and (not self.joker_display_values.disabled)) then
-                if mod.config.reload then
+                if force_reload then
                     self:initialize_joker_display()
-                    mod.config.reload = false
                 else
                     self:calculate_joker_display()
                 end
@@ -473,10 +472,10 @@ end
 
 ---Updates the JokerDisplay for all jokers and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
-function update_all_joker_display(force_update, _from)
+function update_all_joker_display(force_update, force_reload, _from)
     if G.jokers and not G.SETTINGS.paused then
         for k, v in pairs(G.jokers.cards) do
-            v:update_joker_display(force_update, _from)
+            v:update_joker_display(force_update, force_reload, _from)
         end
     end
 end
@@ -1049,7 +1048,7 @@ function Card:update(dt)
                 local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
                 self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                     joker_number_delta_variance / 2 * self.joker_display_update_time_variance
-                self:update_joker_display(false, "Card:update")
+                self:update_joker_display(false, false, "Card:update")
             end
         end
     end
@@ -1316,12 +1315,10 @@ end
 
 -- Callback function for config toggles, updates the example joker and any current jokers if a game is being played
 function update_display(value)
-    mod.config.reload = true
-    G.config_card_area.cards[1]:update_joker_display(false, "config_update")
+    G.config_card_area.cards[1]:update_joker_display(false, true, "config_update")
     if G.jokers then
         for _, joker in pairs(G.jokers.cards) do
-            mod.config.reload = true
-            joker:update_joker_display(false, "config_update")
+            joker:update_joker_display(false, true, "config_update")
         end
     end
 end
