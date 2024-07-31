@@ -591,7 +591,7 @@ end
 ---Returns scoring information about a set of cards. Similar to _G.FUNCS.evaluate_play_.
 ---@param cards table Cards to calculate.
 ---@param count_facedowns boolean? If true, counts cards facing back.
----@return string text Scoring poker hand's non-localized text. "Unknown" if there's a card facedown.
+---@return string text Scoring poker hand's non-localized text. "Unknown" if there's a card facedown or if selected cards are not valid.
 ---@return table poker_hands Poker hands contained in the scoring hand.
 ---@return table scoring_hand Scoring cards in hand.
 JokerDisplay.evaluate_hand = function(cards, count_facedowns)
