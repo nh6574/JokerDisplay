@@ -365,7 +365,7 @@ return {
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
             local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            card.joker_display_values.mult = hand and #hand > 0 and #hand <= card.ability.extra.size and card.ability.extra.mult or 1
+            card.joker_display_values.mult = hand and #hand > 0 and #hand <= card.ability.extra.size and card.ability.extra.mult or 0
         end
     },
     j_stencil = { -- Joker Stencil
