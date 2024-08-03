@@ -41,6 +41,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
 | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
 | [OrtalabDEMO](https://github.com/GauntletGames-2086/Ortalab-DEMO) |
+| [SDM_0's Stuff](https://github.com/SDM0/SDM_0-s-Stuff/) |
 | [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
 | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
 | [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
