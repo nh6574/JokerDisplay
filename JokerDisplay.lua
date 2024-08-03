@@ -769,7 +769,7 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
 
             if retrigger_function then
                 triggers = triggers +
-                    retrigger_function(card, scoring_hand, held_in_hand,
+                    retrigger_function(card, scoring_hand, held_in_hand or false,
                         v.joker_display_values and v.joker_display_values.blueprint_ability_joker or v)
             end
         end
