@@ -435,8 +435,6 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability",              ref_value = "extra" },
                 { text = ")" },
             }
         },
@@ -453,7 +451,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
         end
     },
     j_misprint = { -- Misprint
@@ -489,7 +487,7 @@ return {
         },
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_left <= 1 and
-                localize("k_active_ex") or "Inactive"
+            localize("jdis_active") or localize("jdis_inactive")
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
@@ -636,14 +634,12 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability.extra",        ref_value = "odds" },
                 { text = ")" },
             }
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
         end
     },
     j_even_steven = { -- Even Steven
@@ -733,8 +729,6 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability",              ref_value = "extra" },
                 { text = ")" },
             }
         },
@@ -751,7 +745,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
         end
     },
     j_supernova = { -- Supernova
@@ -780,14 +774,12 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability",              ref_value = "extra" },
                 { text = ")" },
             }
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
         end
     },
     j_egg = { -- Egg
@@ -845,7 +837,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("k_active_ex") or "Inactive")
+            card.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("jdis_active") or localize("jdis_inactive"))
         end
     },
     j_splash = {     -- Splash
@@ -981,14 +973,12 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability.extra",        ref_value = "odds" },
                 { text = ")" },
             }
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
         end
     },
     j_card_sharp = { -- Card Sharp
@@ -1245,8 +1235,6 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability.extra",        ref_value = "odds" },
                 { text = ")" },
             }
         },
@@ -1262,7 +1250,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
         end
     },
     j_mail = { -- Mail-In Rebate
@@ -1309,14 +1297,12 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability",              ref_value = "extra" },
                 { text = ")" },
             }
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
         end
     },
     j_fortune_teller = { -- Fortune Teller
@@ -1626,8 +1612,7 @@ return {
             -- Talisman compatibility
             local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
             card.joker_display_values.active = G.GAME and G.GAME.chips and G.GAME.blind.chips and
-                blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) and localize("k_active_ex") or
-                "Inactive"
+                blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) and localize("jdis_active") or localize("jdis_inactive")
         end
     },
     j_acrobat = { -- Acrobat
@@ -1726,8 +1711,6 @@ return {
             {
                 { text = "(" },
                 { ref_table = "card.joker_display_values", ref_value = "odds" },
-                { text = " in " },
-                { ref_table = "card.ability.extra",        ref_value = "odds" },
                 { text = ")" },
             }
         },
@@ -1748,7 +1731,7 @@ return {
                 count = 3
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = G.GAME and G.GAME.probabilities.normal or 1
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
             card.joker_display_values.localized_text = localize("Hearts", 'suits_plural')
         end
     },
@@ -1827,7 +1810,7 @@ return {
         },
         reminder_text = {
             { text = "(" },
-            { text = "All Suits", colour = G.C.ORANGE },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.ORANGE },
             { text = ")" }
         },
         calc_function = function(card)
@@ -1869,6 +1852,7 @@ return {
             local is_flower_pot_hand = suits["Hearts"] > 0 and suits["Diamonds"] > 0 and suits["Spades"] > 0 and
                 suits["Clubs"] > 0
             card.joker_display_values.x_mult = is_flower_pot_hand and card.ability.extra or 1
+            card.joker_display_values.localized_text = localize("jdis_all_suits")
         end
     },
     j_blueprint = { -- Blueprint
@@ -2182,7 +2166,7 @@ return {
         },
         calc_function = function(card)
             card.joker_display_values.active = card.ability.invis_rounds >= card.ability.extra and
-                localize("k_active_ex") or
+            localize("k_active") or
                 (card.ability.invis_rounds .. "/" .. card.ability.extra)
         end
     },
@@ -2292,7 +2276,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0 and localize("k_active_ex") or "Inactive")
+            card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0 and localize("jdis_active") or localize("jdis_inactive"))
         end
     },
     j_bootstraps = { -- Bootstraps
