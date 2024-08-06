@@ -35,7 +35,7 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
 
     local pures = {}
     for i = 1, #valid_cards do
-        if next(find_joker('Splash')) then
+        if next(SMODS.find_card('j_splash')) then
             scoring_hand[i] = valid_cards[i]
         else
             if valid_cards[i].ability.effect == 'Stone Card' then
@@ -89,28 +89,19 @@ JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debu
 end
 
 ---Returns all held instances of certain Joker, including Blueprint copies.
----@see find_joker
----@param name string Name of the Joker to find.
----@param non_debuff boolean? If true also returns debuffed cards.
+---@see SMODS.find_card
+---@param key string Key of the Joker to find.
+---@param count_debuffed boolean? If true also returns debuffed cards.
 ---@return table #All Jokers found, including Jokers with copy abilities.
-JokerDisplay.find_joker_or_copy = function(name, non_debuff)
+JokerDisplay.find_joker_or_copy = function(key, count_debuffed)
     local jokers = {}
     if not G.jokers or not G.jokers.cards then return {} end
     for k, v in pairs(G.jokers.cards) do
         if v and type(v) == 'table' and
-            (v.ability.name == name or
-                v.joker_display_values and v.joker_display_values.blueprint_ability_name and
-                v.joker_display_values.blueprint_ability_name == name) and
-            (non_debuff or not v.debuff) then
-            table.insert(jokers, v)
-        end
-    end
-    for k, v in pairs(G.consumeables.cards) do
-        if v and type(v) == 'table' and
-            (v.ability.name == name or
-                v.joker_display_values and v.joker_display_values.blueprint_ability_name and
-                v.joker_display_values.blueprint_ability_name == name) and
-            (non_debuff or not v.debuff) then
+            (v..config.center.key == key or
+                v.joker_display_values and v.joker_display_values.blueprint_ability_key and
+                v.joker_display_values.blueprint_ability_key == key) and
+            (count_debuffed or not v.debuff) then
             table.insert(jokers, v)
         end
     end
