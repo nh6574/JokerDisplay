@@ -40,17 +40,32 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
 
     local pures = {}
     for i = 1, #valid_cards do
-        if next(SMODS.find_card('j_splash')) then
-            scoring_hand[i] = valid_cards[i]
-        else
-            if valid_cards[i].ability.effect == 'Stone Card' then
-                local inside = false
-                for j = 1, #scoring_hand do
-                    if scoring_hand[j] == valid_cards[i] then
-                        inside = true
-                    end
+        local inside = false
+        for j = 1, #scoring_hand do
+            if scoring_hand[j] == valid_cards[i] then
+                inside = true
+            end
+        end
+        if not inside and valid_cards[i].ability.effect == 'Stone Card' then
+            table.insert(pures, valid_cards[i])
+            inside = true
+        end
+        if not inside and G.jokers then
+            for _, joker in pairs(G.jokers.cards) do
+                local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+                local scoring_function = (not joker.debuff and joker_display_definition and joker_display_definition.scoring_function) or
+                    (not joker.debuff and joker.joker_display_values and joker.joker_display_values.blueprint_ability_key and
+                        not joker.joker_display_values.blueprint_debuff and
+                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].scoring_function)
+
+                if scoring_function then
+                    inside = scoring_function(valid_cards[i], scoring_hand, joker.joker_display_values and joker.joker_display_values.blueprint_ability_joker or joker)
                 end
-                if not inside then table.insert(pures, valid_cards[i]) end
+                if inside then
+                    table.insert(pures, valid_cards[i])
+                    break
+                end
             end
         end
     end

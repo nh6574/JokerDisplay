@@ -379,7 +379,7 @@ JokerDisplay.get_scoring_hand = function()
         count_facedowns = true
     end
 
-    local text, poker_hands, scoring_hand = JokerDisplay.evaluate_hand(JokerDisplay.current_hand, count_facedowns)
+    local text, poker_hands, scoring_hand = JokerDisplay.evaluate_hand(JokerDisplay.current_hand or {}, count_facedowns)
     JokerDisplay.current_hand_info = {
         text = text,
         poker_hands = poker_hands,
@@ -399,4 +399,10 @@ function draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped
     if from ~= G.hand or to ~= G.play then
         JokerDisplay.get_scoring_hand()
     end
+end
+
+local card_remove_ref = Card.remove
+function Card:remove()
+    card_remove_ref(self)
+    JokerDisplay.get_scoring_hand()
 end

@@ -849,6 +849,9 @@ return {
         end
     },
     j_splash = {     -- Splash
+        scoring_function = function (playing_card, scoring_hand, joker_card)
+            return true
+        end
     },
     j_blue_joker = { -- Blue Joker
         text = {
