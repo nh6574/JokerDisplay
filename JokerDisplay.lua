@@ -21,7 +21,6 @@ SMODS.Atlas({
 })
 
 JokerDisplay = {}
-JokerDisplay.Definitions = SMODS.load_file("definitions/display_definitions.lua")() or {}
 JokerDisplay.path = SMODS.current_mod.path
 JokerDisplay.config = SMODS.current_mod.config
 
@@ -31,6 +30,8 @@ SMODS.load_file("src/display_functions.lua")()
 SMODS.load_file("src/api_helper_functions.lua")()
 SMODS.load_file("src/controller.lua")()
 SMODS.load_file("src/config_tab.lua")()
+
+JokerDisplay.Definitions = SMODS.load_file("definitions/display_definitions.lua")() or {}
 
 ----------------------------------------------
 ------------MOD CODE END----------------------

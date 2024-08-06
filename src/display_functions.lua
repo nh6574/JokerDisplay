@@ -121,7 +121,7 @@ end
 ---@param force_update boolean? Force update even if disabled.
 function Card:update_joker_display(force_update, force_reload, _from)
     if self.ability and self.ability.set == 'Joker' then
-        --sendDebugMessage(tostring(self.ability.name) .. " : " .. tostring(_from))
+        --print(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
             self.joker_display_values = {}
             self.joker_display_values.disabled = JokerDisplay.config.hide_by_default
@@ -348,7 +348,6 @@ function Card:update(dt)
         else
             self.joker_display_last_update_time = self.joker_display_last_update_time + dt
             if self.joker_display_last_update_time > self.joker_display_next_update_time then
-                --sendDebugMessage(self.joker_display_last_update_time)
                 self.joker_display_last_update_time = 0
                 local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
                 self.joker_display_next_update_time = joker_number_delta_variance / 2 +

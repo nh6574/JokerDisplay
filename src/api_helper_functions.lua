@@ -119,36 +119,32 @@ JokerDisplay.find_joker_or_copy = function(key, count_debuffed)
     return jokers
 end
 
+---Sort cards from left to right.
+---@param cards table Cards to sort.
+---@return table # Rightmost card in hand if any.
+JokerDisplay.sort_cards = function(cards)
+    local copy = {}
+    for k,v in pairs(cards) do
+        copy[k] = v
+    end
+    table.sort(copy, function (a, b) return a.T.x < b.T.x end)
+    return copy
+end
+
 ---Returns the leftmost card in a set of cards.
 ---@param cards table Cards to calculate.
----@return table|nil # Leftmost card in hand if any.
+---@return table? # Leftmost card in hand if any.
 JokerDisplay.calculate_leftmost_card = function(cards)
-    if not cards or type(cards) ~= "table" then
-        return nil
-    end
-    local leftmost = cards[1]
-    for i = 1, #cards do
-        if cards[i].T.x < leftmost.T.x then
-            leftmost = cards[i]
-        end
-    end
-    return leftmost
+    local sorted_cards = JokerDisplay.sort_cards(cards)
+    return sorted_cards and sorted_cards[1]
 end
 
 ---Returns the rightmost card in a set of cards.
 ---@param cards table Cards to calculate.
 ---@return table|nil # Rightmost card in hand if any.
 JokerDisplay.calculate_rightmost_card = function(cards)
-    if not cards or type(cards) ~= "table" then
-        return nil
-    end
-    local rightmost = cards[1]
-    for i = 1, #cards do
-        if cards[i].T.x > rightmost.T.x then
-            rightmost = cards[i]
-        end
-    end
-    return rightmost
+    local sorted_cards = JokerDisplay.sort_cards(cards)
+    return sorted_cards and sorted_cards[#sorted_cards]
 end
 
 ---Returns how many times the scoring card would be triggered for scoring if played.
