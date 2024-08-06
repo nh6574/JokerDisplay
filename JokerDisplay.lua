@@ -23,6 +23,12 @@ SMODS.Atlas({
 JokerDisplay = {}
 JokerDisplay.path = SMODS.current_mod.path
 JokerDisplay.config = SMODS.current_mod.config
+JokerDisplay.current_hand = {}
+JokerDisplay.current_hand_info = {
+    text = "Unknown",
+    poker_hands = {},
+    scoring_hand = {}
+}
 
 SMODS.load_file("src/utils.lua")()
 SMODS.load_file("src/ui.lua")()

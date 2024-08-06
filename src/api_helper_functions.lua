@@ -2,7 +2,7 @@
 
 ---Returns scoring information about a set of cards.
 ---@see G.FUNCS.evaluate_play
----@param cards table Cards to calculate.
+---@param cards table? Cards to calculate.
 ---@param count_facedowns boolean? If true, counts cards facing back.
 ---@return string text Scoring poker hand's non-localized text. "Unknown" if there's a card facedown or if selected cards are not valid.
 ---@return table poker_hands Poker hands contained in the scoring hand.
@@ -11,7 +11,10 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
     local valid_cards = cards
     local has_facedown = false
 
-    if not type(cards) == "table" then
+    if not cards then
+        local hand_info = JokerDisplay.current_hand_info
+        return hand_info.text, hand_info.poker_hands, hand_info.scoring_hand
+    elseif not type(cards) == "table" then
         return "Unknown", {}, {}
     end
     for i = 1, #cards do
@@ -141,7 +144,7 @@ end
 
 ---Returns the rightmost card in a set of cards.
 ---@param cards table Cards to calculate.
----@return table|nil # Rightmost card in hand if any.
+---@return table? # Rightmost card in hand if any.
 JokerDisplay.calculate_rightmost_card = function(cards)
     local sorted_cards = JokerDisplay.sort_cards(cards)
     return sorted_cards and sorted_cards[#sorted_cards]

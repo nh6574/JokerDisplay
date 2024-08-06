@@ -337,6 +337,14 @@ local card_update_ref = Card.update
 function Card:update(dt)
     card_update_ref(self, dt)
     if JokerDisplay.config.enabled and G.jokers and self.area == G.jokers then
+        if G.STATE ~= G.STATES.HAND_PLAYED and G.STATE ~= G.STATES.SELECTING_HAND and G.STATE ~= G.STATES.DRAW_TO_HAND then
+            JokerDisplay.current_hand = {}
+            JokerDisplay.current_hand_info = {
+                text = "Unknown",
+                poker_hands = {},
+                scoring_hand = {}
+            }
+        end
         if not self.joker_display_last_update_time then
             self.joker_display_last_update_time = 0
             self.joker_display_update_time_variance = math.random()
@@ -355,5 +363,40 @@ function Card:update(dt)
                 self:update_joker_display(false, false, "Card:update")
             end
         end
+    end
+end
+
+JokerDisplay.get_scoring_hand = function()
+    local count_facedowns = false
+    if G.STATE ~= G.STATES.HAND_PLAYED then
+        JokerDisplay.current_hand = {}
+        if G.STATE == G.STATES.SELECTING_HAND and G.hand and G.hand.highlighted then
+            for i = 1, #G.hand.highlighted do
+                JokerDisplay.current_hand[i] = G.hand.highlighted[i]
+            end
+        end
+    else
+        count_facedowns = true
+    end
+
+    local text, poker_hands, scoring_hand = JokerDisplay.evaluate_hand(JokerDisplay.current_hand, count_facedowns)
+    JokerDisplay.current_hand_info = {
+        text = text,
+        poker_hands = poker_hands,
+        scoring_hand = scoring_hand
+    }
+end
+
+local cardarea_parse_highlighted_ref = CardArea.parse_highlighted
+function CardArea:parse_highlighted()
+    cardarea_parse_highlighted_ref(self)
+    JokerDisplay.get_scoring_hand()
+end
+
+local draw_card_ref = draw_card
+function draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
+    draw_card_ref(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
+    if from ~= G.hand or to ~= G.play then
+        JokerDisplay.get_scoring_hand()
     end
 end

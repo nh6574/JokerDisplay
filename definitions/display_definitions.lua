@@ -27,8 +27,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit(card.ability.extra.suit) then
@@ -59,8 +58,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit(card.ability.extra.suit) then
@@ -91,8 +89,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit(card.ability.extra.suit) then
@@ -123,8 +120,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit(card.ability.extra.suit) then
@@ -151,8 +147,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
@@ -173,8 +168,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
@@ -195,8 +189,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
@@ -217,8 +210,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
@@ -239,8 +231,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 mult = card.ability.t_mult
             end
@@ -261,8 +252,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
@@ -283,8 +273,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
@@ -305,8 +294,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
@@ -327,8 +315,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
@@ -349,8 +336,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 chips = card.ability.t_chips
             end
@@ -365,7 +351,7 @@ return {
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
+            local hand = JokerDisplay.current_hand
             card.joker_display_values.mult = hand and #hand > 0 and #hand <= card.ability.extra.size and card.ability.extra.mult or 0
         end
     },
@@ -457,8 +443,7 @@ return {
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
             local count = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and scoring_card:get_id() == 8 then
@@ -549,8 +534,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and scoring_card:get_id() == 2 or scoring_card:get_id() == 3 or scoring_card:get_id() == 5
@@ -591,8 +575,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_face() then
@@ -674,8 +657,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and scoring_card:get_id() <= 10 and scoring_card:get_id() >= 0 and scoring_card:get_id() % 2 == 0 then
@@ -699,8 +681,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and ((scoring_card:get_id() <= 10 and scoring_card:get_id() >= 0 and
@@ -727,8 +708,7 @@ return {
         },
         calc_function = function(card)
             local chips, mult = 0, 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and scoring_card:get_id() == 14 then
@@ -761,8 +741,7 @@ return {
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
             local count = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_face() then
@@ -782,8 +761,7 @@ return {
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, _ = JokerDisplay.evaluate_hand(hand)
+            local text, _, _ = JokerDisplay.evaluate_hand()
             card.joker_display_values.mult = (text ~= 'Unknown' and G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played) or
                 0
         end
@@ -890,8 +868,7 @@ return {
             { text = "(6)", scale = 0.35 },
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local _, _, scoring_hand = JokerDisplay.evaluate_hand()
             local sixth_sense_eval = #scoring_hand == 1 and scoring_hand[1]:get_id() == 6
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_played == 0
             card.joker_display_values.active_text = card.joker_display_values.active and
@@ -957,8 +934,7 @@ return {
         },
         calc_function = function(card)
             local is_superposition = false
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, scoring_hand = JokerDisplay.evaluate_hand()
             if poker_hands["Straight"] and next(poker_hands["Straight"]) then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and scoring_card:get_id() == 14 then
@@ -983,8 +959,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, _ = JokerDisplay.evaluate_hand(hand)
+            local text, _, _ = JokerDisplay.evaluate_hand()
             local is_to_do_poker_hand = text == card.ability.to_do_poker_hand
             card.joker_display_values.dollars = is_to_do_poker_hand and card.ability.extra.dollars or 0
             card.joker_display_values.to_do_poker_hand = localize(card.ability.to_do_poker_hand, 'poker_hands')
@@ -1023,8 +998,7 @@ return {
             }
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, _ = JokerDisplay.evaluate_hand(hand)
+            local text, _, _ = JokerDisplay.evaluate_hand()
             local is_card_sharp_hand = text ~= 'Unknown' and G.GAME.hands and G.GAME.hands[text] and
                 G.GAME.hands[text].played_this_round > (next(G.play.cards) and 1 or 0)
             card.joker_display_values.x_mult = is_card_sharp_hand and card.ability.extra.Xmult or 1
@@ -1066,8 +1040,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, _ = JokerDisplay.evaluate_hand(hand)
+            local text, _, _ = JokerDisplay.evaluate_hand()
             local is_seance_hand = text == card.ability.extra.poker_hand
 
             card.joker_display_values.count = is_seance_hand and 1 or 0
@@ -1217,8 +1190,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             local face_cards = {}
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
@@ -1484,8 +1456,7 @@ return {
         },
         calc_function = function(card)
             local count = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit(G.GAME.current_round.ancient_card.suit) then
@@ -1527,8 +1498,7 @@ return {
         },
         calc_function = function(card)
             local chips, mult = 0, 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and (scoring_card:get_id() == 10 or scoring_card:get_id() == 4) then
@@ -1592,8 +1562,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_face() then
@@ -1630,8 +1599,7 @@ return {
         },
         calc_function = function(card)
             local dollars = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card.ability.name and scoring_card.ability.name == 'Gold Card' then
@@ -1722,8 +1690,7 @@ return {
         },
         calc_function = function(card)
             local dollars = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit("Diamonds") then
@@ -1765,8 +1732,7 @@ return {
         calc_function = function(card)
             local count = 0
             if G.play then
-                local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-                local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+                local text, _, scoring_hand = JokerDisplay.evaluate_hand()
                 if text ~= 'Unknown' then
                     for _, scoring_card in pairs(scoring_hand) do
                         if scoring_card:is_suit("Hearts") then
@@ -1796,8 +1762,7 @@ return {
         },
         calc_function = function(card)
             local chips = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit("Spades") then
@@ -1823,8 +1788,7 @@ return {
         },
         calc_function = function(card)
             local mult = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit("Clubs") then
@@ -1864,8 +1828,7 @@ return {
             { text = ")" }
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             local suits = {
                 ['Hearts'] = 0,
                 ['Diamonds'] = 0,
@@ -1971,8 +1934,7 @@ return {
         },
         calc_function = function(card)
             local count = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit(G.GAME.current_round.idol_card.suit) and scoring_card:get_id() and scoring_card:get_id() == G.GAME.current_round.idol_card.id then
@@ -2009,8 +1971,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             local suits = {
                 ['Hearts'] = 0,
                 ['Diamonds'] = 0,
@@ -2099,8 +2060,7 @@ return {
         },
         calc_function = function(card)
             local x_mult = 1
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
@@ -2124,8 +2084,7 @@ return {
         },
         calc_function = function(card)
             local x_mult = 1
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
@@ -2149,8 +2108,7 @@ return {
         },
         calc_function = function(card)
             local x_mult = 1
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
@@ -2174,8 +2132,7 @@ return {
         },
         calc_function = function(card)
             local x_mult = 1
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
@@ -2199,8 +2156,7 @@ return {
         },
         calc_function = function(card)
             local x_mult = 1
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local _, poker_hands, _ = JokerDisplay.evaluate_hand(hand)
+            local _, poker_hands, _ = JokerDisplay.evaluate_hand()
             if poker_hands[card.ability.type] and next(poker_hands[card.ability.type]) then
                 x_mult = card.ability.x_mult
             end
@@ -2376,8 +2332,7 @@ return {
         },
         calc_function = function(card)
             local count = 0
-            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
-            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:get_id() and (scoring_card:get_id() == 13 or scoring_card:get_id() == 12) then
