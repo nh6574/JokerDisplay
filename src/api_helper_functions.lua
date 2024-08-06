@@ -32,6 +32,8 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
                 has_facedown = true
             end
         end
+    else
+        valid_cards = cards
     end
 
     local text, _, poker_hands, scoring_hand, _ = G.FUNCS.get_poker_hand_info(valid_cards)
