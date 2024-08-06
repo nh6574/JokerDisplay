@@ -1,5 +1,6 @@
 --- Joker Display Definitions
 --- Check Github Wiki for API details
+--- https://github.com/nh6574/JokerDisplay/wiki
 
 return {
     j_joker = { -- Joker
