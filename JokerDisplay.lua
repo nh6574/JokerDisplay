@@ -56,7 +56,7 @@ end
 
 local mod = SMODS.current_mod
 JokerDisplay = {}
-JokerDisplay.Definitions = SMODS.load_file("display_definitions.lua")() or {}
+JokerDisplay.Definitions = SMODS.load_file("definitions/display_definitions.lua")() or {}
 
 if SMODS.Atlas then
     SMODS.Atlas({
