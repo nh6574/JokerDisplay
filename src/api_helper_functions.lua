@@ -250,3 +250,19 @@ JokerDisplay.calculate_joker_modifiers = function(card)
 
     return modifiers
 end
+
+JokerDisplay.triggers_blind = function(blind, text, poker_hands, scoring_hand, full_hand)
+    if blind.disabled then return false end
+
+    local blind_key = blind.config.blind.key
+    if not blind_key then return nil end
+
+    local blind_definition = JokerDisplay.Blind_Definitions[blind_key]
+    if not blind_definition then return nil end
+
+    if blind_definition.trigger_function then
+        return blind_definition.trigger_function(blind, text, poker_hands, scoring_hand, full_hand)
+    end
+
+    return false
+end

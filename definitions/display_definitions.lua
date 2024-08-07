@@ -352,7 +352,8 @@ return {
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
             local hand = JokerDisplay.current_hand
-            card.joker_display_values.mult = hand and #hand > 0 and #hand <= card.ability.extra.size and card.ability.extra.mult or 0
+            card.joker_display_values.mult = hand and #hand > 0 and #hand <= card.ability.extra.size and
+            card.ability.extra.mult or 0
         end
     },
     j_stencil = { -- Joker Stencil
@@ -451,7 +452,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
         end
     },
     j_misprint = { -- Misprint
@@ -487,7 +488,7 @@ return {
         },
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_left <= 1 and
-            localize("jdis_active") or localize("jdis_inactive")
+                localize("jdis_active") or localize("jdis_inactive")
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
@@ -639,7 +640,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
         end
     },
     j_even_steven = { -- Even Steven
@@ -745,7 +746,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
         end
     },
     j_supernova = { -- Supernova
@@ -779,7 +780,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
         end
     },
     j_egg = { -- Egg
@@ -840,8 +841,8 @@ return {
             card.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("jdis_active") or localize("jdis_inactive"))
         end
     },
-    j_splash = {     -- Splash
-        scoring_function = function (playing_card, scoring_hand, joker_card)
+    j_splash = { -- Splash
+        scoring_function = function(playing_card, scoring_hand, joker_card)
             return true
         end
     },
@@ -978,7 +979,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
         end
     },
     j_card_sharp = { -- Card Sharp
@@ -1250,7 +1251,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
         end
     },
     j_mail = { -- Mail-In Rebate
@@ -1302,7 +1303,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
         end
     },
     j_fortune_teller = { -- Fortune Teller
@@ -1612,7 +1613,8 @@ return {
             -- Talisman compatibility
             local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
             card.joker_display_values.active = G.GAME and G.GAME.chips and G.GAME.blind.chips and
-                blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) and localize("jdis_active") or localize("jdis_inactive")
+                blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) and localize("jdis_active") or
+                localize("jdis_inactive")
         end
     },
     j_acrobat = { -- Acrobat
@@ -1731,7 +1733,7 @@ return {
                 count = 3
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds} }
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
             card.joker_display_values.localized_text = localize("Hearts", 'suits_plural')
         end
     },
@@ -2001,19 +2003,35 @@ return {
         end
     },
     j_matador = { -- Matador
+        text = {
+            { text = "+$" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+        },
+        text_config = { colour = G.C.GOLD },
         reminder_text = {
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
         },
         calc_function = function(card)
-            local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
+            local dollars = 0
+            local text, poker_hands, scoring_hand = JokerDisplay.evaluate_hand()
+            local boss_active = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
                 ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
-            card.joker_display_values.active = disableable
-            card.joker_display_values.active_text = card.joker_display_values.active and
-                ("+" .. localize('$') .. card.ability.extra .. "?") or localize('ph_no_boss_active')
+            card.joker_display_values.active = boss_active
+
+            if card.joker_display_values.active then
+                local triggers_blind = JokerDisplay.triggers_blind(G.GAME.blind, text, poker_hands, scoring_hand, JokerDisplay.current_hand)
+                if triggers_blind then
+                    dollars = card.ability.extra
+                elseif triggers_blind == nil then
+                    dollars = card.ability.extra .. "?"
+                end
+            end
+            card.joker_display_values.dollars = dollars
+            card.joker_display_values.active_text = localize(boss_active and 'k_active' or 'ph_no_boss_active')
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children[1] and card.joker_display_values then
-                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
+                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.RED
                 reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
                 return true
@@ -2166,7 +2184,7 @@ return {
         },
         calc_function = function(card)
             card.joker_display_values.active = card.ability.invis_rounds >= card.ability.extra and
-            localize("k_active") or
+                localize("k_active") or
                 (card.ability.invis_rounds .. "/" .. card.ability.extra)
         end
     },

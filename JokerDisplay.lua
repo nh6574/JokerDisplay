@@ -38,6 +38,7 @@ SMODS.load_file("src/controller.lua")()
 SMODS.load_file("src/config_tab.lua")()
 
 JokerDisplay.Definitions = SMODS.load_file("definitions/display_definitions.lua")() or {}
+JokerDisplay.Blind_Definitions = SMODS.load_file("definitions/blind_definitions.lua")() or {}
 
 ----------------------------------------------
 ------------MOD CODE END----------------------
