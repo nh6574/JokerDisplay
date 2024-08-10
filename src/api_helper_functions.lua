@@ -55,12 +55,14 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
                 local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
                 local scoring_function = (not joker.debuff and joker_display_definition and joker_display_definition.scoring_function) or
                     (not joker.debuff and joker.joker_display_values and joker.joker_display_values.blueprint_ability_key and
-                        not joker.joker_display_values.blueprint_debuff and
+                        not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
                         JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
                         JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].scoring_function)
 
                 if scoring_function then
-                    inside = scoring_function(valid_cards[i], scoring_hand, joker.joker_display_values and joker.joker_display_values.blueprint_ability_joker or joker)
+                    inside = scoring_function(valid_cards[i], scoring_hand,
+                        joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                        joker.joker_display_values.blueprint_ability_joker or joker)
                 end
                 if inside then
                     table.insert(pures, valid_cards[i])
@@ -108,6 +110,46 @@ JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debu
     return nil, false
 end
 
+---Copies an in-play Joker's display
+---@param card table Card that is copying
+---@param copied_joker? table Joker being copied. Initializes defualt display if nil
+---@param is_debuffed boolean? If Joker is debuffed by other means.
+---@param bypass_debuff boolean? Bypass debuff
+---@param stop_func_copy boolean? Don't copy other functions just as mod_function, retrigger_function, etc.
+JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_debuff, stop_func_copy)
+    local changed = not (copied_joker == card.joker_display_values.blueprint_ability_joker) or
+    not (card.joker_display_values.blueprint_debuff == is_debuffed)
+    card.joker_display_values.blueprint_ability_joker = copied_joker
+    card.joker_display_values.blueprint_ability_name = copied_joker and copied_joker.ability.name
+    card.joker_display_values.blueprint_ability_key = copied_joker and copied_joker.config.center.key
+    card.joker_display_values.blueprint_debuff = not bypass_debuff and
+    (is_debuffed or copied_joker and copied_joker.debuff) or false
+    card.joker_display_values.blueprint_stop_func = stop_func_copy
+
+    if card.joker_display_values.blueprint_initialized and (changed or not card.joker_display_values.blueprint_loaded) then
+        card.children.joker_display:remove_text()
+        card.children.joker_display:remove_reminder_text()
+        card.children.joker_display:remove_extra()
+        card.children.joker_display_small:remove_text()
+        card.children.joker_display_small:remove_reminder_text()
+        card.children.joker_display_small:remove_extra()
+        if copied_joker then
+            if card.joker_display_values.blueprint_debuff then
+                card.children.joker_display:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
+            elseif copied_joker.joker_display_values then
+                copied_joker:initialize_joker_display(card)
+                card.joker_display_values.blueprint_loaded = true
+            else
+                card.joker_display_values.blueprint_loaded = false
+            end
+        else
+            card:initialize_joker_display(nil, true)
+            card.joker_display_values.blueprint_loaded = true
+        end
+    end
+    card.joker_display_values.blueprint_initialized = true
+end
+
 ---Returns all held instances of certain Joker, including Blueprint copies.
 ---@see SMODS.find_card
 ---@param key string Key of the Joker to find.
@@ -116,19 +158,20 @@ end
 JokerDisplay.find_joker_or_copy = function(key, count_debuffed)
     local jokers = {}
     if not G.jokers or not G.jokers.cards then return {} end
-    for k, v in pairs(G.jokers.cards) do
-        if v and type(v) == 'table' and
-            (v..config.center.key == key or
-                v.joker_display_values and v.joker_display_values.blueprint_ability_key and
-                v.joker_display_values.blueprint_ability_key == key) and
-            (count_debuffed or not v.debuff) then
-            table.insert(jokers, v)
+    for _, joker in pairs(G.jokers.cards) do
+        if joker and type(joker) == 'table' and
+            (joker .. config.center.key == key or
+                joker.joker_display_values and joker.joker_display_values.blueprint_ability_key and
+                not joker.joker_display_values.blueprint_stop_func and
+                joker.joker_display_values.blueprint_ability_key == key) and
+            (count_debuffed or not joker.debuff) then
+            table.insert(jokers, joker)
         end
     end
 
     local blueprint_count = 0
-    for k, v in pairs(jokers) do
-        if v.ability.name == "Blueprint" or v.ability.name == "Brainstorm" then
+    for _, joker in pairs(jokers) do
+        if joker.joker_display_values.blueprint_ability_key and not joker.joker_display_values.blueprint_stop_func then
             blueprint_count = blueprint_count + 1
         end
     end
@@ -144,10 +187,10 @@ end
 ---@return table # Rightmost card in hand if any.
 JokerDisplay.sort_cards = function(cards)
     local copy = {}
-    for k,v in pairs(cards) do
+    for k, v in pairs(cards) do
         copy[k] = v
     end
-    table.sort(copy, function (a, b) return a.T.x < b.T.x end)
+    table.sort(copy, function(a, b) return a.T.x < b.T.x end)
     return copy
 end
 
@@ -180,19 +223,20 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
     local triggers = 1
 
     if G.jokers then
-        for k, v in pairs(G.jokers.cards) do
-            local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
-            local retrigger_function = (not v.debuff and joker_display_definition and joker_display_definition.retrigger_function) or
-                (not v.debuff and v.joker_display_values and v.joker_display_values.blueprint_ability_key and
-                    not v.joker_display_values.blueprint_debuff and
-                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key] and
-                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].retrigger_function)
+        for _, joker in pairs(G.jokers.cards) do
+            local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+            local retrigger_function = (not joker.debuff and joker_display_definition and joker_display_definition.retrigger_function) or
+                (not joker.debuff and joker.joker_display_values and joker.joker_display_values.blueprint_ability_key and
+                    not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                    JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                    JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_function)
 
             if retrigger_function then
                 -- The rounding is for Cryptid compat
                 triggers = triggers +
                     math.floor(retrigger_function(card, scoring_hand, held_in_hand or false,
-                        v.joker_display_values and v.joker_display_values.blueprint_ability_joker or v))
+                        joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                        joker.joker_display_values.blueprint_ability_joker or joker))
             end
         end
     end
@@ -222,17 +266,18 @@ JokerDisplay.calculate_joker_modifiers = function(card)
     end
 
     if G.jokers then
-        for k, v in pairs(G.jokers.cards) do
-            local joker_display_definition = JokerDisplay.Definitions[v.config.center.key]
-            local mod_function = (not v.debuff and joker_display_definition and joker_display_definition.mod_function) or
-                (not v.debuff and v.joker_display_values and v.joker_display_values.blueprint_ability_key and
-                    not v.joker_display_values.blueprint_debuff and
-                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key] and
-                    JokerDisplay.Definitions[v.joker_display_values.blueprint_ability_key].mod_function)
+        for _, joker in pairs(G.jokers.cards) do
+            local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+            local mod_function = (not joker.debuff and joker_display_definition and joker_display_definition.mod_function) or
+                (not joker.debuff and joker.joker_display_values and joker.joker_display_values.blueprint_ability_key and
+                    not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                    JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                    JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].mod_function)
 
             if mod_function then
                 local extra_mods = mod_function(card,
-                    v.joker_display_values and v.joker_display_values.blueprint_ability_joker or v)
+                    joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                    joker.joker_display_values.blueprint_ability_joker or joker)
                 modifiers = {
                     chips = modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips or
                         extra_mods.chips or modifiers.chips,

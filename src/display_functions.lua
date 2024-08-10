@@ -1,7 +1,9 @@
 ---DISPLAY DEFINITION
 
 ---Initializes nodes for JokerDisplay.
-function Card:initialize_joker_display(custom_parent)
+---@param custom_parent table? Another card the display should be under
+---@param stop_calc boolean? Don't call calculate_joker_display
+function Card:initialize_joker_display(custom_parent, stop_calc)
     if not custom_parent then
         self.children.joker_display:remove_text()
         self.children.joker_display:remove_reminder_text()
@@ -17,28 +19,30 @@ function Card:initialize_joker_display(custom_parent)
         self.children.joker_display_debuff:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
     end
 
-    self:calculate_joker_display()
+    if not stop_calc then
+        self:calculate_joker_display()
+    end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
-    local definiton_text = joker_display_definition and
+    local definition_text = joker_display_definition and
         (joker_display_definition.text or joker_display_definition.line_1)
     local text_config = joker_display_definition and joker_display_definition.text_config
-    local definiton_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
+    local definition_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
         joker_display_definition.line_2)
     local reminder_text_config = joker_display_definition and joker_display_definition.reminder_text_config
-    local definiton_extra = joker_display_definition and joker_display_definition.extra
+    local definition_extra = joker_display_definition and joker_display_definition.extra
     local extra_config = joker_display_definition and joker_display_definition.extra_config
 
-    if definiton_text then
+    if definition_text then
         if custom_parent then
-            custom_parent.children.joker_display:add_text(definiton_text, text_config, self)
-            custom_parent.children.joker_display_small:add_text(definiton_text, text_config, self)
+            custom_parent.children.joker_display:add_text(definition_text, text_config, self)
+            custom_parent.children.joker_display_small:add_text(definition_text, text_config, self)
         else
-            self.children.joker_display:add_text(definiton_text, text_config)
-            self.children.joker_display_small:add_text(definiton_text, text_config)
+            self.children.joker_display:add_text(definition_text, text_config)
+            self.children.joker_display_small:add_text(definition_text, text_config)
         end
     end
-    if definiton_reminder_text then
+    if definition_reminder_text then
         if not reminder_text_config then
             reminder_text_config = {}
         end
@@ -46,34 +50,34 @@ function Card:initialize_joker_display(custom_parent)
         reminder_text_config.scale = reminder_text_config.scale or 0.3
         if JokerDisplay.config.default_rows.reminder then
             if custom_parent then
-                custom_parent.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config,
+                custom_parent.children.joker_display:add_reminder_text(definition_reminder_text, reminder_text_config,
                     self)
             else
-                self.children.joker_display:add_reminder_text(definiton_reminder_text, reminder_text_config)
+                self.children.joker_display:add_reminder_text(definition_reminder_text, reminder_text_config)
             end
         end
         if JokerDisplay.config.small_rows.reminder then
             if custom_parent then
-                custom_parent.children.joker_display_small:add_reminder_text(definiton_reminder_text,
+                custom_parent.children.joker_display_small:add_reminder_text(definition_reminder_text,
                     reminder_text_config, self)
             else
-                self.children.joker_display_small:add_reminder_text(definiton_reminder_text, reminder_text_config)
+                self.children.joker_display_small:add_reminder_text(definition_reminder_text, reminder_text_config)
             end
         end
     end
-    if definiton_extra then
+    if definition_extra then
         if JokerDisplay.config.default_rows.extra then
             if custom_parent then
-                custom_parent.children.joker_display:add_extra(definiton_extra, extra_config, self)
+                custom_parent.children.joker_display:add_extra(definition_extra, extra_config, self)
             else
-                self.children.joker_display:add_extra(definiton_extra, extra_config)
+                self.children.joker_display:add_extra(definition_extra, extra_config)
             end
         end
         if JokerDisplay.config.small_rows.extra then
             if custom_parent then
-                custom_parent.children.joker_display_small:add_extra(definiton_extra, extra_config, self)
+                custom_parent.children.joker_display_small:add_extra(definition_extra, extra_config, self)
             else
-                self.children.joker_display_small:add_extra(definiton_extra, extra_config)
+                self.children.joker_display_small:add_extra(definition_extra, extra_config)
             end
         end
     end
@@ -318,7 +322,7 @@ G.FUNCS.joker_display_style_override = function(e)
         local reminder_text = e.children and e.children[4] or nil
         local extra = e.children and e.children[2] or nil
 
-        local is_blueprint_copying = card.joker_display_values and card.joker_display_values.blueprint_ability_key
+        local is_blueprint_copying = card.joker_display_values and not card.joker_display_values.blueprint_stop_func and card.joker_display_values.blueprint_ability_key
         local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
         local style_function = joker_display_definition and joker_display_definition.style_function
 
