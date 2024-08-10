@@ -112,7 +112,7 @@ end
 
 ---Copies an in-play Joker's display
 ---@param card table Card that is copying
----@param copied_joker? table Joker being copied. Initializes defualt display if nil
+---@param copied_joker? table Joker being copied. Initializes default display if nil
 ---@param is_debuffed boolean? If Joker is debuffed by other means.
 ---@param bypass_debuff boolean? Bypass debuff
 ---@param stop_func_copy boolean? Don't copy other functions just as mod_function, retrigger_function, etc.
