@@ -252,6 +252,13 @@ JokerDisplay.calculate_joker_modifiers = function(card)
     return modifiers
 end
 
+---Returns if hand triggers (boss) blind.
+---@param blind table Blind to calculate
+---@param text string Scoring poker hand's non-localized text. "Unknown" if there's a card facedown or if selected cards are not valid.
+---@param poker_hands table Poker hands contained in the scoring hand.
+---@param scoring_hand table Scoring cards in hand.
+---@param full_hand table Full hand.
+---@return boolean? # True if it triggers the blind, false otherwise. nil if unknown (blind is not defined).
 JokerDisplay.triggers_blind = function(blind, text, poker_hands, scoring_hand, full_hand)
     if blind.disabled then return false end
 

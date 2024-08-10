@@ -353,7 +353,7 @@ return {
         calc_function = function(card)
             local hand = JokerDisplay.current_hand
             card.joker_display_values.mult = hand and #hand > 0 and #hand <= card.ability.extra.size and
-            card.ability.extra.mult or 0
+                card.ability.extra.mult or 0
         end
     },
     j_stencil = { -- Joker Stencil
@@ -1068,11 +1068,13 @@ return {
     },
     j_vagabond = { -- Vagabond
         text = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text", colour = G.C.SECONDARY_SET.Tarot }
+            { text = "+" },
+            { ref_table = "card.joker_display_values", ref_value = "count" }
         },
+        text_config = { colour = G.C.SECONDARY_SET.Tarot },
         calc_function = function(card)
             card.joker_display_values.active = G.GAME and G.GAME.dollars < 5
-            card.joker_display_values.active_text = card.joker_display_values.active and "+1" or "+0"
+            card.joker_display_values.count = card.joker_display_values.active and 1 or 0
         end
     },
     j_baron = { -- Baron
@@ -1094,7 +1096,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
+            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
         end
     },
     j_cloud_9 = { -- Cloud 9
@@ -1399,7 +1401,7 @@ return {
             card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0 and
                 G.GAME.current_round.discards_left > 0
             card.joker_display_values.dollars = card.joker_display_values.active and
-                ("+$" .. (is_trading_card_discard and card.ability.extra or 0)) or "-"
+                ("+$" .. (is_trading_card_discard and card.ability.extra and JokerDisplay.number_format(card.ability.extra) or 0)) or "-"
         end,
         style_function = function(card, text, reminder_text, extra)
             if text and text.children[1] then
@@ -1455,7 +1457,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
+            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
             card.joker_display_values.ancient_card_suit = localize(G.GAME.current_round.ancient_card.suit,
                 'suits_singular')
         end,
@@ -1932,7 +1934,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
+            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
             card.joker_display_values.idol_card_rank = localize(G.GAME.current_round.idol_card.rank, 'ranks')
             card.joker_display_values.idol_card_suit = localize(G.GAME.current_round.idol_card.suit, 'suits_plural')
         end,
@@ -2019,7 +2021,8 @@ return {
             card.joker_display_values.active = boss_active
 
             if card.joker_display_values.active then
-                local triggers_blind = JokerDisplay.triggers_blind(G.GAME.blind, text, poker_hands, scoring_hand, JokerDisplay.current_hand)
+                local triggers_blind = JokerDisplay.triggers_blind(G.GAME.blind, text, poker_hands, scoring_hand,
+                    JokerDisplay.current_hand)
                 if triggers_blind then
                     dollars = card.ability.extra
                 elseif triggers_blind == nil then
@@ -2346,7 +2349,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra ^ count)))
+            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
             card.joker_display_values.localized_text_king = localize("King", "ranks")
             card.joker_display_values.localized_text_queen = localize("Queen", "ranks")
         end

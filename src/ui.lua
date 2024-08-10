@@ -293,6 +293,67 @@ function Card:joker_display_has_info()
         (self.children.joker_display_small and self.children.joker_display_small:has_info())
 end
 
+local uielement_update_text_ref = UIElement.update_text
+function UIElement:update_text()
+    if self.UIBox.name and self.UIBox.name == "JokerDisplay" then
+        if self.config and self.config.text and not self.config.text_drawable then
+            self.config.lang = self.config.lang or G.LANG
+            self.config.text_drawable = love.graphics.newText(self.config.lang.font.FONT, {G.C.WHITE,self.config.text})
+        end
+        if self.config.ref_table and self.config.ref_table[self.config.ref_value] ~= self.config.prev_value then
+            self.config.text = tostring(JokerDisplay.number_format(self.config.ref_table[self.config.ref_value]))
+            self.config.text_drawable:set(self.config.text)
+            if not self.config.no_recalc and self.config.prev_value and string.len(JokerDisplay.number_format(self.config.prev_value)) ~= string.len(JokerDisplay.number_format(self.config.text)) then self.UIBox:recalculate() end
+            self.config.prev_value = self.config.ref_table[self.config.ref_value]
+        end
+    else
+        uielement_update_text_ref(self)
+    end
+end
+
+function JokerDisplayBox:calculate_xywh(node, _T, recalculate, _scale)
+    node.ARGS.xywh_node_trans = node.ARGS.xywh_node_trans or {}
+    local _nt = node.ARGS.xywh_node_trans
+
+    if node.UIT == G.UIT.T then
+        _nt.x, _nt.y, _nt.w, _nt.h =
+            _T.x,
+            _T.y,
+            node.config.w or (node.config.object and node.config.object.T.w),
+            node.config.h or (node.config.object and node.config.object.T.h)
+
+        node.config.text_drawable = nil
+        local scale = node.config.scale or 1
+        if not node.config.text and node.config.ref_table and node.config.ref_value then
+            node.config.text = JokerDisplay.number_format(node.config.ref_table[node.config.ref_value])
+            if node.config.func and not recalculate then G.FUNCS[node.config.func](node) end
+        end
+        if not node.config.text then node.config.text = '[UI ERROR]' end
+        node.config.lang = node.config.lang or G.LANG
+        local tx = node.config.lang.font.FONT:getWidth(node.config.text) * node.config.lang.font.squish * scale *
+        G.TILESCALE * node.config.lang.font.FONTSCALE
+        local ty = node.config.lang.font.FONT:getHeight() * scale * G.TILESCALE * node.config.lang.font.FONTSCALE *
+        node.config.lang.font.TEXT_HEIGHT_SCALE
+        if node.config.vert then
+            local thunk = tx; tx = ty; ty = thunk
+        end
+        _nt.x, _nt.y, _nt.w, _nt.h =
+            _T.x,
+            _T.y,
+            tx / (G.TILESIZE * G.TILESCALE),
+            ty / (G.TILESIZE * G.TILESCALE)
+
+        node.content_dimensions = node.content_dimensions or {}
+        node.content_dimensions.w = _T.w
+        node.content_dimensions.h = _T.h
+        node:set_values(_nt, recalculate)
+
+        return _nt.w, _nt.h
+    else
+        return UIBox.calculate_xywh(self, node, _T, recalculate, _scale)
+    end
+end
+
 --- HELPER FUNCTIONS
 
 ---Creates an object with JokerDisplay configurations.
