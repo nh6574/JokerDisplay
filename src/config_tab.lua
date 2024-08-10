@@ -12,6 +12,7 @@ SMODS.current_mod.config_tab = function()
     card:set_rental(true)
     G.config_card_area:emplace(card)
     G.config_card_area.cards[1]:update_joker_display()
+    G.config_card_area.cards[1].joker_display_values.disabled = false
 
     return {
         n = G.UIT.ROOT,
