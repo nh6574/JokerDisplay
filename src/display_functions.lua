@@ -93,6 +93,8 @@ end
 
 ---Calculates values for JokerDisplay. Saves them to Card.joker_display_values.
 function Card:calculate_joker_display()
+    self.joker_display_values.trigger_count = JokerDisplay.calculate_joker_triggers(self)
+
     self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
     self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
 

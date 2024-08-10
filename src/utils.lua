@@ -48,7 +48,9 @@ end
 ---@param places number? Decimal places
 ---@return any # The formatted string or `num` if it's not a number.
 function JokerDisplay.number_format(num, e_switch_point, places)
-    if not num or (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
+    if not num then return num or '' end
+    if type(num) == "function" then num = num() end
+    if (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
     -- Talisman compat. Copied from it with some changes :)
     if type(num) == 'table' then
         big_num = to_big(num)

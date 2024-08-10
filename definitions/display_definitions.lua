@@ -6,7 +6,7 @@ return {
     j_joker = { -- Joker
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT }
     },
@@ -1096,7 +1096,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
+            card.joker_display_values.x_mult = card.ability.extra ^ count
         end
     },
     j_cloud_9 = { -- Cloud 9
@@ -1457,7 +1457,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
+            card.joker_display_values.x_mult = card.ability.extra ^ count
             card.joker_display_values.ancient_card_suit = localize(G.GAME.current_round.ancient_card.suit,
                 'suits_singular')
         end,
@@ -1909,7 +1909,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
+            card.joker_display_values.x_mult = card.ability.extra ^ count
             card.joker_display_values.idol_card_rank = localize(G.GAME.current_round.idol_card.rank, 'ranks')
             card.joker_display_values.idol_card_suit = localize(G.GAME.current_round.idol_card.suit, 'suits_plural')
         end,
@@ -2299,7 +2299,7 @@ return {
                     end
                 end
             end
-            card.joker_display_values.x_mult = JokerDisplay.number_format(card.ability.extra ^ count)
+            card.joker_display_values.x_mult = card.ability.extra ^ count
             card.joker_display_values.localized_text_king = localize("King", "ranks")
             card.joker_display_values.localized_text_queen = localize("Queen", "ranks")
         end
