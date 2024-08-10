@@ -370,7 +370,7 @@ return {
     },
     j_mime = {         -- Mime
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
-            return held_in_hand and 1 or 0
+            return held_in_hand and JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_credit_card = { -- Credit Card
@@ -492,7 +492,7 @@ return {
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return G.GAME and G.GAME.current_round.hands_left <= 1 and joker_card.ability.extra or 0
+            return G.GAME and G.GAME.current_round.hands_left <= 1 and joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_raised_fist = { -- Raised Fist
@@ -601,7 +601,7 @@ return {
     j_delayed_grat = { -- Delayed Gratification
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -620,7 +620,7 @@ return {
             if held_in_hand then return 0 end
             return (playing_card:get_id() == 2 or playing_card:get_id() == 3 or
                     playing_card:get_id() == 4 or playing_card:get_id() == 5) and
-                joker_card.ability.extra or 0
+                joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_pareidolia = {  -- Pareidolia
@@ -1104,7 +1104,7 @@ return {
     j_cloud_9 = { -- Cloud 9
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1118,7 +1118,7 @@ return {
     j_rocket = { -- Rocket
         text = {
             { text = "+$" },
-            { ref_table = "card.ability.extra", ref_value = "dollars", retrigger_type = "mult" },
+            { ref_table = "card.ability.extra", ref_value = "dollars" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1285,7 +1285,7 @@ return {
     j_to_the_moon = { -- To the Moon
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1338,7 +1338,7 @@ return {
     j_golden = { -- Golden Joker
         text = {
             { text = "+$" },
-            { ref_table = "card.ability", ref_value = "extra", retrigger_type = "mult" },
+            { ref_table = "card.ability", ref_value = "extra" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1361,7 +1361,7 @@ return {
     j_baseball = { -- Baseball Card
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "count",          colour = G.C.ORANGE, retrigger_type = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "count",          colour = G.C.ORANGE },
             { text = "x" },
             { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.GREEN },
             { text = ")" },
@@ -1379,7 +1379,7 @@ return {
             card.joker_display_values.localized_text = localize("k_uncommon")
         end,
         mod_function = function(card, mod_joker)
-            return { x_mult = (card.config.center.rarity == 2 and mod_joker.ability.extra or nil) }
+            return { x_mult = (card.config.center.rarity == 2 and mod_joker.ability.extra ^ JokerDisplay.calculate_joker_triggers(mod_joker) or nil) }
         end
     },
     j_bull = { -- Bull
@@ -1440,7 +1440,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult",  retrigger_type = "exp" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1486,7 +1486,7 @@ return {
             { text = "+",                              colour = G.C.CHIPS },
             { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS, retrigger_type = "mult" },
             { text = " +",                             colour = G.C.MULT },
-            { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT, retrigger_type = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT,  retrigger_type = "mult" }
         },
         reminder_text = {
             { text = "(10,4)" }
@@ -1520,7 +1520,7 @@ return {
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return 1
+            return JokerDisplay.calculate_joker_triggers(joker_card)
         end
     },
     j_castle = { -- Castle
@@ -1639,7 +1639,7 @@ return {
     j_sock_and_buskin = { -- Sock and Buskin
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return playing_card:is_face() and joker_card.ability.extra or 0
+            return playing_card:is_face() and joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_swashbuckler = { -- Swashbuckler
@@ -1669,7 +1669,7 @@ return {
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
             local first_card = scoring_hand and JokerDisplay.calculate_leftmost_card(scoring_hand)
-            return first_card and playing_card == first_card and joker_card.ability.extra or 0
+            return first_card and playing_card == first_card and joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_rough_gem = { -- Rough Gem
@@ -1890,7 +1890,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp"}
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2184,7 +2184,7 @@ return {
     j_satellite = { -- Satellite
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
