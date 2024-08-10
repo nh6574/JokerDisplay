@@ -300,14 +300,18 @@ function UIElement:update_text()
             self.config.lang = self.config.lang or G.LANG
             self.config.text_drawable = love.graphics.newText(self.config.lang.font.FONT, { G.C.WHITE, self.config.text })
         end
-        if self.config.ref_table then
+        local card = self.UIBox.parent
+        if JokerDisplay.config.enabled and (card.joker_display_values and not card.joker_display_values.disabled) and self.config.ref_table then
             local formatted_text = JokerDisplay.text_format(self.config.ref_table[self.config.ref_value], self)
-            if formatted_text ~= self.config.prev_value then
+            local prev_value = self.config.prev_value_joker_display or JokerDisplay.text_format(self.config.prev_value, self)
+            if formatted_text ~= prev_value then
                 self.config.text = formatted_text
                 self.config.text_drawable:set(self.config.text)
-                if not self.config.no_recalc and self.config.prev_value and string.len(self.config.prev_value) ~= string.len(self.config.text) then
-                    self.UIBox:recalculate() end
+                if not self.config.no_recalc and prev_value and string.len(prev_value) ~= string.len(self.config.text) then
+                    self.UIBox:recalculate()
+                end
                 self.config.prev_value = formatted_text
+                self.config.prev_value_joker_display = formatted_text
             end
         end
     else
@@ -328,7 +332,8 @@ function JokerDisplayBox:calculate_xywh(node, _T, recalculate, _scale)
 
         node.config.text_drawable = nil
         local scale = node.config.scale or 1
-        if node.config.ref_table and node.config.ref_value then
+        local card = self.parent
+        if ((JokerDisplay.config.enabled and card.joker_display_values and not card.joker_display_values.disabled) or not node.config.text) and node.config.ref_table and node.config.ref_value then
             node.config.text = JokerDisplay.text_format(node.config.ref_table[node.config.ref_value], node)
             if node.config.func and not recalculate then G.FUNCS[node.config.func](node) end
         end
@@ -376,7 +381,7 @@ JokerDisplay.retrigger_format = function(num, node, card)
     if (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
 
     local retrigger_type = node.config.retrigger_type
-    local triggers = card.joker_display_values and (card.joker_display_values.trigger_count or JokerDisplay.calculate_joker_triggers(card))
+    local triggers = card.joker_display_values and card.joker_display_values.trigger_count or 1
 
     if not retrigger_type then
         return num
