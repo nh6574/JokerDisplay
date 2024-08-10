@@ -324,7 +324,7 @@ function JokerDisplayBox:calculate_xywh(node, _T, recalculate, _scale)
 
         node.config.text_drawable = nil
         local scale = node.config.scale or 1
-        if not node.config.text and node.config.ref_table and node.config.ref_value then
+        if node.config.ref_table and node.config.ref_value then
             node.config.text = JokerDisplay.number_format(node.config.ref_table[node.config.ref_value])
             if node.config.func and not recalculate then G.FUNCS[node.config.func](node) end
         end
