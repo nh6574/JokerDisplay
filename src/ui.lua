@@ -308,6 +308,7 @@ function UIElement:update_text()
                 self.config.text = formatted_text
                 self.config.text_drawable:set(self.config.text)
                 if not self.config.no_recalc and prev_value and string.len(prev_value) ~= string.len(self.config.text) then
+                    self.config.prev_value_joker_display = formatted_text
                     self.UIBox:recalculate()
                 end
                 self.config.prev_value = formatted_text
