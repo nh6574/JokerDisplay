@@ -115,7 +115,7 @@ end
 ---@param copied_joker? table Joker being copied. Initializes default display if nil
 ---@param is_debuffed boolean? If Joker is debuffed by other means.
 ---@param bypass_debuff boolean? Bypass debuff
----@param stop_func_copy boolean? Don't copy other functions just as mod_function, retrigger_function, etc.
+---@param stop_func_copy boolean? Don't copy other functions such as mod_function, retrigger_function, etc.
 JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_debuff, stop_func_copy)
     local changed = not (copied_joker == card.joker_display_values.blueprint_ability_joker) or
     not (card.joker_display_values.blueprint_debuff == is_debuffed)
