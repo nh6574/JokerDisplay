@@ -1,8 +1,8 @@
 --HELPER FUNCTIONS
 
----Returns scoring information about a set of cards.
+---Returns scoring information about a set of cards. You can get the full hand using `JokerDisplay.current_hand`.
 ---@see G.FUNCS.evaluate_play
----@param cards table? Cards to calculate.
+---@param cards table? Cards to calculate. If nil, uses current precalculated hand.
 ---@param count_facedowns boolean? If true, counts cards facing back.
 ---@return string text Scoring poker hand's non-localized text. "Unknown" if there's a card facedown or if selected cards are not valid.
 ---@return table poker_hands Poker hands contained in the scoring hand.
@@ -184,7 +184,7 @@ end
 
 ---Sort cards from left to right.
 ---@param cards table Cards to sort.
----@return table # Rightmost card in hand if any.
+---@return table # Sorted cards
 JokerDisplay.sort_cards = function(cards)
     local copy = {}
     for k, v in pairs(cards) do
@@ -212,7 +212,7 @@ end
 
 ---Returns how many times the scoring card would be triggered for scoring if played.
 ---@param card table Card to calculate.
----@param scoring_hand table? Scoring hand. nil if poker hand is unknown (i.e. there are facedowns) (This might change in the future).
+---@param scoring_hand table? Scoring hand.
 ---@param held_in_hand boolean? If the card is held in hand and not a scoring card.
 ---@return integer # Times the card would trigger. (0 if debuffed)
 JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand)

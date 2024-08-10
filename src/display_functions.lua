@@ -123,6 +123,8 @@ end
 
 ---Updates the JokerDisplay and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
+---@param force_reload boolean? Force re-initialization
+---@param _from string? Debug string
 function Card:update_joker_display(force_update, force_reload, _from)
     if self.ability and self.ability.set == 'Joker' then
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
@@ -234,6 +236,8 @@ end
 
 ---Updates the JokerDisplay for all jokers and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
+---@---@param force_reload boolean? Force re-initialization
+---@param _from string? Debug string
 function JokerDisplay.update_all_joker_display(force_update, force_reload, _from)
     if G.jokers and not G.SETTINGS.paused then
         for k, v in pairs(G.jokers.cards) do
@@ -242,6 +246,7 @@ function JokerDisplay.update_all_joker_display(force_update, force_reload, _from
     end
 end
 
+---Hides/unhides display
 function Card:joker_display_toggle()
     if not self.joker_display_values then return end
     if self.joker_display_values.disabled then
@@ -370,6 +375,8 @@ function Card:update(dt)
     end
 end
 
+---Gets information about the current highlighted/played hand. If you want to evaluate the current hand:
+---@see JokerDisplay.evaluate_hand
 JokerDisplay.get_scoring_hand = function()
     local count_facedowns = false
     if G.STATE ~= G.STATES.HAND_PLAYED then
