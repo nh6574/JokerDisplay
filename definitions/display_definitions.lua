@@ -13,7 +13,7 @@ return {
     j_greedy_joker = { -- Greedy Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = { --
@@ -44,7 +44,7 @@ return {
     j_lusty_joker = { -- Lusty Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -75,7 +75,7 @@ return {
     j_wrathful_joker = { -- Wrathful Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -106,7 +106,7 @@ return {
     j_gluttenous_joker = { -- Gluttonous Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -137,7 +137,7 @@ return {
     j_jolly = { -- Jolly Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -158,7 +158,7 @@ return {
     j_zany = { -- Zany Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -179,7 +179,7 @@ return {
     j_mad = { -- Mad Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -200,7 +200,7 @@ return {
     j_crazy = { -- Crazy Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -221,7 +221,7 @@ return {
     j_droll = { -- Droll Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -242,7 +242,7 @@ return {
     j_sly = { -- Sly Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -263,7 +263,7 @@ return {
     j_wily = { -- Wily Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -284,7 +284,7 @@ return {
     j_clever = { -- Clever Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -305,7 +305,7 @@ return {
     j_devious = { -- Devious Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -326,7 +326,7 @@ return {
     j_crafty = { -- Crafty Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -347,7 +347,7 @@ return {
     j_half = { -- Half Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -361,7 +361,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -378,14 +378,14 @@ return {
     j_ceremonial = {  -- Ceremonial Dagger
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
     j_banner = { -- Banner
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         calc_function = function(card)
@@ -396,7 +396,7 @@ return {
     j_mystic_summit = { -- Mystic Summit
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -411,7 +411,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -429,7 +429,7 @@ return {
     j_8_ball = { -- 8 Ball
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "count" },
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.SECONDARY_SET.Tarot },
         extra = {
@@ -498,7 +498,7 @@ return {
     j_raised_fist = { -- Raised Fist
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -525,7 +525,7 @@ return {
     j_fibonacci = { -- Fibonacci
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -553,7 +553,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -564,7 +564,7 @@ return {
     j_scary_face = { -- Scary Face
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -591,7 +591,7 @@ return {
     j_abstract = { -- Abstract Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -601,7 +601,7 @@ return {
     j_delayed_grat = { -- Delayed Gratification
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -628,7 +628,7 @@ return {
     j_gros_michel = { -- Gros Michel
         text = {
             { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "mult" }
+            { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         extra = {
@@ -646,7 +646,7 @@ return {
     j_even_steven = { -- Even Steven
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -670,7 +670,7 @@ return {
     j_odd_todd = { -- Odd Todd
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -696,9 +696,9 @@ return {
     j_scholar = { -- Scholar
         text = {
             { text = "+",                              colour = G.C.CHIPS },
-            { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS },
+            { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS, retrigger_type = "mult" },
             { text = " +",                             colour = G.C.MULT },
-            { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
+            { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT,  retrigger_type = "mult" }
         },
         reminder_text = {
             { ref_table = "card.joker_display_values", ref_value = "localized_text" }
@@ -722,7 +722,7 @@ return {
     },
     j_business = { -- Business Card
         text = {
-            { ref_table = "card.joker_display_values", ref_value = "count" },
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
             { text = "x",                              scale = 0.35 },
             { text = "$2",                             colour = G.C.GOLD },
         },
@@ -752,7 +752,7 @@ return {
     j_supernova = { -- Supernova
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -764,7 +764,7 @@ return {
     j_ride_the_bus = { -- Ride the Bus
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
@@ -797,7 +797,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -820,14 +820,14 @@ return {
     j_runner = { -- Runner
         text = {
             { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "chips" }
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
     },
     j_ice_cream = { -- Ice Cream
         text = {
             { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "chips" }
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
     },
@@ -849,7 +849,7 @@ return {
     j_blue_joker = { -- Blue Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         calc_function = function(card)
@@ -858,7 +858,8 @@ return {
     },
     j_sixth_sense = { -- Sixth Sense
         text = {
-            { ref_table = "card.joker_display_values", ref_value = "active_text" }
+            { text = "+" },
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" }
         },
         reminder_text = {
             { text = "(6)", scale = 0.35 },
@@ -867,12 +868,13 @@ return {
             local _, _, scoring_hand = JokerDisplay.evaluate_hand()
             local sixth_sense_eval = #scoring_hand == 1 and scoring_hand[1]:get_id() == 6
             card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_played == 0
-            card.joker_display_values.active_text = card.joker_display_values.active and
-                "+" .. tostring(sixth_sense_eval and 1 or 0) or "-"
+            card.joker_display_values.count = sixth_sense_eval and 1 or 0
         end,
         style_function = function(card, text, reminder_text, extra)
-            if text and text.children[1] then
+            if text and text.children[1] and text.children[2] then
                 text.children[1].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Spectral or
+                    G.C.UI.TEXT_INACTIVE
+                text.children[2].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Spectral or
                     G.C.UI.TEXT_INACTIVE
             end
             return false
@@ -883,7 +885,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -893,7 +895,7 @@ return {
     j_faceless = { -- Faceless Joker
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         calc_function = function(card)
@@ -911,14 +913,14 @@ return {
     j_green_joker = { -- Green Joker
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
     j_superposition = { -- Superposition
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "count" },
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.SECONDARY_SET.Tarot },
         reminder_text = {
@@ -946,7 +948,7 @@ return {
     j_todo_list = { -- To Do List
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -966,7 +968,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability.extra", ref_value = "Xmult" }
+                    { ref_table = "card.ability.extra", ref_value = "Xmult", retrigger_type = "exp" }
                 }
             }
         },
@@ -987,7 +989,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1001,7 +1003,7 @@ return {
     j_red_card = { -- Red Card
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
@@ -1010,7 +1012,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1018,14 +1020,14 @@ return {
     j_square = { -- Square Joker
         text = {
             { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "chips" }
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
     },
     j_seance = { -- Séance
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "count" },
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.SECONDARY_SET.Spectral },
         reminder_text = {
@@ -1049,7 +1051,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1061,7 +1063,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1069,7 +1071,7 @@ return {
     j_vagabond = { -- Vagabond
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "count" }
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.SECONDARY_SET.Tarot },
         calc_function = function(card)
@@ -1082,7 +1084,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1102,7 +1104,7 @@ return {
     j_cloud_9 = { -- Cloud 9
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1116,7 +1118,7 @@ return {
     j_rocket = { -- Rocket
         text = {
             { text = "+$" },
-            { ref_table = "card.ability.extra", ref_value = "dollars" },
+            { ref_table = "card.ability.extra", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1131,7 +1133,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1176,7 +1178,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1219,7 +1221,7 @@ return {
     j_erosion = { -- Erosion
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -1229,7 +1231,7 @@ return {
     },
     j_reserved_parking = { -- Reserved Parking
         text = {
-            { ref_table = "card.joker_display_values", ref_value = "count" },
+            { ref_table = "card.joker_display_values", ref_value = "count",   retrigger_type = "mult" },
             { text = "x",                              scale = 0.35 },
             { text = "$",                              colour = G.C.GOLD },
             { ref_table = "card.ability.extra",        ref_value = "dollars", colour = G.C.GOLD },
@@ -1259,7 +1261,7 @@ return {
     j_mail = { -- Mail-In Rebate
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1283,7 +1285,7 @@ return {
     j_to_the_moon = { -- To the Moon
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1311,7 +1313,7 @@ return {
     j_fortune_teller = { -- Fortune Teller
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -1326,7 +1328,7 @@ return {
     j_stone = {    -- Stone Joker
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         calc_function = function(card)
@@ -1336,7 +1338,7 @@ return {
     j_golden = { -- Golden Joker
         text = {
             { text = "+$" },
-            { ref_table = "card.ability", ref_value = "extra" },
+            { ref_table = "card.ability", ref_value = "extra", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1351,7 +1353,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1359,7 +1361,7 @@ return {
     j_baseball = { -- Baseball Card
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "count",          colour = G.C.ORANGE },
+            { ref_table = "card.joker_display_values", ref_value = "count",          colour = G.C.ORANGE, retrigger_type = "mult" },
             { text = "x" },
             { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.GREEN },
             { text = ")" },
@@ -1383,7 +1385,7 @@ return {
     j_bull = { -- Bull
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" }
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.CHIPS },
         calc_function = function(card)
@@ -1394,14 +1396,15 @@ return {
     },
     j_trading = {   -- Trading Card
         text = {
-            { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD, retrigger_type = "mult" },
         },
         calc_function = function(card)
             local is_trading_card_discard = #G.hand.highlighted == 1
             card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0 and
                 G.GAME.current_round.discards_left > 0
             card.joker_display_values.dollars = card.joker_display_values.active and
-                ("+$" .. (is_trading_card_discard and card.ability.extra and JokerDisplay.number_format(card.ability.extra) or 0)) or "-"
+                ("+$" .. (is_trading_card_discard and card.ability.extra and JokerDisplay.number_format(card.ability.extra) or 0)) or
+                "-"
         end,
         style_function = function(card, text, reminder_text, extra)
             if text and text.children[1] then
@@ -1414,21 +1417,21 @@ return {
     j_flash = { -- Flash Card
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
     j_popcorn = { -- Popcorn
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
     j_trousers = { -- Spare Trousers
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
@@ -1437,7 +1440,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult",  retrigger_type = "exp" }
                 }
             }
         },
@@ -1473,7 +1476,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1481,9 +1484,9 @@ return {
     j_walkie_talkie = { -- Walkie Talkie
         text = {
             { text = "+",                              colour = G.C.CHIPS },
-            { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS },
+            { ref_table = "card.joker_display_values", ref_value = "chips", colour = G.C.CHIPS, retrigger_type = "mult" },
             { text = " +",                             colour = G.C.MULT },
-            { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT }
+            { ref_table = "card.joker_display_values", ref_value = "mult",  colour = G.C.MULT, retrigger_type = "mult" }
         },
         reminder_text = {
             { text = "(10,4)" }
@@ -1523,7 +1526,7 @@ return {
     j_castle = { -- Castle
         text = {
             { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "chips" },
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -1544,7 +1547,7 @@ return {
     j_smiley = { -- Smiley Face
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" }
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -1573,7 +1576,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1581,12 +1584,12 @@ return {
     j_ticket = { -- Golden Ticket
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.ORANGE },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.ORANGE, retrigger_type = "mult" },
             { text = ")" },
         },
         calc_function = function(card)
@@ -1624,7 +1627,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1642,7 +1645,7 @@ return {
     j_swashbuckler = { -- Swashbuckler
         text = {
             { text = "+" },
-            { ref_table = "card.ability", ref_value = "mult" }
+            { ref_table = "card.ability", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
     },
@@ -1657,7 +1660,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1672,7 +1675,7 @@ return {
     j_rough_gem = { -- Rough Gem
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -1697,7 +1700,7 @@ return {
     },
     j_bloodstone = { -- Bloodstone
         text = {
-            { ref_table = "card.joker_display_values", ref_value = "count" },
+            { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
             { text = "x",                              scale = 0.35 },
             {
                 border_nodes = {
@@ -1742,7 +1745,7 @@ return {
     j_arrowhead = { -- Arrowhead
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "chips" },
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
@@ -1768,7 +1771,7 @@ return {
     j_onyx_agate = { -- Onyx Agate
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.MULT },
         reminder_text = {
@@ -1796,7 +1799,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -1808,7 +1811,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1874,7 +1877,7 @@ return {
     j_wee = { -- Wee Joker
         text = {
             { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "chips" },
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.CHIPS },
     },
@@ -1887,7 +1890,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp"}
                 }
             }
         },
@@ -1925,7 +1928,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -1982,7 +1985,7 @@ return {
     j_matador = { -- Matador
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -2022,7 +2025,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         }
@@ -2032,7 +2035,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2056,7 +2059,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2080,7 +2083,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2104,7 +2107,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2128,7 +2131,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2150,7 +2153,7 @@ return {
     j_stuntman = { -- Stuntman
         text = {
             { text = "+",                       colour = G.C.CHIPS },
-            { ref_table = "card.ability.extra", ref_value = "chip_mod", colour = G.C.CHIPS },
+            { ref_table = "card.ability.extra", ref_value = "chip_mod", colour = G.C.CHIPS, retrigger_type = "mult" },
         },
         text_config = { colour = G.C.CHIPS },
     },
@@ -2181,7 +2184,7 @@ return {
     j_satellite = { -- Satellite
         text = {
             { text = "+$" },
-            { ref_table = "card.joker_display_values", ref_value = "dollars" },
+            { ref_table = "card.joker_display_values", ref_value = "dollars", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
@@ -2201,7 +2204,7 @@ return {
     j_shoot_the_moon = { -- Shoot the Moon
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -2222,7 +2225,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2253,7 +2256,7 @@ return {
     j_bootstraps = { -- Bootstraps
         text = {
             { text = "+" },
-            { ref_table = "card.joker_display_values", ref_value = "mult" },
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" },
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
@@ -2267,7 +2270,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "caino_xmult" }
+                    { ref_table = "card.ability", ref_value = "caino_xmult", retrigger_type = "exp" }
                 }
             }
         }
@@ -2277,7 +2280,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },
@@ -2309,7 +2312,7 @@ return {
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability", ref_value = "x_mult" }
+                    { ref_table = "card.ability", ref_value = "x_mult", retrigger_type = "exp" }
                 }
             }
         },

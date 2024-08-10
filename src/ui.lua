@@ -397,7 +397,7 @@ JokerDisplay.retrigger_format = function(num, node, card)
         return num * triggers
     end
     if retrigger_type == "exp" or retrigger_type == "exponentiate" or retrigger_type == "^" then
-        return num ^ triggers
+        return num ^ (triggers > 0 and triggers or 1)
     end
 
     return num
