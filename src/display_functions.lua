@@ -4,34 +4,80 @@
 ---@param custom_parent table? Another card the display should be under
 ---@param stop_calc boolean? Don't call calculate_joker_display
 function Card:initialize_joker_display(custom_parent, stop_calc)
+    local replace_text, replace_text_config = nil, nil
+    local replace_reminder, replace_reminder_config = nil, nil
+    local replace_extra, replace_extra_config = nil, nil
+    local replace_modifiers, replace_modifiers_config = nil, nil
+    local replace_debuff_text, replace_debuff_text_config = nil, nil
+    local replace_debuff_reminder, replace_debuff_reminder_config = nil, nil
+    local replace_debuff_extra, replace_debuff_extra_config = nil, nil
+    local replace_stop_calc = false
+    if JokerDisplay.Global_Definitions.Replace then
+        local current_replace_priority
+        for _, replace_definition in pairs(JokerDisplay.Global_Definitions.Replace) do
+            local replace_priority = replace_definition.priority or 0
+            local is_replace_priority_greater = not current_replace_priority or (replace_priority > current_replace_priority)
+            if is_replace_priority_greater and replace_definition.is_replaced_func and replace_definition.is_replaced_func(self, custom_parent) then
+                current_replace_priority = replace_priority
+                replace_text, replace_text_config = JokerDisplay.get_replace_definition(replace_definition.replace_text, "text")
+                replace_reminder, replace_reminder_config = JokerDisplay.get_replace_definition(replace_definition.replace_reminder, "reminder")
+                replace_extra, replace_extra_config = JokerDisplay.get_replace_definition(replace_definition.replace_extra, "extra")
+                replace_modifiers, replace_modifiers_config = JokerDisplay.get_replace_definition(replace_definition.replace_modifiers, "modifiers")
+                replace_debuff_text, replace_debuff_text_config = JokerDisplay.get_replace_definition(replace_definition.replace_debuff_text, "text")
+                replace_debuff_reminder, replace_debuff_reminder_config = JokerDisplay.get_replace_definition(replace_definition.replace_debuff_text, "reminder")
+                replace_debuff_extra, replace_debuff_extra_config = JokerDisplay.get_replace_definition(replace_definition.replace_debuff_text, "extra")
+                replace_stop_calc = replace_definition.stop_calc
+            end
+        end
+    end
+
     if not custom_parent then
         self.children.joker_display:remove_text()
-        self.children.joker_display:remove_reminder_text()
-        self.children.joker_display:remove_extra()
-        self.children.joker_display:remove_modifiers()
         self.children.joker_display_small:remove_text()
+        self.children.joker_display:remove_reminder_text()
         self.children.joker_display_small:remove_reminder_text()
+        self.children.joker_display:remove_extra()
         self.children.joker_display_small:remove_extra()
+        self.children.joker_display:remove_modifiers()
         self.children.joker_display_small:remove_modifiers()
-        self.children.joker_display_debuff:remove_text()
         self.children.joker_display_debuff:remove_modifiers()
+        self.children.joker_display_debuff:remove_text()
 
-        self.children.joker_display_debuff:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
+        self.children.joker_display_debuff:add_text(replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } }, replace_debuff_text_config)
     end
+    if replace_modifiers then
+        self.children.joker_display.stop_modifiers = true
+        self.children.joker_display_small.stop_modifiers = true
+        self.children.joker_display_debuff.stop_modifiers = true
+    else
+        self.children.joker_display.stop_modifiers = false
+        self.children.joker_display_small.stop_modifiers = false
+        self.children.joker_display_debuff.stop_modifiers = false
+    end
+    self.children.joker_display_debuff:remove_reminder_text()
+    if replace_debuff_reminder then
+        self.children.joker_display_debuff:add_reminder_text(replace_debuff_reminder, replace_debuff_reminder_config)
+    end
+    self.children.joker_display_debuff:remove_extra()
+    if replace_debuff_extra then
+        self.children.joker_display_debuff:add_extra(replace_debuff_extra, replace_debuff_extra_config)
+    end
+
+    self.joker_display_stop_calc = replace_stop_calc
 
     if not stop_calc then
         self:calculate_joker_display()
     end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
-    local definition_text = joker_display_definition and
+    local definition_text = replace_text or joker_display_definition and
         (joker_display_definition.text or joker_display_definition.line_1)
-    local text_config = joker_display_definition and joker_display_definition.text_config
-    local definition_reminder_text = joker_display_definition and (joker_display_definition.reminder_text or
+    local text_config = replace_text_config or joker_display_definition and joker_display_definition.text_config
+    local definition_reminder_text = replace_reminder or joker_display_definition and (joker_display_definition.reminder_text or
         joker_display_definition.line_2)
-    local reminder_text_config = joker_display_definition and joker_display_definition.reminder_text_config
-    local definition_extra = joker_display_definition and joker_display_definition.extra
-    local extra_config = joker_display_definition and joker_display_definition.extra_config
+    local reminder_text_config = replace_reminder_config or joker_display_definition and joker_display_definition.reminder_text_config
+    local definition_extra = replace_extra or joker_display_definition and joker_display_definition.extra
+    local extra_config = replace_extra_config or joker_display_definition and joker_display_definition.extra_config
 
     if definition_text then
         if custom_parent then
@@ -85,10 +131,40 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
     if custom_parent then
         custom_parent.children.joker_display:recalculate()
         custom_parent.children.joker_display_small:recalculate()
+        custom_parent.children.joker_display_debuff:recalculate()
     else
         self.children.joker_display:recalculate()
         self.children.joker_display_small:recalculate()
+        self.children.joker_display_debuff:recalculate()
     end
+end
+
+function JokerDisplay.get_replace_definition(definition, def_type)
+    if type(definition) == "function" then
+        definition = definition()
+    end
+    if type(definition) == "table" then
+        return definition, nil
+    end
+    if type(definition) == "string" then
+        local joker_display_definition = JokerDisplay.Definitions[definition]
+        if joker_display_definition then
+            if def_type == "text" then
+                return joker_display_definition.text or joker_display_definition.line_1, joker_display_definition.text_config
+            end
+            if def_type == "reminder" then
+                return joker_display_definition.reminder_text or
+                joker_display_definition.line_2
+            end
+            if def_type == "extra" then
+                return joker_display_definition.extra, joker_display_definition.extra_config
+            end
+            if def_type == "modifiers" then
+                return {}, {} -- TBD
+            end
+        end
+    end
+    return nil, nil
 end
 
 ---Calculates values for JokerDisplay. Saves them to Card.joker_display_values.
@@ -106,25 +182,31 @@ function Card:calculate_joker_display()
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
     end
 
-    if JokerDisplay.config.default_rows.modifiers then
-        self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
-        self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+    if JokerDisplay.config.default_rows.modifiers and not self.joker_display_stop_calc then
+        if not self.children.joker_display.stop_modifiers then
+            self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+        end
+        if not self.children.joker_display_debuff.stop_modifiers then
+            self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+        end
     end
 
-    if JokerDisplay.config.small_rows.modifiers then
+    if JokerDisplay.config.small_rows.modifiers and not self.children.joker_display_small.stop_modifiers and not self.joker_display_stop_calc then
         self.children.joker_display_small:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
     end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local calc_function = joker_display_definition and joker_display_definition.calc_function
 
-    if calc_function then
+    if calc_function and not self.joker_display_stop_calc then
         calc_function(self)
     end
 end
 
 ---Updates the JokerDisplay and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
+---@param force_reload boolean? Force re-initialization
+---@param _from string? Debug string
 function Card:update_joker_display(force_update, force_reload, _from)
     if self.ability and self.ability.set == 'Joker' then
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
@@ -236,14 +318,17 @@ end
 
 ---Updates the JokerDisplay for all jokers and initializes it if necessary.
 ---@param force_update boolean? Force update even if disabled.
+---@param force_reload boolean? Force re-initialization
+---@param _from string? Debug string
 function JokerDisplay.update_all_joker_display(force_update, force_reload, _from)
-    if G.jokers and not G.SETTINGS.paused then
-        for k, v in pairs(G.jokers.cards) do
-            v:update_joker_display(force_update, force_reload, _from)
+    if G.jokers then
+        for _, card in pairs(G.jokers.cards) do
+            card:update_joker_display(force_update, force_reload, _from)
         end
     end
 end
 
+---Hides/unhides display
 function Card:joker_display_toggle()
     if not self.joker_display_values then return end
     if self.joker_display_values.disabled then
@@ -324,7 +409,8 @@ G.FUNCS.joker_display_style_override = function(e)
         local reminder_text = e.children and e.children[4] or nil
         local extra = e.children and e.children[2] or nil
 
-        local is_blueprint_copying = card.joker_display_values and not card.joker_display_values.blueprint_stop_func and card.joker_display_values.blueprint_ability_key
+        local is_blueprint_copying = card.joker_display_values and not card.joker_display_values.blueprint_stop_func and
+        card.joker_display_values.blueprint_ability_key
         local joker_display_definition = JokerDisplay.Definitions[is_blueprint_copying or card.config.center.key]
         local style_function = joker_display_definition and joker_display_definition.style_function
 
@@ -367,11 +453,29 @@ function Card:update(dt)
                 self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                     joker_number_delta_variance / 2 * self.joker_display_update_time_variance
                 self:update_joker_display(false, false, "Card:update")
+
+                local display_alignment = self.children.joker_display.alignment.offset.y
+                local display_small_alignment = self.children.joker_display_small.alignment.offset.y
+                local display_debuff_alignment = self.children.joker_display_debuff.alignment.offset.y
+                self.children.joker_display:align_to_text()
+                self.children.joker_display_small:align_to_text()
+                self.children.joker_display_debuff:align_to_text()
+                if display_alignment ~= self.children.joker_display.alignment.offset.y then
+                    self.children.joker_display:recalculate() 
+                end
+                if display_small_alignment ~= self.children.joker_display_small.alignment.offset.y then
+                    self.children.joker_display_small:recalculate()
+                end
+                if display_debuff_alignment ~= self.children.joker_display_debuff.alignment.offset.y then
+                    self.children.joker_display:recalculate()
+                end
             end
         end
     end
 end
 
+---Gets information about the current highlighted/played hand. If you want to evaluate the current hand:
+---@see JokerDisplay.evaluate_hand
 JokerDisplay.get_scoring_hand = function()
     local count_facedowns = false
     if G.STATE ~= G.STATES.HAND_PLAYED then

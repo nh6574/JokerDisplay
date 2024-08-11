@@ -94,11 +94,22 @@ function JokerDisplayBox:recalculate()
     self:align_to_text()
 end
 
+function JokerDisplayBox:align_to_text()
+    local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
+        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y or
+        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
+        (self.T.y - self.alignment.offset.y))
+    self.alignment.offset.y = y_value or self.alignment.offset.y
+end
+
 function JokerDisplayBox:add_text(nodes, config, custom_parent)
-    self.has_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config), self.text)
+        local display_object = JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config)
+        if display_object then
+            self:add_child(display_object, self.text)
+        end
     end
+    self.has_text = #self.text.children > 0
 end
 
 function JokerDisplayBox:remove_text()
@@ -107,11 +118,14 @@ function JokerDisplayBox:remove_text()
 end
 
 function JokerDisplayBox:add_reminder_text(nodes, config, custom_parent)
-    self.has_reminder_text = true
     for i = 1, #nodes do
-        self:add_child(JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config),
-            self.reminder_text)
+        local display_object = JokerDisplay.create_display_object(custom_parent or self.parent, nodes[i], config)
+
+        if display_object then
+            self:add_child(display_object, self.reminder_text)
+        end
     end
+    self.has_reminder_text = #self.reminder_text.children > 0
 end
 
 function JokerDisplayBox:remove_reminder_text()
@@ -120,20 +134,25 @@ function JokerDisplayBox:remove_reminder_text()
 end
 
 function JokerDisplayBox:add_extra(node_rows, config, custom_parent)
-    self.has_extra = true
     for i = #node_rows, 1, -1 do
         local row_nodes = {}
         for j = 1, #node_rows[i] do
-            table.insert(row_nodes,
-                JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j], config))
+            local display_object = JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j], config)
+            if display_object then
+                table.insert(row_nodes, display_object)
+            end
         end
-        local extra_row = {
-            n = G.UIT.R,
-            config = { ref_table = self.parent, align = "cm", padding = 0.03 },
-            nodes = row_nodes
-        }
-        self:add_child(extra_row, self.extra)
+
+        if #row_nodes > 0 then
+            local extra_row = {
+                n = G.UIT.R,
+                config = { ref_table = custom_parent or self.parent, align = "cm", padding = 0.03 },
+                nodes = row_nodes
+            }
+            self:add_child(extra_row, self.extra)
+        end
     end
+    self.has_extra = #self.extra.children > 0
 end
 
 function JokerDisplayBox:remove_extra()
@@ -276,14 +295,6 @@ function JokerDisplayBox:remove_children(node)
     self:recalculate()
 end
 
-function JokerDisplayBox:align_to_text()
-    local y_value = self.T and self.T.y - (self.has_text and self.text.T.y or
-        self.has_extra and self.extra.children[#self.extra.children] and self.extra.children[#self.extra.children].T and self.extra.children[#self.extra.children].T.y or
-        self.has_modifiers and self.modifier_row.children[#self.modifier_row.children] and self.modifier_row.children[#self.modifier_row.children].T and self.modifier_row.children[#self.modifier_row.children].T.y or
-        (self.T.y - self.alignment.offset.y))
-    self.alignment.offset.y = y_value or self.alignment.offset.y
-end
-
 function JokerDisplayBox:has_info()
     return self.has_text or self.has_extra or self.has_modifiers or self.has_reminder_text
 end
@@ -407,8 +418,11 @@ end
 ---@param card table Reference card
 ---@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?, retrigger_type: function|string?} Node configuration
 ---@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects
----@return table
+---@return table?
 JokerDisplay.create_display_object = function(card, display_config, defaults_config)
+    if not display_config or not next(display_config) then
+        return nil
+    end
     local default_text_colour = defaults_config and defaults_config.colour or G.C.UI.TEXT_LIGHT
     local default_text_scale = defaults_config and defaults_config.scale or 0.4
 
