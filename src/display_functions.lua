@@ -144,7 +144,7 @@ function JokerDisplay.get_replace_definition(definition, def_type)
         definition = definition()
     end
     if type(definition) == "table" then
-        return definition, {}
+        return definition, nil
     end
     if type(definition) == "string" then
         local joker_display_definition = JokerDisplay.Definitions[definition]
@@ -160,7 +160,7 @@ function JokerDisplay.get_replace_definition(definition, def_type)
                 return joker_display_definition.extra, joker_display_definition.extra_config
             end
             if def_type == "modifiers" then
-                return {} -- TBD
+                return {}, {} -- TBD
             end
         end
     end
@@ -451,6 +451,22 @@ function Card:update(dt)
                 self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                     joker_number_delta_variance / 2 * self.joker_display_update_time_variance
                 self:update_joker_display(false, false, "Card:update")
+
+                local display_alignment = self.children.joker_display.alignment.offset.y
+                local display_small_alignment = self.children.joker_display_small.alignment.offset.y
+                local display_debuff_alignment = self.children.joker_display_debuff.alignment.offset.y
+                self.children.joker_display:align_to_text()
+                self.children.joker_display_small:align_to_text()
+                self.children.joker_display_debuff:align_to_text()
+                if display_alignment ~= self.children.joker_display.alignment.offset.y then
+                    self.children.joker_display:recalculate() 
+                end
+                if display_small_alignment ~= self.children.joker_display_small.alignment.offset.y then
+                    self.children.joker_display_small:recalculate()
+                end
+                if display_debuff_alignment ~= self.children.joker_display_debuff.alignment.offset.y then
+                    self.children.joker_display:recalculate()
+                end
             end
         end
     end
