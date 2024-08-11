@@ -16,9 +16,9 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         local current_replace_priority
         for _, replace_definition in pairs(JokerDisplay.Global_Definitions.Replace) do
             local replace_priority = replace_definition.priority or 0
-            local replace_priority_greater = not current_replace_priority or (replace_priority > current_replace_priority)
-            current_replace_priority = replace_priority_greater and replace_priority or current_replace_priority
-            if replace_priority_greater and replace_definition.is_replaced_func and replace_definition.is_replaced_func(self, custom_parent) then
+            local is_replace_priority_greater = not current_replace_priority or (replace_priority > current_replace_priority)
+            if is_replace_priority_greater and replace_definition.is_replaced_func and replace_definition.is_replaced_func(self, custom_parent) then
+                current_replace_priority = replace_priority
                 replace_text, replace_text_config = JokerDisplay.get_replace_definition(replace_definition.replace_text, "text")
                 replace_reminder, replace_reminder_config = JokerDisplay.get_replace_definition(replace_definition.replace_reminder, "reminder")
                 replace_extra, replace_extra_config = JokerDisplay.get_replace_definition(replace_definition.replace_extra, "extra")
