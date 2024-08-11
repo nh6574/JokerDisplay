@@ -26,30 +26,24 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
                 replace_debuff_text, replace_debuff_text_config = JokerDisplay.get_replace_definition(replace_definition.replace_debuff_text, "text")
                 replace_debuff_reminder, replace_debuff_reminder_config = JokerDisplay.get_replace_definition(replace_definition.replace_debuff_text, "reminder")
                 replace_debuff_extra, replace_debuff_extra_config = JokerDisplay.get_replace_definition(replace_definition.replace_debuff_text, "extra")
-                replace_stop_calc = replace_definition.replace_stop_calc
+                replace_stop_calc = replace_definition.stop_calc
             end
         end
     end
 
-    if replace_text or not custom_parent then
+    if not custom_parent then
         self.children.joker_display:remove_text()
         self.children.joker_display_small:remove_text()
-    end
-    if replace_reminder or not custom_parent then
         self.children.joker_display:remove_reminder_text()
         self.children.joker_display_small:remove_reminder_text()
-    end
-    if replace_extra or not custom_parent then
         self.children.joker_display:remove_extra()
         self.children.joker_display_small:remove_extra()
-    end
-    if replace_modifiers or not custom_parent then
         self.children.joker_display:remove_modifiers()
         self.children.joker_display_small:remove_modifiers()
         self.children.joker_display_debuff:remove_modifiers()
-        self.children.joker_display.stop_modifiers = true
-        self.children.joker_display_small.stop_modifiers = true
-        self.children.joker_display_debuff.stop_modifiers = true
+        self.children.joker_display_debuff:remove_text()
+
+        self.children.joker_display_debuff:add_text(replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } }, replace_debuff_text_config)
     end
     if replace_modifiers then
         self.children.joker_display.stop_modifiers = true
@@ -60,10 +54,6 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         self.children.joker_display_small.stop_modifiers = false
         self.children.joker_display_debuff.stop_modifiers = false
     end
-    if replace_debuff_text or not custom_parent then
-        self.children.joker_display_debuff:remove_text()
-        self.children.joker_display_debuff:add_text(replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } }, replace_debuff_text_config)
-    end
     self.children.joker_display_debuff:remove_reminder_text()
     if replace_debuff_reminder then
         self.children.joker_display_debuff:add_reminder_text(replace_debuff_reminder, replace_debuff_reminder_config)
@@ -73,7 +63,9 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         self.children.joker_display_debuff:add_extra(replace_debuff_extra, replace_debuff_extra_config)
     end
 
-    if not replace_stop_calc and not stop_calc then
+    self.joker_display_stop_calc = replace_stop_calc
+
+    if not stop_calc then
         self:calculate_joker_display()
     end
 
@@ -188,7 +180,7 @@ function Card:calculate_joker_display()
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
     end
 
-    if JokerDisplay.config.default_rows.modifiers then
+    if JokerDisplay.config.default_rows.modifiers and not self.joker_display_stop_calc then
         if not self.children.joker_display.stop_modifiers then
             self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
         end
@@ -197,14 +189,14 @@ function Card:calculate_joker_display()
         end
     end
 
-    if JokerDisplay.config.small_rows.modifiers and not self.children.joker_display_small.stop_modifiers then
+    if JokerDisplay.config.small_rows.modifiers and not self.children.joker_display_small.stop_modifiers and not self.joker_display_stop_calc then
         self.children.joker_display_small:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
     end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
     local calc_function = joker_display_definition and joker_display_definition.calc_function
 
-    if calc_function then
+    if calc_function and not self.joker_display_stop_calc then
         calc_function(self)
     end
 end
