@@ -1,4 +1,4 @@
---- Blind definition
+--- Blind Definitions
 return {
     bl_small = { -- Small Blind
     },
