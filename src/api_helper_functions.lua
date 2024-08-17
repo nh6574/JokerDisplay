@@ -86,21 +86,14 @@ end
 ---@return table|nil name Copied Joker
 ---@return boolean debuff If the copied joker (or any in the chain) is debuffed
 JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debuff)
-    if _cycle_count and _cycle_count > #G.jokers.cards + 1 then
+    local joker_display_definition = JokerDisplay.Definitions[card.config.center.key]
+    if not joker_display_definition.get_blueprint_joker or (_cycle_count and _cycle_count > #G.jokers.cards + 1) then
         return nil, false
     end
-    local other_joker = nil
-    if card.ability.name == "Blueprint" then
-        for i = 1, #G.jokers.cards do
-            if G.jokers.cards[i] == card then
-                other_joker = G.jokers.cards[i + 1]
-            end
-        end
-    elseif card.ability.name == "Brainstorm" then
-        other_joker = G.jokers.cards[1]
-    end
+    local other_joker = joker_display_definition.get_blueprint_joker(card)
     if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
-        if other_joker.ability.name == "Blueprint" or other_joker.ability.name == "Brainstorm" then
+        local other_joker_display_definition = JokerDisplay.Definitions[other_joker.config.center.key]
+        if other_joker_display_definition.get_blueprint_joker then
             return JokerDisplay.calculate_blueprint_copy(other_joker,
                 _cycle_count and _cycle_count + 1 or 1,
                 _cycle_debuff or other_joker.debuff)

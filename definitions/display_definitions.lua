@@ -1872,6 +1872,14 @@ return {
             local copied_joker, copied_debuff = JokerDisplay.calculate_blueprint_copy(card)
             card.joker_display_values.blueprint_compat = localize('k_incompatible')
             JokerDisplay.copy_display(card, copied_joker, copied_debuff)
+        end,
+        get_blueprint_joker = function (card)
+            for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i] == card then
+					return G.jokers.cards[i + 1]
+				end
+			end
+            return nil
         end
     },
     j_wee = { -- Wee Joker
@@ -2179,6 +2187,9 @@ return {
             local copied_joker, copied_debuff = JokerDisplay.calculate_blueprint_copy(card)
             card.joker_display_values.blueprint_compat = localize('k_incompatible')
             JokerDisplay.copy_display(card, copied_joker, copied_debuff)
+        end,
+        get_blueprint_joker = function (card)
+            return G.jokers.cards[1]
         end
     },
     j_satellite = { -- Satellite
