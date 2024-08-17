@@ -76,7 +76,7 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
     self.joker_display_stop_calc = replace_stop_calc
 
     if not stop_calc then
-        self:calculate_joker_display()
+        self:calculate_joker_display(custom_parent)
     end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
@@ -181,31 +181,33 @@ function JokerDisplay.get_replace_definition(definition, def_type)
 end
 
 ---Calculates values for JokerDisplay. Saves them to Card.joker_display_values.
-function Card:calculate_joker_display()
-    self.joker_display_values.trigger_count = JokerDisplay.calculate_joker_triggers(self)
+function Card:calculate_joker_display(custom_parent)
+    self.joker_display_values.trigger_count = JokerDisplay.calculate_joker_triggers(custom_parent or self)
 
-    self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
-    self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
-
-    if self.ability.perishable then
-        self.joker_display_values.perishable = (self.ability.perish_tally or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
-    end
-
-    if self.ability.rental then
+    if not custom_parent then
+        self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
-    end
 
-    if JokerDisplay.config.default_rows.modifiers and not self.joker_display_stop_calc then
-        if not self.children.joker_display.stop_modifiers then
-            self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+        if self.ability.perishable then
+            self.joker_display_values.perishable = (self.ability.perish_tally or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
         end
-        if not self.children.joker_display_debuff.stop_modifiers then
-            self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
-        end
-    end
 
-    if JokerDisplay.config.small_rows.modifiers and not self.children.joker_display_small.stop_modifiers and not self.joker_display_stop_calc then
-        self.children.joker_display_small:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+        if self.ability.rental then
+            self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
+        end
+
+        if JokerDisplay.config.default_rows.modifiers and not self.joker_display_stop_calc then
+            if not self.children.joker_display.stop_modifiers then
+                self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+            end
+            if not self.children.joker_display_debuff.stop_modifiers then
+                self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+            end
+        end
+
+        if JokerDisplay.config.small_rows.modifiers and not self.children.joker_display_small.stop_modifiers and not self.joker_display_stop_calc then
+            self.children.joker_display_small:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
+        end
     end
 
     local joker_display_definition = JokerDisplay.Definitions[self.config.center.key]
