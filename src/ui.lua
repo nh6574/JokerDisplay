@@ -69,11 +69,10 @@ function JokerDisplayBox:init(parent, func, args)
     self.modifiers = {
         chips = nil,
         x_chips = nil,
-        x_chips_text = nil,
         mult = nil,
         x_mult = nil,
-        x_mult_text = nil,
         dollars = nil,
+        e_mult = nil,
     }
 end
 
@@ -178,9 +177,10 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
         mult = modifiers.mult,       --or not reset and self.modifiers.mult or nil,
         x_mult = modifiers.x_mult,   --or not reset and self.modifiers.x_mult or nil,
         dollars = modifiers.dollars, -- not reset and self.modifiers.dollars or nil,
+        e_mult = modifiers.e_mult,
     }
 
-    local mod_keys = { "chips", "x_chips", "mult", "x_mult", "dollars" }
+    local mod_keys = { "chips", "x_chips", "mult", "x_mult", "dollars", "e_mult" }
     local modifiers_changed = reset or false
     local has_modifiers = false
 
@@ -193,10 +193,6 @@ function JokerDisplayBox:change_modifiers(modifiers, reset)
             has_modifiers = true
         end
     end
-
-    self.modifiers.x_chips_text = self.modifiers.x_chips and tonumber(string.format("%.2f", self.modifiers.x_chips)) or
-        nil
-    self.modifiers.x_mult_text = self.modifiers.x_mult and tonumber(string.format("%.2f", self.modifiers.x_mult)) or nil
 
     if modifiers_changed then
         self:remove_modifiers()
@@ -226,7 +222,7 @@ function JokerDisplayBox:add_modifiers()
             JokerDisplay.create_display_object(self,
                 {
                     border_nodes = { { text = "X" },
-                        { ref_table = "card.modifiers", ref_value = "x_chips_text" } },
+                        { ref_table = "card.modifiers", ref_value = "x_chips" } },
                     border_colour = G.C.CHIPS
                 }))
         table.insert(mod_nodes, xchip_node)
@@ -248,11 +244,23 @@ function JokerDisplayBox:add_modifiers()
                 {
                     border_nodes = {
                         { text = "X" },
-                        { ref_table = "card.modifiers", ref_value = "x_mult_text" }
+                        { ref_table = "card.modifiers", ref_value = "x_mult" }
                     }
                 }
             ))
         table.insert(mod_nodes, xmult_node)
+    end
+
+    if self.modifiers.e_mult then
+        local emult_node = {}
+        table.insert(emult_node,
+            JokerDisplay.create_display_object(self,
+                {
+                    border_nodes = { { text = "^" },
+                        { ref_table = "card.modifiers", ref_value = "e_mult" } },
+                    border_colour = G.C.DARK_EDITION
+                }))
+        table.insert(mod_nodes, emult_node)
     end
 
     if self.modifiers.dollars then

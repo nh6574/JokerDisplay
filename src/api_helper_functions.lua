@@ -251,7 +251,8 @@ JokerDisplay.calculate_joker_modifiers = function(card)
         x_chips = nil,
         mult = nil,
         x_mult = nil,
-        dollars = nil
+        dollars = nil,
+        e_mult = nil
     }
     local joker_edition = card:get_edition()
 
@@ -276,16 +277,18 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                     joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
                     joker.joker_display_values.blueprint_ability_joker or joker)
                 modifiers = {
-                    chips = modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips or
+                    chips = (modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips) or
                         extra_mods.chips or modifiers.chips,
-                    x_chips = modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips * extra_mods.x_chips or
+                    x_chips = (modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips * extra_mods.x_chips) or
                         extra_mods.x_chips or modifiers.x_chips,
-                    mult = modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult or
+                    mult = (modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult) or
                         extra_mods.mult or modifiers.mult,
-                    x_mult = modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult * extra_mods.x_mult or
+                    x_mult = (modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult * extra_mods.x_mult) or
                         extra_mods.x_mult or modifiers.x_mult,
-                    dollars = modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars or
+                    dollars = (modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars) or
                         extra_mods.dollars or modifiers.dollars,
+                    e_mult = (modifiers.e_mult and extra_mods.e_mult and modifiers.e_mult ^ extra_mods.e_mult) or
+                    extra_mods.e_mult or modifiers.e_mult,
                 }
             end
         end
