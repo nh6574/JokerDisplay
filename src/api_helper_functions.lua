@@ -125,6 +125,7 @@ JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_deb
     card.joker_display_values.blueprint_debuff = not bypass_debuff and
     (is_debuffed or copied_joker and copied_joker.debuff) or false
     card.joker_display_values.blueprint_stop_func = stop_func_copy
+    card.joker_display_values.blueprint_force_update = true
 
     if card.joker_display_values.blueprint_initialized and (changed or not card.joker_display_values.blueprint_loaded) then
         card.children.joker_display:remove_text()

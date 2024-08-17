@@ -77,7 +77,17 @@ function JokerDisplayBox:init(parent, func, args)
     }
 end
 
-function JokerDisplayBox:recalculate()
+function JokerDisplayBox:recalculate(from_update)
+    if not from_update then return end
+    if self.parent.joker_display_values then
+        if self.parent.debuff then
+            if self.joker_display_type ~= "DEBUFF" then return end
+        elseif self.parent.joker_display_values.small then
+            if self.joker_display_type ~= "SMALL" then return end
+        elseif self.joker_display_type ~= "NORMAL" then
+            return
+        end
+    end
     if not (self.has_text or self.has_extra or self.has_modifiers) and self.has_reminder_text then
         self.text.config.minh = 0.4
     else
@@ -137,7 +147,8 @@ function JokerDisplayBox:add_extra(node_rows, config, custom_parent)
     for i = #node_rows, 1, -1 do
         local row_nodes = {}
         for j = 1, #node_rows[i] do
-            local display_object = JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j], config)
+            local display_object = JokerDisplay.create_display_object(custom_parent or self.parent, node_rows[i][j],
+                config)
             if display_object then
                 table.insert(row_nodes, display_object)
             end
@@ -292,7 +303,7 @@ function JokerDisplayBox:remove_children(node)
     end
     remove_all(node.children)
     node.children = {}
-    self:recalculate()
+    self:recalculate(true)
 end
 
 function JokerDisplayBox:has_info()
@@ -309,12 +320,14 @@ function UIElement:update_text()
     if self.UIBox.name and self.UIBox.name == "JokerDisplay" then
         if self.config and self.config.text and not self.config.text_drawable then
             self.config.lang = self.config.lang or G.LANG
-            self.config.text_drawable = love.graphics.newText(self.config.lang.font.FONT, {G.C.WHITE,self.config.text})
+            self.config.text_drawable = love.graphics.newText(self.config.lang.font.FONT, { G.C.WHITE, self.config.text })
         end
         if self.config.ref_table and self.config.ref_table[self.config.ref_value] ~= self.config.prev_value then
             self.config.text = tostring(JokerDisplay.number_format(self.config.ref_table[self.config.ref_value]))
             self.config.text_drawable:set(self.config.text)
-            if not self.config.no_recalc and self.config.prev_value and string.len(JokerDisplay.number_format(self.config.prev_value)) ~= string.len(JokerDisplay.number_format(self.config.text)) then self.UIBox:recalculate() end
+            if not self.config.no_recalc and self.config.prev_value and string.len(JokerDisplay.number_format(self.config.prev_value)) ~= string.len(JokerDisplay.number_format(self.config.text)) then
+                self.UIBox:recalculate(true)
+            end
             self.config.prev_value = self.config.ref_table[self.config.ref_value]
         end
     else
@@ -342,9 +355,9 @@ function JokerDisplayBox:calculate_xywh(node, _T, recalculate, _scale)
         if not node.config.text then node.config.text = '[UI ERROR]' end
         node.config.lang = node.config.lang or G.LANG
         local tx = node.config.lang.font.FONT:getWidth(node.config.text) * node.config.lang.font.squish * scale *
-        G.TILESCALE * node.config.lang.font.FONTSCALE
+            G.TILESCALE * node.config.lang.font.FONTSCALE
         local ty = node.config.lang.font.FONT:getHeight() * scale * G.TILESCALE * node.config.lang.font.FONTSCALE *
-        node.config.lang.font.TEXT_HEIGHT_SCALE
+            node.config.lang.font.TEXT_HEIGHT_SCALE
         if node.config.vert then
             local thunk = tx; tx = ty; ty = thunk
         end
