@@ -276,7 +276,7 @@ function JokerDisplayBox:add_modifiers()
         end
         local mod_column = {
             n = G.UIT.C,
-            config = { ref_table = self, align = "cm", padding = 0.03 },
+            config = { ref_table = self.parent, align = "cm", padding = 0.03 },
             nodes = mod_nodes[i]
         }
         table.insert(mod_rows[row_index], mod_column)
@@ -285,7 +285,7 @@ function JokerDisplayBox:add_modifiers()
     for i = 1, #mod_rows do
         local extra_row = {
             n = G.UIT.R,
-            config = { ref_table = self, align = "cm", padding = 0.03 },
+            config = { ref_table = self.parent, align = "cm", padding = 0.03 },
             nodes = mod_rows[i]
         }
         self:add_child(extra_row, self.modifier_row)
@@ -322,13 +322,20 @@ function UIElement:update_text()
             self.config.lang = self.config.lang or G.LANG
             self.config.text_drawable = love.graphics.newText(self.config.lang.font.FONT, { G.C.WHITE, self.config.text })
         end
-        if self.config.ref_table and self.config.ref_table[self.config.ref_value] ~= self.config.prev_value then
-            self.config.text = tostring(JokerDisplay.number_format(self.config.ref_table[self.config.ref_value]))
-            self.config.text_drawable:set(self.config.text)
-            if not self.config.no_recalc and self.config.prev_value and string.len(JokerDisplay.number_format(self.config.prev_value)) ~= string.len(JokerDisplay.number_format(self.config.text)) then
-                self.UIBox:recalculate(true)
+        local card = self.UIBox.parent
+        if JokerDisplay.config.enabled and (card.joker_display_values and not card.joker_display_values.disabled) and self.config.ref_table then
+            local formatted_text = JokerDisplay.text_format(self.config.ref_table[self.config.ref_value], self)
+            local prev_value = self.config.prev_value_joker_display or JokerDisplay.text_format(self.config.prev_value, self)
+            if formatted_text ~= prev_value then
+                self.config.text = formatted_text
+                self.config.text_drawable:set(self.config.text)
+                if not self.config.no_recalc and prev_value and string.len(prev_value) ~= string.len(self.config.text) then
+                    self.config.prev_value_joker_display = formatted_text
+                    self.UIBox:recalculate(true)
+                end
+                self.config.prev_value = formatted_text
+                self.config.prev_value_joker_display = formatted_text
             end
-            self.config.prev_value = self.config.ref_table[self.config.ref_value]
         end
     else
         uielement_update_text_ref(self)
@@ -348,8 +355,9 @@ function JokerDisplayBox:calculate_xywh(node, _T, recalculate, _scale)
 
         node.config.text_drawable = nil
         local scale = node.config.scale or 1
-        if node.config.ref_table and node.config.ref_value then
-            node.config.text = JokerDisplay.number_format(node.config.ref_table[node.config.ref_value])
+        local card = self.parent
+        if ((JokerDisplay.config.enabled and card.joker_display_values and not card.joker_display_values.disabled) or not node.config.text) and node.config.ref_table and node.config.ref_value then
+            node.config.text = JokerDisplay.text_format(node.config.ref_table[node.config.ref_value], node)
             if node.config.func and not recalculate then G.FUNCS[node.config.func](node) end
         end
         if not node.config.text then node.config.text = '[UI ERROR]' end
@@ -380,9 +388,46 @@ end
 
 --- HELPER FUNCTIONS
 
+JokerDisplay.text_format = function(text, node)
+    if not text then return text or 'ERROR' end
+    if type(text) == "function" then text = text() end
+
+    local card = node.UIBox.parent
+
+    text = JokerDisplay.retrigger_format(text, node, card)
+    text = JokerDisplay.number_format(text)
+
+    return text
+end
+
+JokerDisplay.retrigger_format = function(num, node, card)
+    if (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
+
+    local retrigger_type = node.config.retrigger_type
+    local triggers = card.joker_display_values and card.joker_display_values.trigger_count or 1
+
+    if not retrigger_type then
+        return num
+    end
+    if type(retrigger_type) == "function" then
+        return retrigger_type(num, triggers)
+    end
+    if retrigger_type == "add" or retrigger_type == "+" then
+        return num + triggers - 1
+    end
+    if retrigger_type == "mult" or retrigger_type == "multiply" or retrigger_type == "*" then
+        return num * triggers
+    end
+    if retrigger_type == "exp" or retrigger_type == "exponentiate" or retrigger_type == "^" then
+        return num ^ (triggers > 0 and triggers or 1)
+    end
+
+    return num
+end
+
 ---Creates an object with JokerDisplay configurations.
 ---@param card table Reference card
----@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?} Node configuration
+---@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?, retrigger_type: function|string?} Node configuration
 ---@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects
 ---@return table?
 JokerDisplay.create_display_object = function(card, display_config, defaults_config)
@@ -423,28 +468,30 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
             ref_table = ref_table,
             ref_value = display_config.ref_value,
             colour = display_config.colour or default_text_colour,
-            scale = display_config.scale or default_text_scale
+            scale = display_config.scale or default_text_scale,
+            retrigger_type = display_config.retrigger_type
         })
     end
     if display_config.text then
         return JokerDisplay.create_display_text_object({
             text = display_config.text,
             colour = display_config.colour or default_text_colour,
-            scale = display_config.scale or default_text_scale
+            scale = display_config.scale or default_text_scale,
+            retrigger_type = display_config.retrigger_type
         })
     end
     return node
 end
 
 ---Creates a G.UIT.T object with JokerDisplay configurations for text display.
----@param config {text: string?, ref_table: table?, ref_value: string?, scale: number?, colour: table?}
+---@param config {text: string?, ref_table: table?, ref_value: string?, scale: number?, colour: table?, retrigger_type: function|string? }
 ---@return table
 JokerDisplay.create_display_text_object = function(config)
     local text_node = {}
     if config.ref_table then
-        text_node = { n = G.UIT.T, config = { ref_table = config.ref_table, ref_value = config.ref_value, scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT } }
+        text_node = { n = G.UIT.T, config = { ref_table = config.ref_table, ref_value = config.ref_value, scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT, retrigger_type = config.retrigger_type } }
     else
-        text_node = { n = G.UIT.T, config = { text = config.text or "ERROR", scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT } }
+        text_node = { n = G.UIT.T, config = { text = config.text or "ERROR", scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT, retrigger_type = config.retrigger_type } }
     end
     return text_node
 end
