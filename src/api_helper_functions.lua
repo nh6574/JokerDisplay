@@ -2,7 +2,7 @@
 
 ---Returns scoring information about a set of cards. You can get the full hand using `JokerDisplay.current_hand`.
 ---@see G.FUNCS.evaluate_play
----@param cards table? Cards to calculate. If nil, uses current precalculated hand.
+---@param cards table? Cards to calculate. Defaults to current precalculated hand.
 ---@param count_facedowns boolean? If true, counts cards facing back.
 ---@return string text Scoring poker hand's non-localized text. "Unknown" if there's a card facedown or if selected cards are not valid.
 ---@return table poker_hands Poker hands contained in the scoring hand.
@@ -79,11 +79,11 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
     return (has_facedown and "Unknown" or text), poker_hands, scoring_hand
 end
 
----Returns what Joker the current card (i.e. Blueprint or Brainstorm) is copying.
----@param card table Blueprint or Brainstorm card to calculate copy.
+---Returns what Joker the current Blueprint-like card is copying.
+---@param card table Blueprint-like card to calculate copy for.
 ---@param _cycle_count integer? Counts how many times the function has recurred to prevent loops.
 ---@param _cycle_debuff boolean? Saves debuffed state on recursion.
----@return table|nil name Copied Joker
+---@return table? copied_joker Copied Joker
 ---@return boolean debuff If the copied joker (or any in the chain) is debuffed
 JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debuff)
     local joker_display_definition = JokerDisplay.Definitions[card.config.center.key]
@@ -108,7 +108,7 @@ end
 ---@param card table Card that is copying
 ---@param copied_joker? table Joker being copied. Initializes default display if nil
 ---@param is_debuffed boolean? If Joker is debuffed by other means.
----@param bypass_debuff boolean? Bypass debuff
+---@param bypass_debuff boolean? Bypass debuff.
 ---@param stop_func_copy boolean? Don't copy other functions such as mod_function, retrigger_function, etc.
 JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_debuff, stop_func_copy)
     local changed = not (copied_joker == card.joker_display_values.blueprint_ability_joker) or
@@ -179,7 +179,7 @@ end
 
 ---Sort cards from left to right.
 ---@param cards table Cards to sort.
----@return table # Sorted cards
+---@return table # Sorted cards.
 JokerDisplay.sort_cards = function(cards)
     local copy = {}
     for k, v in pairs(cards) do
@@ -208,7 +208,7 @@ end
 ---Returns how many times the scoring card would be triggered for scoring if played.
 ---@param card table Card to calculate.
 ---@param scoring_hand table? Scoring hand.
----@param held_in_hand boolean? If the card is held in hand and not a scoring card.
+---@param held_in_hand boolean? true if the card is held in hand and not a scoring card.
 ---@return integer # Times the card would trigger. (0 if debuffed)
 JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand)
     if card.debuff then
@@ -243,8 +243,8 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
 end
 
 ---Returns what modifiers the other Jokers in play add to the this Joker card.
----@param card table Card to calculate.
----@return table # Modifiers
+---@param card table Joker to calculate.
+---@return table # Modifiers.
 JokerDisplay.calculate_joker_modifiers = function(card)
     local modifiers = {
         chips = nil,
@@ -298,12 +298,12 @@ JokerDisplay.calculate_joker_modifiers = function(card)
 end
 
 ---Returns if hand triggers (boss) blind.
----@param blind table Blind to calculate
+---@param blind table Blind to calculate.
 ---@param text string Scoring poker hand's non-localized text. "Unknown" if there's a card facedown or if selected cards are not valid.
 ---@param poker_hands table Poker hands contained in the scoring hand.
 ---@param scoring_hand table Scoring cards in hand.
 ---@param full_hand table Full hand.
----@return boolean? # True if it triggers the blind, false otherwise. nil if unknown (blind is not defined).
+---@return boolean? # true if it triggers the blind, false otherwise. nil if unknown (blind is not defined).
 JokerDisplay.triggers_blind = function(blind, text, poker_hands, scoring_hand, full_hand)
     if blind.disabled then return false end
 
@@ -320,6 +320,9 @@ JokerDisplay.triggers_blind = function(blind, text, poker_hands, scoring_hand, f
     return false
 end
 
+---Returns how many times the Joker would be triggered if activated.
+---@param card table Joker to calculate.
+---@return integer # Times the card would trigger. (0 if debuffed)
 JokerDisplay.calculate_joker_triggers = function(card)
     if card.debuff then
         return 0

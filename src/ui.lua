@@ -434,10 +434,10 @@ JokerDisplay.retrigger_format = function(num, node, card)
 end
 
 ---Creates an object with JokerDisplay configurations.
----@param card table Reference card
----@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?, retrigger_type: function|string?} Node configuration
----@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects
----@return table?
+---@param card table Reference card.
+---@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?, retrigger_type: function|string?} Node configuration.
+---@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects.
+---@return table? # Display object.
 JokerDisplay.create_display_object = function(card, display_config, defaults_config)
     if not display_config or not next(display_config) then
         return nil

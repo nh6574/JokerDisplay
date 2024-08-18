@@ -1,7 +1,7 @@
 --- UTILITY FUNCTIONS
 
 --- Splits text by a separator.
----@param str string String to split
+---@param str string String to split.
 ---@param sep string? Separator. Defaults to whitespace.
 ---@return table split_text
 function JokerDisplay.strsplit(str, sep)
@@ -15,8 +15,8 @@ function JokerDisplay.strsplit(str, sep)
     return t
 end
 
---- Deep copies a table
----@param orig table Table to copy
+--- Deep copies a table.
+---@param orig table Table to copy.
 ---@return table? copy
 function JokerDisplay.deepcopy(orig)
     local copy
@@ -41,11 +41,11 @@ if not _G["to_big"] then
     end
 end
 
----Formats number
+---Formats number.
 ---@see number_format
 ---@param num any Number to format. Accepts Talisman's bignum/omeganum.
----@param e_switch_point number? Number from where to switch to scientic notation
----@param places number? Decimal places
+---@param e_switch_point number? Number from where to switch to scientic notation. Defaults to 1000000.
+---@param places number? Maximum decimal places. Defaults to 2.
 ---@return any # The formatted string or `num` if it's not a number.
 function JokerDisplay.number_format(num, e_switch_point, places)
     if not num then return num or '' end
