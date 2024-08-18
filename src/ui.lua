@@ -78,15 +78,6 @@ end
 
 function JokerDisplayBox:recalculate(from_update, force_update)
     if not from_update then return end
-    if not force_update and self.parent.joker_display_values then
-        if self.parent.debuff then
-            if self.joker_display_type ~= "DEBUFF" then return end
-        elseif self.parent.joker_display_values.small then
-            if self.joker_display_type ~= "SMALL" then return end
-        elseif self.joker_display_type ~= "NORMAL" then
-            return
-        end
-    end
     if not (self.has_text or self.has_extra or self.has_modifiers) and self.has_reminder_text then
         self.text.config.minh = 0.4
     else
