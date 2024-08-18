@@ -2,7 +2,7 @@
 
 --- Splits text by a separator.
 ---@param str string String to split
----@param sep string? Separator. Defauls to whitespace.
+---@param sep string? Separator. Defaults to whitespace.
 ---@return table split_text
 function JokerDisplay.strsplit(str, sep)
     if sep == nil then
