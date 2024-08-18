@@ -76,9 +76,9 @@ function JokerDisplayBox:init(parent, func, args)
     }
 end
 
-function JokerDisplayBox:recalculate(from_update)
+function JokerDisplayBox:recalculate(from_update, force_update)
     if not from_update then return end
-    if self.parent.joker_display_values then
+    if not force_update and self.parent.joker_display_values then
         if self.parent.debuff then
             if self.joker_display_type ~= "DEBUFF" then return end
         elseif self.parent.joker_display_values.small then

@@ -141,13 +141,13 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
     end
 
     if custom_parent then
-        custom_parent.children.joker_display:recalculate(true)
-        custom_parent.children.joker_display_small:recalculate(true)
-        custom_parent.children.joker_display_debuff:recalculate(true)
+        custom_parent.children.joker_display:recalculate(true, true)
+        custom_parent.children.joker_display_small:recalculate(true, true)
+        custom_parent.children.joker_display_debuff:recalculate(true, true)
     else
-        self.children.joker_display:recalculate(true)
-        self.children.joker_display_small:recalculate(true)
-        self.children.joker_display_debuff:recalculate(true)
+        self.children.joker_display:recalculate(true, true)
+        self.children.joker_display_small:recalculate(true, true)
+        self.children.joker_display_debuff:recalculate(true, true)
     end
 end
 
@@ -471,9 +471,9 @@ function Card:update(dt)
                     joker_number_delta_variance / 2 * self.joker_display_update_time_variance
                 self:update_joker_display(false, false, "Card:update")
 
-                self.children.joker_display:recalculate(true)
-                self.children.joker_display_small:recalculate(true)
-                self.children.joker_display_debuff:recalculate(true)
+                if self.children.joker_display then self.children.joker_display:recalculate(true) end
+                if self.children.joker_display_small then self.children.joker_display_small:recalculate(true) end
+                if self.children.joker_display_debuff then self.children.joker_display_debuff:recalculate(true) end
             end
         end
     end
