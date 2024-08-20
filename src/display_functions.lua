@@ -463,7 +463,7 @@ function Card:update(dt)
         elseif self.joker_display_values and G.real_dt > 0.05 and #G.jokers.cards > 20 then
             self.joker_display_values.disabled = true
         else
-            self.joker_display_last_update_time = self.joker_display_last_update_time + dt
+            self.joker_display_last_update_time = self.joker_display_last_update_time + G.real_dt
             if self.joker_display_last_update_time > self.joker_display_next_update_time then
                 self.joker_display_last_update_time = 0
                 local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
