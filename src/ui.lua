@@ -198,13 +198,26 @@ function JokerDisplayBox:add_modifiers()
 
     local mod_nodes = {}
 
-    if self.modifiers.chips then
-        local chip_node = {}
-        table.insert(chip_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.CHIPS }))
-        table.insert(chip_node,
+    if self.modifiers.dollars then
+        local dollars_node = {}
+        table.insert(dollars_node,
+            JokerDisplay.create_display_object(self, { text = "+" .. localize('$'), colour = G.C.GOLD }))
+        table.insert(dollars_node,
             JokerDisplay.create_display_object(self,
-                { ref_table = "card.modifiers", ref_value = "chips", colour = G.C.CHIPS }))
-        table.insert(mod_nodes, chip_node)
+                { ref_table = "card.modifiers", ref_value = "dollars", colour = G.C.GOLD }))
+        table.insert(mod_nodes, dollars_node)
+    end
+
+    if self.modifiers.e_mult then
+        local emult_node = {}
+        table.insert(emult_node,
+            JokerDisplay.create_display_object(self,
+                {
+                    border_nodes = { { text = "^" },
+                        { ref_table = "card.modifiers", ref_value = "e_mult" } },
+                    border_colour = G.C.DARK_EDITION
+                }))
+        table.insert(mod_nodes, emult_node)
     end
 
     if self.modifiers.x_chips then
@@ -217,15 +230,6 @@ function JokerDisplayBox:add_modifiers()
                     border_colour = G.C.CHIPS
                 }))
         table.insert(mod_nodes, xchip_node)
-    end
-
-    if self.modifiers.mult then
-        local mult_node = {}
-        table.insert(mult_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.MULT }))
-        table.insert(mult_node,
-            JokerDisplay.create_display_object(self,
-                { ref_table = "card.modifiers", ref_value = "mult", colour = G.C.MULT }))
-        table.insert(mod_nodes, mult_node)
     end
 
     if self.modifiers.x_mult then
@@ -242,26 +246,22 @@ function JokerDisplayBox:add_modifiers()
         table.insert(mod_nodes, xmult_node)
     end
 
-    if self.modifiers.e_mult then
-        local emult_node = {}
-        table.insert(emult_node,
+    if self.modifiers.chips then
+        local chip_node = {}
+        table.insert(chip_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.CHIPS }))
+        table.insert(chip_node,
             JokerDisplay.create_display_object(self,
-                {
-                    border_nodes = { { text = "^" },
-                        { ref_table = "card.modifiers", ref_value = "e_mult" } },
-                    border_colour = G.C.DARK_EDITION
-                }))
-        table.insert(mod_nodes, emult_node)
+                { ref_table = "card.modifiers", ref_value = "chips", colour = G.C.CHIPS }))
+        table.insert(mod_nodes, chip_node)
     end
 
-    if self.modifiers.dollars then
-        local dollars_node = {}
-        table.insert(dollars_node,
-            JokerDisplay.create_display_object(self, { text = "+" .. localize('$'), colour = G.C.GOLD }))
-        table.insert(dollars_node,
+    if self.modifiers.mult then
+        local mult_node = {}
+        table.insert(mult_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.MULT }))
+        table.insert(mult_node,
             JokerDisplay.create_display_object(self,
-                { ref_table = "card.modifiers", ref_value = "dollars", colour = G.C.GOLD }))
-        table.insert(mod_nodes, dollars_node)
+                { ref_table = "card.modifiers", ref_value = "mult", colour = G.C.MULT }))
+        table.insert(mod_nodes, mult_node)
     end
 
     local row_index = 1
