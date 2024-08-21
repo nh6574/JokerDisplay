@@ -76,7 +76,7 @@ function JokerDisplayBox:init(parent, func, args)
     }
 end
 
-function JokerDisplayBox:recalculate(from_update, force_update)
+function JokerDisplayBox:recalculate(from_update)
     if not from_update then return end
     if not (self.has_text or self.has_extra or self.has_modifiers) and self.has_reminder_text then
         self.text.config.minh = 0.4
@@ -302,6 +302,11 @@ function JokerDisplayBox:remove_children(node)
     end
     remove_all(node.children)
     node.children = {}
+    self:recalculate(true)
+end
+
+function JokerDisplayBox:add_child(node, parent)
+    UIBox.add_child(self, node, parent)
     self:recalculate(true)
 end
 
