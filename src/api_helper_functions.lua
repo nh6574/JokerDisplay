@@ -93,7 +93,7 @@ JokerDisplay.calculate_blueprint_copy = function(card, _cycle_count, _cycle_debu
     local other_joker = joker_display_definition.get_blueprint_joker(card)
     if other_joker and other_joker ~= card and other_joker.config.center.blueprint_compat then
         local other_joker_display_definition = JokerDisplay.Definitions[other_joker.config.center.key]
-        if other_joker_display_definition.get_blueprint_joker then
+        if other_joker_display_definition and other_joker_display_definition.get_blueprint_joker then
             return JokerDisplay.calculate_blueprint_copy(other_joker,
                 _cycle_count and _cycle_count + 1 or 1,
                 _cycle_debuff or other_joker.debuff)
