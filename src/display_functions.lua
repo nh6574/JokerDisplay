@@ -457,7 +457,7 @@ function Card:update(dt)
         if not self.joker_display_last_update_time then
             self.joker_display_last_update_time = 0
             self.joker_display_update_time_variance = math.random()
-            local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
+            local joker_number_delta_variance = math.max(0.01, #G.jokers.cards / 20)
             self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                 joker_number_delta_variance / 2 * self.joker_display_update_time_variance
         elseif self.joker_display_values and G.real_dt > 0.05 and #G.jokers.cards > 20 then
@@ -466,7 +466,7 @@ function Card:update(dt)
             self.joker_display_last_update_time = self.joker_display_last_update_time + G.real_dt
             if self.joker_display_last_update_time > self.joker_display_next_update_time then
                 self.joker_display_last_update_time = 0
-                local joker_number_delta_variance = math.max(0.2, #G.jokers.cards / 20)
+                local joker_number_delta_variance = math.max(0.1, #G.jokers.cards / 20)
                 self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                     joker_number_delta_variance / 2 * self.joker_display_update_time_variance
                 self:update_joker_display(false, false, "Card:update")

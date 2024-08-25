@@ -314,6 +314,10 @@ function JokerDisplayBox:has_info()
     return self.has_text or self.has_extra or self.has_modifiers or self.has_reminder_text
 end
 
+function JokerDisplayBox:move_wh(dt)
+    UIBox.move_wh(self, dt or G.real_dt or 0)
+end
+
 function Card:joker_display_has_info()
     return (self.children.joker_display and self.children.joker_display:has_info()) or
         (self.children.joker_display_small and self.children.joker_display_small:has_info())
