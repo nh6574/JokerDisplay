@@ -53,10 +53,11 @@ function JokerDisplay.number_format(num, e_switch_point, places)
     if (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
     -- Talisman compat. Copied from it with some changes :)
     if type(num) == 'table' then
-        big_num = to_big(num)
+        local big_num = to_big(num)
         if big_num >= to_big(e_switch_point or 1000000) then
             return Notations.Balatro:format(big_num, places or 2)
         end
+        num = num:to_number()
     end
     -- Copied from the main game.. with some changes :)
     if num >= (e_switch_point or 1000000) then
