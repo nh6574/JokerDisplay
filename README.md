@@ -42,6 +42,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
 | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
 | [OrtalabDEMO](https://github.com/GauntletGames-2086/Ortalab-DEMO) |
+| [Pampa Joker Pack](https://github.com/lshtech/balatro-pampa-joker-pack) |
 | [Paperback](https://github.com/GitNether/paperback) |
 | [SDM_0's Stuff](https://github.com/SDM0/SDM_0-s-Stuff/) |
 | [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
@@ -54,7 +55,6 @@ I have another repo to add support for some specific mods. Please don't ask me f
 |---|
 | [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
 | [Jimbo's New Pack](https://github.com/art-muncher/Jimbo-s-Pack) |
-| [Pampa Joker Pack](https://batabata3.github.io/balatro-pampa-joker-pack/) |
 
 ## Contributing
 
