@@ -44,6 +44,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [OrtalabDEMO](https://github.com/GauntletGames-2086/Ortalab-DEMO) |
 | [Pampa Joker Pack](https://github.com/lshtech/balatro-pampa-joker-pack) |
 | [Paperback](https://github.com/GitNether/paperback) |
+| [Reverie](https://github.com/dvrp0/reverie/tree/main) |
 | [SDM_0's Stuff](https://github.com/SDM0/SDM_0-s-Stuff/) |
 | [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
 | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
