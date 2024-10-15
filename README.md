@@ -38,6 +38,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [Bunco](https://github.com/Firch/Bunco) |
 | [Cryptid](https://github.com/MathIsFun0/Cryptid) |
 | [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
+| [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
 | [Jank Jonklers](https://github.com/spikeof2010/JankJonklers) |
 | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
 | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
@@ -49,13 +50,6 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
 | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
 | [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
-
-I have another repo to add support for some specific mods. Please don't ask me for mod support outside of these, go bother the devs instead :).
-
-| Mods supported through [JokerDisplayModSupport](https://github.com/nh6574/JokerDisplayModSupport) |
-|---|
-| [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
-| [Jimbo's New Pack](https://github.com/art-muncher/Jimbo-s-Pack) |
 
 ## Contributing
 
