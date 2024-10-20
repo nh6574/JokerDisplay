@@ -479,6 +479,14 @@ function Card:update(dt)
     end
 end
 
+local card_set_ability_ref = Card.set_ability
+function Card:set_ability(center, initial, delay_sprites)
+    card_set_ability_ref(self, center, initial, delay_sprites)
+    if JokerDisplay.config.enabled and G.jokers and self.area == G.jokers and self.joker_display_values then
+        self:update_joker_display(true, true, "Card:set_ability")
+    end
+end
+
 ---Gets information about the current highlighted/played hand. If you want to evaluate the current hand:
 ---@see JokerDisplay.evaluate_hand
 JokerDisplay.get_scoring_hand = function()
