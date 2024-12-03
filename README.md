@@ -50,6 +50,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
 | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
 | [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
+| [Valkyrie](https://github.com/dainekoichi/Valkyrie-BalatroMod) |
 
 ## Contributing
 
