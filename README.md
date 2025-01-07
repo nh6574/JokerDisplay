@@ -58,6 +58,12 @@ I don't know how much time I'm going to dedicate to this (I'm not really _that_ 
 
 Also I would appreciate if people contact me when there are updates to the game or Steamodded that break any features or add content.
 
+### Acknowledgements
+
+Special thanks to Eremel and OppositeWolf770 for the help!
+
+And thank you to WholeHorse for the Russian localization!
+
 ## Contact
 
 If you have any issues feel free to contact me on Twitter: [@nh6574](https://twitter.com/nh6574)
