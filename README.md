@@ -62,7 +62,7 @@ Also I would appreciate if people contact me when there are updates to the game 
 
 Special thanks to Eremel and OppositeWolf770 for the help!
 
-And thank you to WholeHorse for the Russian localization!
+And thank you to WholeHorse for the Russian localization and SDM0 for the French localization!
 
 ## Contact
 
