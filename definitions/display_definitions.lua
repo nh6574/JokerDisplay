@@ -1986,9 +1986,7 @@ return {
                     end
                 end
             end
-            for k,v in pairs(suits) do
-                sendDebugMessage(k..":"..v)
-            end
+            
             local is_seeing_double_hand = (suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0) and
                 (suits["Clubs"] > 0)
             card.joker_display_values.x_mult = is_seeing_double_hand and card.ability.extra or 1
