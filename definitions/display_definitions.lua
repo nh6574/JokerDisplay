@@ -1960,11 +1960,14 @@ return {
                     if scoring_hand[i].ability.name ~= 'Wild Card' then
                         if scoring_hand[i]:is_suit('Hearts') then
                             suits["Hearts"] = suits["Hearts"] + 1
-                        elseif scoring_hand[i]:is_suit('Diamonds') then
+                        end
+                        if scoring_hand[i]:is_suit('Diamonds') then
                             suits["Diamonds"] = suits["Diamonds"] + 1
-                        elseif scoring_hand[i]:is_suit('Spades') then
+                        end
+                        if scoring_hand[i]:is_suit('Spades') then
                             suits["Spades"] = suits["Spades"] + 1
-                        elseif scoring_hand[i]:is_suit('Clubs') then
+                        end
+                        if scoring_hand[i]:is_suit('Clubs') then
                             suits["Clubs"] = suits["Clubs"] + 1
                         end
                     end
@@ -1982,6 +1985,9 @@ return {
                         end
                     end
                 end
+            end
+            for k,v in pairs(suits) do
+                sendDebugMessage(k..":"..v)
             end
             local is_seeing_double_hand = (suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0) and
                 (suits["Clubs"] > 0)
