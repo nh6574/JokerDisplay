@@ -492,7 +492,8 @@ return {
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return G.GAME and G.GAME.current_round.hands_left <= 1 and joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+            return G.GAME and G.GAME.current_round.hands_left <= 1 and
+            joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_raised_fist = { -- Raised Fist
@@ -757,7 +758,7 @@ return {
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
             local text, _, _ = JokerDisplay.evaluate_hand()
-            card.joker_display_values.mult = (text ~= 'Unknown' and G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played) or
+            card.joker_display_values.mult = (text ~= 'Unknown' and G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played + (next(G.play.cards) and 0 or 1)) or
                 0
         end
     },
@@ -1639,7 +1640,8 @@ return {
     j_sock_and_buskin = { -- Sock and Buskin
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return playing_card:is_face() and joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+            return playing_card:is_face() and
+            joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_swashbuckler = { -- Swashbuckler
@@ -1669,7 +1671,8 @@ return {
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
             local first_card = scoring_hand and JokerDisplay.calculate_leftmost_card(scoring_hand)
-            return first_card and playing_card == first_card and joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+            return first_card and playing_card == first_card and
+            joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
     j_rough_gem = { -- Rough Gem
@@ -1873,12 +1876,12 @@ return {
             card.joker_display_values.blueprint_compat = localize('k_incompatible')
             JokerDisplay.copy_display(card, copied_joker, copied_debuff)
         end,
-        get_blueprint_joker = function (card)
+        get_blueprint_joker = function(card)
             for i = 1, #G.jokers.cards do
-				if G.jokers.cards[i] == card then
-					return G.jokers.cards[i + 1]
-				end
-			end
+                if G.jokers.cards[i] == card then
+                    return G.jokers.cards[i + 1]
+                end
+            end
             return nil
         end
     },
@@ -1986,7 +1989,7 @@ return {
                     end
                 end
             end
-            
+
             local is_seeing_double_hand = (suits["Hearts"] > 0 or suits["Diamonds"] > 0 or suits["Spades"] > 0) and
                 (suits["Clubs"] > 0)
             card.joker_display_values.x_mult = is_seeing_double_hand and card.ability.extra or 1
@@ -2192,7 +2195,7 @@ return {
             card.joker_display_values.blueprint_compat = localize('k_incompatible')
             JokerDisplay.copy_display(card, copied_joker, copied_debuff)
         end,
-        get_blueprint_joker = function (card)
+        get_blueprint_joker = function(card)
             return G.jokers.cards[1]
         end
     },
