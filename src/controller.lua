@@ -37,11 +37,17 @@ end
 local controller_button_press_update_ref = Controller.button_press_update
 function Controller:button_press_update(button, dt)
     controller_button_press_update_ref(self, button, dt)
-
-    if button == 'b' and G.jokers and self.focused.target and self.focused.target.area == G.jokers then
+    
+    if G.jokers and self.focused.target and self.focused.target.area == G.jokers then
         local press_node = self.hovering.target or self.focused.target
-        if press_node then
-            press_node:joker_display_toggle()
+        if press_node and press_node.joker_display_values then
+            if button == 'b' then
+                press_node:joker_display_toggle()
+            elseif button == 'dpup' then
+                if not JokerDisplay.config.disable_collapse and not press_node.joker_display_values.disabled then
+                    press_node.joker_display_values.small = not press_node.joker_display_values.small
+                end
+            end
         end
     end
 end
