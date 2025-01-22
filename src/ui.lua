@@ -163,11 +163,11 @@ end
 
 function JokerDisplayBox:change_modifiers(modifiers, reset)
     local new_modifiers = {
-        chips = modifiers.chips,     --or not reset and self.modifiers.chips or nil,
-        x_chips = modifiers.x_chips, --or not reset and self.modifiers.x_chips or nil,
-        mult = modifiers.mult,       --or not reset and self.modifiers.mult or nil,
-        x_mult = modifiers.x_mult,   --or not reset and self.modifiers.x_mult or nil,
-        dollars = modifiers.dollars, -- not reset and self.modifiers.dollars or nil,
+        chips = modifiers.chips,
+        x_chips = modifiers.x_chips,
+        mult = modifiers.mult,
+        x_mult = modifiers.x_mult,
+        dollars = modifiers.dollars,
         e_mult = modifiers.e_mult,
     }
 
