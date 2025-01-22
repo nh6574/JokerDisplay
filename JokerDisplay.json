@@ -1,0 +1,14 @@
+{
+	"id": "JokerDisplay",
+	"name": "JokerDisplay",
+	"display_name": "JokerDisplay",
+	"author": ["nh6574"],
+	"description": "Display useful information under Jokers. Controls: Right-click or B - hide/show. Left-click or Up - collapse/expand.",
+	"prefix": "JokerDisplay",
+	"main_file": "JokerDisplay.lua",
+	"priority": -100000,
+	"badge_colour": "",
+	"badge_text_colour": "",
+	"version": "1.7.5",
+	"dependencies": ["Steamodded (>=1.0.0~ALPHA-1304a)"]
+}

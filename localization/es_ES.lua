@@ -1,4 +1,23 @@
 return {
+	["descriptions"] = {
+		["Mod"] = {
+			["JokerDisplay"] = {
+                name = "JokerDisplay",
+                text = {
+                    "Muestra información útil bajo los Comodines",
+					" ",
+                    "{C:attention}Controles:{}",
+                    "{C:blue}Click derecho o B:{} mostrar/ocultar",
+                    "{C:blue}Click izquierdo o Arriba:{} colapsar/expandir",
+					" ",
+					"Agradecimientos a {C:green}Eremel{} y {C:green}OppositeWolf770{}",
+					" ",
+					"Traducción al ruso por: {C:green}WholeHorse{}",
+					"Traducción al francés por: {C:green}SDM_0{}",
+                },
+            }
+		}
+	},
 	["misc"] = {
 		["dictionary"] = {
 			["jdis_enabled"] = "Habilitado",
