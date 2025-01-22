@@ -55,7 +55,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 
 ## Contributing
 
-This mod will probably not get any new features after 1.8, so please feel free to fork or do PRs if you feel like you can improve on this or fix any of the problems above!
+This mod will probably not get any new features after 1.8, so please feel free to fork or do PRs if you feel like you can improve on this or fix any issues!
 
 Also I would appreciate if people contact me when there are updates to the game or Steamodded that break any features or add content.
 
