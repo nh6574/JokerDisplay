@@ -1,10 +1,10 @@
-# JokerDisplay - Balatro Mod
+# JokerDisplay for Balatro
 
 Balatro mod that displays information such as modifiers or relevant hands, ranks or suits under Jokers.
 
 ## Installation
 
-1. Install [Steamodded](https://github.com/Steamopollys/Steamodded) (version >1.0.0)
+1. Install [Steamodded](https://github.com/Steamopollys/Steamodded) [(version >1.0.0)](https://github.com/Steamodded/smods/wiki)
 2. Download the [latest release](https://github.com/nh6574/JokerDisplay/releases)
 3. Extract the zip file into it's own folder inside your Balatro mods folder (%appdata%\Balatro\Mods)
 
@@ -27,7 +27,7 @@ Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for 
 
 ## Mod Support
 
-This mod only supports vanilla jokers but you can add support for it in your mod by defining how the display should look.
+This mod only supports vanilla jokers but you can add support for it in your own mod by defining how the display should look.
 
 Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API documentation.
 
