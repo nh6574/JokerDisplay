@@ -31,28 +31,18 @@ This mod only supports vanilla jokers but you can add support for it in your own
 
 Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API documentation.
 
-| Mods with JokerDisplay support |
-|---|
-| [Baladrone](https://github.com/fantasygone/Baladrone) |
-| [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
-| [Bird Jokers](https://github.com/JustinBanzon/Bird-Jokers) |
-| [Boss Jokers](https://github.com/KilledByLava/BossJokers) |
-| [Bunco](https://github.com/Firch/Bunco) |
-| [Cryptid](https://github.com/MathIsFun0/Cryptid) |
-| [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
-| [Emporium](https://github.com/krokshut/Emporium)|
-| [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
-| [Jank Jonklers](https://github.com/spikeof2010/JankJonklers) |
-| [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
-| [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
-| [OrtalabDEMO](https://github.com/GauntletGames-2086/Ortalab-DEMO) |
-| [Pampa Joker Pack](https://github.com/lshtech/balatro-pampa-joker-pack) |
-| [Reverie](https://github.com/dvrp0/reverie/tree/main) |
-| [SDM_0's Stuff](https://github.com/SDM0/SDM_0-s-Stuff/) |
-| [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
-| [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
-| [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
-| [Valkyrie](https://github.com/dainekoichi/Valkyrie-BalatroMod) |
+| Mods with JokerDisplay support |  |
+|---|---|
+| [Baladrone](https://github.com/fantasygone/Baladrone) | [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
+| [Bird Jokers](https://github.com/JustinBanzon/Bird-Jokers) | [Boss Jokers](https://github.com/KilledByLava/BossJokers) |
+| [Bunco](https://github.com/Firch/Bunco) | [Cryptid](https://github.com/MathIsFun0/Cryptid) |
+| [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) | [Emporium](https://github.com/krokshut/Emporium)|
+| [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) | [Jank Jonklers](https://github.com/spikeof2010/JankJonklers) |
+| [Joker Evolution](https://github.com/SDM0/Joker-Evolution) | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
+| [OrtalabDEMO](https://github.com/GauntletGames-2086/Ortalab-DEMO) | [Pampa Joker Pack](https://github.com/lshtech/balatro-pampa-joker-pack) |
+| [Reverie](https://github.com/dvrp0/reverie/tree/main) | [SDM_0's Stuff](https://github.com/SDM0/SDM_0-s-Stuff/) |
+| [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) | [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) |
+| [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) | [Valkyrie](https://github.com/dainekoichi/Valkyrie-BalatroMod) |
 
 ## Contributing
 
