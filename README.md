@@ -33,6 +33,7 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 
 | Mods with JokerDisplay support |
 |---|
+| [Baladrone](https://github.com/fantasygone/Baladrone) |
 | [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
 | [Bird Jokers](https://github.com/JustinBanzon/Bird-Jokers) |
 | [Boss Jokers](https://github.com/KilledByLava/BossJokers) |
