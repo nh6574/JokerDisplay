@@ -4,6 +4,11 @@
 ---@param custom_parent table? Another card the display should be under
 ---@param stop_calc boolean? Don't call calculate_joker_display
 function Card:initialize_joker_display(custom_parent, stop_calc)
+    if not JokerDisplay.Definitions[self.config.center.key] and
+        self.config.center.joker_display_def and type(self.config.center.joker_display_def) == "function" then
+        JokerDisplay.Definitions[self.config.center.key] = self.config.center.joker_display_def(JokerDisplay)
+    end
+
     local replace_text, replace_text_config = nil, nil
     local replace_reminder, replace_reminder_config = nil, nil
     local replace_extra, replace_extra_config = nil, nil
@@ -17,23 +22,23 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         for _, replace_definition in pairs(JokerDisplay.Global_Definitions.Replace) do
             local replace_priority = replace_definition.priority or 0
             local is_replace_priority_greater = not current_replace_priority or
-            (replace_priority > current_replace_priority)
+                (replace_priority > current_replace_priority)
             if is_replace_priority_greater and replace_definition.is_replaced_func and replace_definition.is_replaced_func(self, custom_parent) then
                 current_replace_priority = replace_priority
                 replace_text, replace_text_config = JokerDisplay.get_replace_definition(replace_definition.replace_text,
                     "text")
                 replace_reminder, replace_reminder_config = JokerDisplay.get_replace_definition(
-                replace_definition.replace_reminder, "reminder")
+                    replace_definition.replace_reminder, "reminder")
                 replace_extra, replace_extra_config = JokerDisplay.get_replace_definition(
-                replace_definition.replace_extra, "extra")
+                    replace_definition.replace_extra, "extra")
                 replace_modifiers, replace_modifiers_config = JokerDisplay.get_replace_definition(
-                replace_definition.replace_modifiers, "modifiers")
+                    replace_definition.replace_modifiers, "modifiers")
                 replace_debuff_text, replace_debuff_text_config = JokerDisplay.get_replace_definition(
-                replace_definition.replace_debuff_text, "text")
+                    replace_definition.replace_debuff_text, "text")
                 replace_debuff_reminder, replace_debuff_reminder_config = JokerDisplay.get_replace_definition(
-                replace_definition.replace_debuff_text, "reminder")
+                    replace_definition.replace_debuff_text, "reminder")
                 replace_debuff_extra, replace_debuff_extra_config = JokerDisplay.get_replace_definition(
-                replace_definition.replace_debuff_text, "extra")
+                    replace_definition.replace_debuff_text, "extra")
                 replace_stop_calc = replace_definition.stop_calc
             end
         end
@@ -52,7 +57,7 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         self.children.joker_display_debuff:remove_text()
 
         self.children.joker_display_debuff:add_text(
-        replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } },
+            replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } },
             replace_debuff_text_config)
     end
     if replace_modifiers then
@@ -84,10 +89,10 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         (joker_display_definition.text or joker_display_definition.line_1)
     local text_config = replace_text_config or joker_display_definition and joker_display_definition.text_config
     local definition_reminder_text = replace_reminder or
-    joker_display_definition and (joker_display_definition.reminder_text or
-        joker_display_definition.line_2)
+        joker_display_definition and (joker_display_definition.reminder_text or
+            joker_display_definition.line_2)
     local reminder_text_config = replace_reminder_config or
-    joker_display_definition and joker_display_definition.reminder_text_config
+        joker_display_definition and joker_display_definition.reminder_text_config
     local definition_extra = replace_extra or joker_display_definition and joker_display_definition.extra
     local extra_config = replace_extra_config or joker_display_definition and joker_display_definition.extra_config
 
@@ -189,7 +194,8 @@ function Card:calculate_joker_display(custom_parent)
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
 
         if self.ability.perishable then
-            self.joker_display_values.perishable = (self.ability.perish_tally or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
+            self.joker_display_values.perishable = (self.ability.perish_tally or 5) ..
+                "/" .. (G.GAME.perishable_rounds or 5)
         end
 
         if self.ability.rental then
@@ -320,7 +326,7 @@ function Card:update_joker_display(force_update, force_reload, _from)
         else
             if force_update or (JokerDisplay.config.enabled and
                     ((self:joker_display_has_info() or not JokerDisplay.config.hide_empty)
-                    and (not self.joker_display_values.disabled) or self.joker_display_values.blueprint_force_update)) then
+                        and (not self.joker_display_values.disabled) or self.joker_display_values.blueprint_force_update)) then
                 if force_reload then
                     self:initialize_joker_display()
                 else
@@ -431,7 +437,7 @@ G.FUNCS.joker_display_style_override = function(e)
 
         if style_function then
             local recalculate = style_function(
-            is_blueprint_copying and card.joker_display_values.blueprint_ability_joker or card, text, reminder_text,
+                is_blueprint_copying and card.joker_display_values.blueprint_ability_joker or card, text, reminder_text,
                 extra)
             if recalculate then
                 JokerDisplayBox.recalculate(e.UIBox, true)
