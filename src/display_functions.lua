@@ -358,6 +358,30 @@ function Card:joker_display_toggle()
     self.joker_display_values.disabled = not self.joker_display_values.disabled
 end
 
+---Removes display entirely
+function Card:joker_display_remove()
+    if self.children.joker_display then
+        self.children.joker_display:remove()
+        self.children.joker_display = nil
+    end
+    if self.children.joker_display_small then
+        self.children.joker_display_small:remove()
+        self.children.joker_display_small = nil
+    end
+    if self.children.joker_display_debuff then
+        self.children.joker_display_debuff:remove()
+        self.children.joker_display_debuff = nil
+    end
+    if self.children.joker_display_perishable then
+        self.children.joker_display_perishable:remove()
+        self.children.joker_display_perishable = nil
+    end
+    if self.children.joker_display_rental then
+        self.children.joker_display_rental:remove()
+        self.children.joker_display_rental = nil
+    end
+end
+
 ---STYLE MOD FUNCTIONS
 G.FUNCS.joker_display_disable = function(e)
     local card = e.config.ref_table
