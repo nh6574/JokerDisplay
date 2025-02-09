@@ -1,8 +1,3 @@
-----------------------------------------------
-------------MOD CODE -------------------------
-
----MOD INITIALIZATION
-
 SMODS.Atlas({
     key = "modicon",
     path = "icon.png",
@@ -31,6 +26,3 @@ JokerDisplay.Global_Definitions = SMODS.load_file("definitions/global_definition
 JokerDisplay.Definitions = SMODS.load_file("definitions/display_definitions.lua")() or {}
 JokerDisplay.Blind_Definitions = SMODS.load_file("definitions/blind_definitions.lua")() or {}
 JokerDisplay.Edition_Definitions = SMODS.load_file("definitions/edition_definitions.lua")() or {}
-
-----------------------------------------------
-------------MOD CODE END----------------------
