@@ -1,5 +1,9 @@
 --- MOD CONFIG
 
+SMODS.current_mod.description_loc_vars = function()
+    return { background_colour = G.C.CLEAR, text_colour = G.C.WHITE, scale = 1.2 }
+end
+
 SMODS.current_mod.config_tab = function()
     -- Create a card area that will display an example joker
     G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
