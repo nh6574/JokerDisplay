@@ -155,7 +155,7 @@ JokerDisplay.find_joker_or_copy = function(key, count_debuffed)
     if not G.jokers or not G.jokers.cards then return {} end
     for _, joker in pairs(G.jokers.cards) do
         if joker and type(joker) == 'table' and
-            (joker .. config.center.key == key or
+            (joker.config.center.key == key or
                 joker.joker_display_values and joker.joker_display_values.blueprint_ability_key and
                 not joker.joker_display_values.blueprint_stop_func and
                 joker.joker_display_values.blueprint_ability_key == key) and
