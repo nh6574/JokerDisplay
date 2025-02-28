@@ -1076,7 +1076,7 @@ return {
         },
         text_config = { colour = G.C.SECONDARY_SET.Tarot },
         calc_function = function(card)
-            card.joker_display_values.active = G.GAME and G.GAME.dollars < 5
+            card.joker_display_values.active = G.GAME and to_big(G.GAME.dollars) < to_big(5)
             card.joker_display_values.count = card.joker_display_values.active and 1 or 0
         end
     },
