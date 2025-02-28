@@ -193,7 +193,7 @@ function Card:calculate_joker_display(custom_parent)
         self.joker_display_values.perishable = (G.GAME.perishable_rounds or 5) .. "/" .. (G.GAME.perishable_rounds or 5)
         self.joker_display_values.rental = "-$" .. (G.GAME.rental_rate or 3)
 
-        if self.ability.perishable then
+        if self.ability.perish_tally then
             self.joker_display_values.perishable = (self.ability.perish_tally or 5) ..
                 "/" .. (G.GAME.perishable_rounds or 5)
         end
