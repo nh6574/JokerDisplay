@@ -8,8 +8,6 @@ Balatro mod that displays information such as modifiers or relevant hands, ranks
 2. Download the [latest release](https://github.com/nh6574/JokerDisplay/releases)
 3. Extract the zip file into its own folder inside your Balatro mods folder (%appdata%\Balatro\Mods)
 
-Support for Steamodded <=0.9.8 was dropped in v1.6.1. Please use [version v1.6.0](https://github.com/nh6574/JokerDisplay/releases/tag/v1.6.0) or update to >1.0.0.
-
 ## Usage
 
 * Right-click the display or a Joker to hide/unhide displays (or use the back button on your controller over a Joker). This will disable all calculations for that joker (in case of crashes).
