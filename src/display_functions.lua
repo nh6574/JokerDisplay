@@ -543,13 +543,15 @@ end
 local cardarea_parse_highlighted_ref = CardArea.parse_highlighted
 function CardArea:parse_highlighted()
     cardarea_parse_highlighted_ref(self)
-    JokerDisplay.get_scoring_hand()
+    if G.hand then
+        JokerDisplay.get_scoring_hand()
+    end
 end
 
 local draw_card_ref = draw_card
 function draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
     draw_card_ref(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
-    if from ~= G.hand or to ~= G.play then
+    if G.hand and from ~= G.hand or to ~= G.play then
         JokerDisplay.get_scoring_hand()
     end
 end
@@ -557,5 +559,7 @@ end
 local card_remove_ref = Card.remove
 function Card:remove()
     card_remove_ref(self)
-    JokerDisplay.get_scoring_hand()
+    if G.hand then
+        JokerDisplay.get_scoring_hand()
+    end
 end
