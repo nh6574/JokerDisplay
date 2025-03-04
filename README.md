@@ -35,8 +35,8 @@ Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API docume
 | [Baladrone](https://github.com/fantasygone/Baladrone) | [Betmma Jokers](https://github.com/betmma/my_balatro_mods) |
 | [Bird Jokers](https://github.com/JustinBanzon/Bird-Jokers) | [Boss Jokers](https://github.com/KilledByLava/BossJokers) |
 | [Bunco](https://github.com/Firch/Bunco) | [Cryptid](https://github.com/MathIsFun0/Cryptid) |
-| [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) | [Emporium](https://github.com/krokshut/Emporium)|
-| [Friends Vs. Balatro](https://github.com/rae-vyn/FriendsVsBalatro/tree/main) |  |
+| [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) | [Diceylatro](https://nriomoder.itch.io/diceylatro) |
+| [Emporium](https://github.com/krokshut/Emporium) | [Friends Vs. Balatro](https://github.com/rae-vyn/FriendsVsBalatro/tree/main) |
 | [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) | [Jank Jonklers](https://github.com/spikeof2010/JankJonklers) |
 | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) | [JamMod](https://github.com/WilsontheWolf/JamMod) | 
 | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) | [Pampa Joker Pack](https://github.com/lshtech/balatro-pampa-joker-pack) | 
