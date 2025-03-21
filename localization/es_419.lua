@@ -2,20 +2,20 @@ return {
 	descriptions = {
 		Mod = {
 			JokerDisplay = {
-                name = "JokerDisplay",
-                text = {
-                    "Muestra información útil bajo los Comodines",
+				name = "JokerDisplay",
+				text = {
+					"Muestra información útil bajo los Comodines",
 					" ",
-                    "{C:attention}Controles:{}",
-                    "{C:blue}Click derecho o B:{} mostrar/ocultar",
-                    "{C:blue}Click izquierdo o Arriba:{} colapsar/expandir",
+					"{C:attention}Controles:{}",
+					"{C:blue}Click derecho o B:{} mostrar/ocultar",
+					"{C:blue}Click izquierdo o Arriba:{} colapsar/expandir",
 					" ",
 					"Agradecimientos a {C:green}Eremel{} y {C:green}OppositeWolf770{}",
 					" ",
 					"Traducción al ruso por: {C:green}WholeHorse{}",
 					"Traducción al francés por: {C:green}SDM_0{}",
-                },
-            }
+				},
+			}
 		}
 	},
 	misc = {
@@ -31,12 +31,13 @@ return {
 			jdis_extras = "Extras",
 			jdis_default_display = "Por Defecto",
 			jdis_small_display = "Colapsado",
-            jdis_active = "¡Activado!",
+			jdis_active = "¡Activado!",
 			jdis_inactive = "Inactivo",
 			jdis_all_suits = "Todos los palos"
 		},
 		v_dictionary = {
-			jdis_odds = "#1# en #2#"
+			jdis_odds = "#1# en #2#",
+			jdis_rank_of_suit = "#1# de #2#"
 		}
 	},
 }

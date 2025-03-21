@@ -36,7 +36,8 @@ return {
 			jdis_all_suits = "All Suits"
 		},
 		v_dictionary = {
-			jdis_odds = "#1# in #2#"
+			jdis_odds = "#1# in #2#",
+			jdis_rank_of_suit = "#1# of #2#"
 		}
 	},
 }
