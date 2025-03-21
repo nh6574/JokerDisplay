@@ -213,7 +213,19 @@ SMODS.current_mod.config_tab = function()
                     }
                 }
             },
-            { n = G.UIT.R, config = { minh = 0.5 } }
+            {
+                n = G.UIT.R,
+                config = { padding = 0.01, align = "cm" },
+                nodes = {
+                    create_toggle({
+                        label = localize('jdis_shift_to_hide'),
+                        ref_table = JokerDisplay.config,
+                        ref_value =
+                        'shift_to_hide'
+                    })
+                }
+            },
+            { n = G.UIT.R, config = { minh = 0.1 } }
         }
     }
 end

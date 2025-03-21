@@ -23,6 +23,7 @@ return {
 			jdis_enabled = "Habilitado",
 			jdis_hide_by_default = "Ocultar por defecto",
 			jdis_hide_empty = "Ocultar vacíos",
+			jdis_shift_to_hide = "Shift + Click Derecho para ocultar",
 			jdis_disable_collapse = "Dehabilitar colapsado",
 			jdis_disable_perishable = "Dehabilitar Perecedero",
 			jdis_disable_rental = "Dehabilitar Alquiler",
