@@ -232,7 +232,7 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
                 triggers = triggers +
                     math.floor(retrigger_function(card, scoring_hand, held_in_hand or false,
                         joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                        joker.joker_display_values.blueprint_ability_joker or joker))
+                        joker.joker_display_values.blueprint_ability_joker or joker) or 0)
             end
         end
     end
@@ -358,7 +358,7 @@ JokerDisplay.calculate_joker_triggers = function(card)
                 triggers = triggers +
                     math.floor(retrigger_joker_function(card,
                         joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                        joker.joker_display_values.blueprint_ability_joker or joker))
+                        joker.joker_display_values.blueprint_ability_joker or joker) or 0)
             end
         end
     end
