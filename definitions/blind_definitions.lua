@@ -21,7 +21,7 @@ return {
         trigger_function = function(blind, text, poker_hands, scoring_hand, full_hand)
             --TODO: Fix untriggering when hand is played for the first time
             local hand_exists = text ~= 'Unknown' and G.GAME and G.GAME.hands and G.GAME.hands[text]
-            return hand_exists and G.GAME.hands[text].level > 1 or false
+            return hand_exists and G.GAME.hands[text].level > to_big(1) or false
         end
     },
     bl_club = { -- The Club
