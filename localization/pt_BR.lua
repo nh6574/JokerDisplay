@@ -15,6 +15,7 @@ return {
 					"Tradução pro russo: {C:green}WholeHorse{}",
 					"Tradução pro francês: {C:green}SDM_0{}",
 					"Tradução pro português: {C:green}naumazeredo{}",
+					"Tradução pro italiano: {C:green}fleshness{}",
 				},
 			},
 		},
