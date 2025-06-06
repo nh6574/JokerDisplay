@@ -26,7 +26,7 @@
 ---@field text? string Text to display
 ---@field colour? table HEX color of the text.
 ---@field scale? number Scale of the text
----@field ref_table? table Reference table to get text from
+---@field ref_table? string Reference table to get text from, written in string form. `card` always refers to the current card
 ---@field ref_value? string Field in ref_table to get text from
 ---@field retrigger_type? 'add'|'+'|'mult'|'multiply'|'*'|'exp'|'exponentiate'|'^'|fun(base_number:integer,triggers:integer):integer If your Joker's numerical ref_value can retrigger multiple times, you can add retrigger_type to specify how that value interacts with retriggering. "add" or "+": Add the extra triggers to the base number. "mult", "multiply" or "*": Multiplies the base number by the number of total triggers. Use this for mult, chips, dollars or counters. "exp", "exponentiate" or "^": Exponentiates the base number by the number of total triggers. Use this for Xmult or Xchips. Or specify your own function (for emult, for example)
 ---@field dynatext? table Specify dynatext object
