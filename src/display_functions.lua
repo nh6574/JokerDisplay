@@ -548,9 +548,7 @@ JokerDisplay.get_scoring_hand = function()
     if G.STATE ~= G.STATES.HAND_PLAYED then
         JokerDisplay.current_hand = {}
         if G.STATE == G.STATES.SELECTING_HAND and G.hand and G.hand.highlighted then
-            for i = 1, #G.hand.highlighted do
-                JokerDisplay.current_hand[i] = G.hand.highlighted[i]
-            end
+            JokerDisplay.current_hand = JokerDisplay.sort_cards(G.hand.highlighted)
         end
     else
         count_facedowns = true
@@ -584,6 +582,14 @@ local card_remove_ref = Card.remove
 function Card:remove()
     card_remove_ref(self)
     if G.hand then
+        JokerDisplay.get_scoring_hand()
+    end
+end
+
+local card_release_ref = Node.stop_drag
+function Node:stop_drag()
+    card_release_ref(self)
+    if self.area and self.area == G.hand then
         JokerDisplay.get_scoring_hand()
     end
 end
