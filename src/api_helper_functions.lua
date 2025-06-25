@@ -51,23 +51,25 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
             inside = true
         end
         if not inside and G.jokers then
-            for _, joker in pairs(G.jokers.cards) do
-                local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
-                local scoring_function = not joker.debuff and joker.joker_display_values and
-                    ((joker_display_definition and joker_display_definition.scoring_function) or
-                        (joker.joker_display_values.blueprint_ability_key and
-                            not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
-                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
-                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].scoring_function))
+            for _, area in ipairs(JokerDisplay.get_display_areas()) do
+                for _, joker in pairs(area.cards) do
+                    local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+                    local scoring_function = not joker.debuff and joker.joker_display_values and
+                        ((joker_display_definition and joker_display_definition.scoring_function) or
+                            (joker.joker_display_values.blueprint_ability_key and
+                                not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                                JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                                JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].scoring_function))
 
-                if scoring_function then
-                    inside = scoring_function(valid_cards[i], scoring_hand,
-                        joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                        joker.joker_display_values.blueprint_ability_joker or joker)
-                end
-                if inside then
-                    table.insert(pures, valid_cards[i])
-                    break
+                    if scoring_function then
+                        inside = scoring_function(valid_cards[i], scoring_hand,
+                            joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                            joker.joker_display_values.blueprint_ability_joker or joker)
+                    end
+                    if inside then
+                        table.insert(pures, valid_cards[i])
+                        break
+                    end
                 end
             end
         end
@@ -218,21 +220,23 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
     local triggers = 1
 
     if G.jokers then
-        for _, joker in pairs(G.jokers.cards) do
-            local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
-            local retrigger_function = not joker.debuff and joker.joker_display_values and
-                ((joker_display_definition and joker_display_definition.retrigger_function) or
-                    (joker.joker_display_values.blueprint_ability_key and
-                        not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
-                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
-                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_function))
+        for _, area in ipairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards) do
+                local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+                local retrigger_function = not joker.debuff and joker.joker_display_values and
+                    ((joker_display_definition and joker_display_definition.retrigger_function) or
+                        (joker.joker_display_values.blueprint_ability_key and
+                            not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_function))
 
-            if retrigger_function then
-                -- The rounding is for Cryptid compat
-                triggers = triggers +
-                    math.floor(retrigger_function(card, scoring_hand, held_in_hand or false,
-                        joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                        joker.joker_display_values.blueprint_ability_joker or joker) or 0)
+                if retrigger_function then
+                    -- The rounding is for Cryptid compat
+                    triggers = triggers +
+                        math.floor(retrigger_function(card, scoring_hand, held_in_hand or false,
+                            joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                            joker.joker_display_values.blueprint_ability_joker or joker) or 0)
+                end
             end
         end
     end
@@ -276,33 +280,35 @@ JokerDisplay.calculate_joker_modifiers = function(card)
     end
 
     if G.jokers then
-        for _, joker in pairs(G.jokers.cards) do
-            local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
-            local mod_function = not joker.debuff and joker.joker_display_values and
-                ((joker_display_definition and joker_display_definition.mod_function) or
-                    (joker.joker_display_values.blueprint_ability_key and
-                        not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
-                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
-                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].mod_function))
+        for _, area in ipairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards) do
+                local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+                local mod_function = not joker.debuff and joker.joker_display_values and
+                    ((joker_display_definition and joker_display_definition.mod_function) or
+                        (joker.joker_display_values.blueprint_ability_key and
+                            not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].mod_function))
 
-            if mod_function then
-                local extra_mods = mod_function(card,
-                    joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                    joker.joker_display_values.blueprint_ability_joker or joker)
-                modifiers = {
-                    chips = (modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips) or
-                        extra_mods.chips or modifiers.chips,
-                    x_chips = (modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips * extra_mods.x_chips) or
-                        extra_mods.x_chips or modifiers.x_chips,
-                    mult = (modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult) or
-                        extra_mods.mult or modifiers.mult,
-                    x_mult = (modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult * extra_mods.x_mult) or
-                        extra_mods.x_mult or modifiers.x_mult,
-                    dollars = (modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars) or
-                        extra_mods.dollars or modifiers.dollars,
-                    e_mult = (modifiers.e_mult and extra_mods.e_mult and modifiers.e_mult ^ extra_mods.e_mult) or
-                        extra_mods.e_mult or modifiers.e_mult,
-                }
+                if mod_function then
+                    local extra_mods = mod_function(card,
+                        joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                        joker.joker_display_values.blueprint_ability_joker or joker)
+                    modifiers = {
+                        chips = (modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips) or
+                            extra_mods.chips or modifiers.chips,
+                        x_chips = (modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips * extra_mods.x_chips) or
+                            extra_mods.x_chips or modifiers.x_chips,
+                        mult = (modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult) or
+                            extra_mods.mult or modifiers.mult,
+                        x_mult = (modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult * extra_mods.x_mult) or
+                            extra_mods.x_mult or modifiers.x_mult,
+                        dollars = (modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars) or
+                            extra_mods.dollars or modifiers.dollars,
+                        e_mult = (modifiers.e_mult and extra_mods.e_mult and modifiers.e_mult ^ extra_mods.e_mult) or
+                            extra_mods.e_mult or modifiers.e_mult,
+                    }
+                end
             end
         end
     end
@@ -344,21 +350,23 @@ JokerDisplay.calculate_joker_triggers = function(card)
     local triggers = 1
 
     if G.jokers then
-        for _, joker in pairs(G.jokers.cards) do
-            local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
-            local retrigger_joker_function = not joker.debuff and joker.joker_display_values and
-                ((joker_display_definition and joker_display_definition.retrigger_joker_function) or
-                    (joker.joker_display_values.blueprint_ability_key and
-                        not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
-                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
-                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_joker_function))
+        for _, area in ipairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards) do
+                local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
+                local retrigger_joker_function = not joker.debuff and joker.joker_display_values and
+                    ((joker_display_definition and joker_display_definition.retrigger_joker_function) or
+                        (joker.joker_display_values.blueprint_ability_key and
+                            not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_joker_function))
 
-            if retrigger_joker_function then
-                -- The rounding is for Cryptid compat
-                triggers = triggers +
-                    math.floor(retrigger_joker_function(card,
-                        joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                        joker.joker_display_values.blueprint_ability_joker or joker) or 0)
+                if retrigger_joker_function then
+                    -- The rounding is for Cryptid compat
+                    triggers = triggers +
+                        math.floor(retrigger_joker_function(card,
+                            joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
+                            joker.joker_display_values.blueprint_ability_joker or joker) or 0)
+                end
             end
         end
     end

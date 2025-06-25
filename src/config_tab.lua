@@ -234,8 +234,10 @@ end
 function update_display()
     G.config_card_area.cards[1]:update_joker_display(false, true, "config_update")
     if G.jokers then
-        for _, joker in pairs(G.jokers.cards) do
-            joker:update_joker_display(false, true, "config_update")
+        for _, area in ipairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards) do
+                joker:update_joker_display(false, true, "config_update")
+            end
         end
     end
 end
