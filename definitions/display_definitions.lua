@@ -16,7 +16,7 @@ return {
             { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
-        reminder_text = { --
+        reminder_text = {
             { text = "(" },
             {
                 ref_table = "card.joker_display_values",
@@ -452,7 +452,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_misprint = { -- Misprint
@@ -641,7 +642,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_even_steven = { -- Even Steven
@@ -747,7 +749,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_supernova = { -- Supernova
@@ -781,7 +784,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_egg = { -- Egg
@@ -982,7 +986,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_card_sharp = { -- Card Sharp
@@ -1256,7 +1261,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_mail = { -- Mail-In Rebate
@@ -1308,7 +1314,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
     j_fortune_teller = { -- Fortune Teller
@@ -1741,7 +1748,8 @@ return {
                 count = 3
             end
             card.joker_display_values.count = count
-            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
             card.joker_display_values.localized_text = localize("Hearts", 'suits_plural')
         end
     },
