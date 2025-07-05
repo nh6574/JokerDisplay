@@ -15,7 +15,8 @@ return {
 					"Russian localization by: {C:green}WholeHorse{}",
 					"French localization by: {C:green}SDM_0{}",
 					"Portuguese localization by: {C:green}naumazeredo{}",
-					"Italian localization by: {C:green}fleshness{}"
+					"Italian localization by: {C:green}fleshness{}",
+					"German localization by: {C:green}GunnableScum{}"
 				},
 			}
 		}
