@@ -16,7 +16,6 @@ return {
 					"Tradução pro francês: {C:green}SDM_0{}",
 					"Tradução pro português: {C:green}naumazeredo{}",
 					"Tradução pro italiano: {C:green}fleshness{}",
-					-- I think this is correct, any brazillians in chat?
 					"Tradução pro alemão: {C:green}GunnableScum{}",
 				},
 			},

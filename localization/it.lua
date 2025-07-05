@@ -16,7 +16,6 @@ return {
                     "Localizzazione francese a cura di: {C:green}SDM_0{}",
                     "Localizzazione portoghese a cura di: {C:green}naumazeredo{}",
                     "Localizzazione italiana a cura di: {C:green}fleshness{}",
-                    -- I think this is correct, any italiano natives in chat?
                     "Localizzazione tedesca a cura di: {C:green}GunnableScum{}"
                 },
             }
