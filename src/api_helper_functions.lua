@@ -262,6 +262,9 @@ JokerDisplay.calculate_joker_modifiers = function(card)
     for _, edition in pairs(JokerDisplay.Edition_Definitions) do
         if edition.condition_function(card) then
             local edition_mods = edition.mod_function(card)
+            edition_mods.x_mult = edition_mods.x_mult or edition_mods.xmult
+            edition_mods.x_chips = edition_mods.x_chips or edition_mods.xchips
+            edition_mods.e_mult = edition_mods.e_mult or edition_mods.emult
             modifiers = {
                 chips = (modifiers.chips and edition_mods.chips and modifiers.chips + edition_mods.chips) or
                     edition_mods.chips or modifiers.chips,
@@ -294,6 +297,9 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                     local extra_mods = mod_function(card,
                         joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
                         joker.joker_display_values.blueprint_ability_joker or joker)
+                    extra_mods.x_mult = extra_mods.x_mult or extra_mods.xmult
+                    extra_mods.x_chips = extra_mods.x_chips or extra_mods.xchips
+                    extra_mods.e_mult = extra_mods.e_mult or extra_mods.emult
                     modifiers = {
                         chips = (modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips) or
                             extra_mods.chips or modifiers.chips,

@@ -3,10 +3,13 @@
 ---@class JDModifiers
 ---@field chips? number
 ---@field x_chips? number
+---@field xchips? number
 ---@field mult? number
 ---@field x_mult? number
+---@field xmult? number
 ---@field dollars? number
 ---@field e_mult? number
+---@field emult? number
 
 ---@class JokerDisplay
 ---@field evaluate_hand? fun(cards:Card[]|table[]?, count_facedowns:boolean?):string,table<string, Card[]|table[]>,Card[]|table[] Returns scoring information about a set of cards. You can get the full hand using `JokerDisplay.current_hand`.
