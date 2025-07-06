@@ -452,7 +452,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra, '8ball')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -642,7 +642,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'gros_michel')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -749,7 +749,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra, 'business')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -784,7 +784,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra, 'space')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -986,7 +986,7 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cavendish')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1261,7 +1261,7 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'parking')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1314,7 +1314,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra,
+                'halu' .. G.GAME.round_resets.ante)
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1748,7 +1749,7 @@ return {
                 count = 3
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'bloodstone')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
             card.joker_display_values.localized_text = localize("Hearts", 'suits_plural')
         end
