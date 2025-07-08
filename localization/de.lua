@@ -17,6 +17,7 @@ return {
 					"Portugiesische Übersetzung von: {C:green}naumazeredo{}",
 					"Italienische Übersetzung von: {C:green}fleshness{}",
 					"Deutsche Übersetzung von: {C:green}GunnableScum{}",
+					"Traditionelles Chinesisch Übersetzung von: {C:green}wilfredlam0418{}",
 					"Niederländische Übersetzung von: {C:green}Soulsphere{}",
 				},
 			}

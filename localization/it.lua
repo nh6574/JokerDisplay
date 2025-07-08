@@ -17,7 +17,8 @@ return {
                     "Localizzazione portoghese a cura di: {C:green}naumazeredo{}",
                     "Localizzazione italiana a cura di: {C:green}fleshness{}",
                     "Localizzazione tedesca a cura di: {C:green}GunnableScum{}",
-                    "Localizzazione olandese a cura di: {C:green}Soulsphere{}"
+                    "Localizzazione olandese a cura di: {C:green}Soulsphere{}",
+                    "Localizzazione cinese tradizionale a cura di: {C:green}wilfredlam0418{}"
                 },
             }
         }
