@@ -17,6 +17,7 @@ return {
 					"Traducción al portugués por: {C:green}naumazeredo{}",
 					"Traducción al italiano por: {C:green}fleshness{}",
 					"Traducción al alemán por: {C:green}GunnableScum{}",
+					"Traducción al chino tradicional por: {C:green}wilfredlam0418{}"
 				},
 			}
 		}
