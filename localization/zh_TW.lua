@@ -17,7 +17,8 @@ return {
 					"葡萄牙文翻譯由: {C:green}naumazeredo{}",
 					"義大利文翻譯由: {C:green}fleshness{}",
 					"德文翻譯由: {C:green}GunnableScum{}",
-					"繁體中文由: {C:green}wilfredlam0418{}"
+					"繁體中文由: {C:green}wilfredlam0418{}",
+					"Dutch localization by: {C:green}Soulsphere{}"
 				},
 			}
 		}
