@@ -16,7 +16,8 @@ return {
                     "Localizzazione francese a cura di: {C:green}SDM_0{}",
                     "Localizzazione portoghese a cura di: {C:green}naumazeredo{}",
                     "Localizzazione italiana a cura di: {C:green}fleshness{}",
-                    "Localizzazione tedesca a cura di: {C:green}GunnableScum{}"
+                    "Localizzazione tedesca a cura di: {C:green}GunnableScum{}",
+                    "Localizzazione olandese a cura di: {C:green}Soulsphere{}"
                 },
             }
         }

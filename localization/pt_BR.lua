@@ -17,6 +17,7 @@ return {
 					"Tradução pro português: {C:green}naumazeredo{}",
 					"Tradução pro italiano: {C:green}fleshness{}",
 					"Tradução pro alemão: {C:green}GunnableScum{}",
+					"Tradução pro holandês: {C:green}Soulsphere{}",
 				},
 			},
 		},

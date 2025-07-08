@@ -16,7 +16,8 @@ return {
 					"French localization by: {C:green}SDM_0{}",
 					"Portuguese localization by: {C:green}naumazeredo{}",
 					"Italian localization by: {C:green}fleshness{}",
-					"German localization by: {C:green}GunnableScum{}"
+					"German localization by: {C:green}GunnableScum{}",
+					"Dutch localization by: {C:green}Soulsphere{}"
 				},
 			}
 		}
