@@ -16,7 +16,8 @@ return {
 					"法文翻譯由: {C:green}SDM_0{}",
 					"葡萄牙文翻譯由: {C:green}naumazeredo{}",
 					"義大利文翻譯由: {C:green}fleshness{}",
-					"德文翻譯由: {C:green}GunnableScum{}"
+					"德文翻譯由: {C:green}GunnableScum{}",
+					"繁體中文由: {C:green}wilfredlam0418{}"
 				},
 			}
 		}
@@ -40,8 +41,8 @@ return {
 			jdis_all_suits = "所有花色"
 		},
 		v_dictionary = {
-			jdis_odds = "#2# 分之 #1#",
-			jdis_rank_of_suit = "#1# 的 #2#"
+			jdis_odds = "#1#/#2#",
+			jdis_rank_of_suit = "#1# 的#2#"
 		}
 	},
 }
