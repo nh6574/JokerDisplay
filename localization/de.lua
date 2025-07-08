@@ -16,7 +16,8 @@ return {
 					"Französische Übersetzung von: {C:green}SDM_0{}",
 					"Portugiesische Übersetzung von: {C:green}naumazeredo{}",
 					"Italienische Übersetzung von: {C:green}fleshness{}",
-					"Deutsche Übersetzung von: {C:green}GunnableScum{}"
+					"Deutsche Übersetzung von: {C:green}GunnableScum{}",
+					"Traditionelles Chinesisch Übersetzung von: {C:green}wilfredlam0418{}"
 				},
 			}
 		}
