@@ -46,4 +46,5 @@ luac.out
 tk_debug_window.py
 JokerDisplay.zip
 JokerDisplay/
+.luarc.json
 .lovelyignore
