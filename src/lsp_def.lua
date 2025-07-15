@@ -52,7 +52,6 @@
 ---@field retrigger_function? fun(card:Card|table, scoring_hand:Card[]|table[]?, held_in_hand:boolean?, joker_card:Card|table?):integer Used to calculate playing card retriggers caused by the Joker.
 ---@field retrigger_joker_function? fun(card:Card|table, retrigger_joker:Card|table?):integer Used to calculate other Joker retriggers caused by the Joker.
 ---@field mod_function? fun(card:Card|table, mod_joker:Card|table?):JDModifiers Used to add extra modifiers to other Jokers.
----@field scoring_function? fun(card:Card|table, scoring_hand:Card[]|table[]?, joker_card:Card|table?):boolean? Used to check if the Joker is causing a playing card in the played hand to be counted even if it's not in a valid poker hand (i.e. for Splash).
 ---@field get_blueprint_joker? fun(card:Card|table):Card|table? Used to calculate the Joker to copy for Blueprint-like Jokers.
 
 ---@class SMODS.Joker

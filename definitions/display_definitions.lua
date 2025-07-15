@@ -846,10 +846,7 @@ return {
             card.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("jdis_active") or localize("jdis_inactive"))
         end
     },
-    j_splash = { -- Splash
-        scoring_function = function(playing_card, scoring_hand, joker_card)
-            return true
-        end
+    j_splash = {     -- Splash
     },
     j_blue_joker = { -- Blue Joker
         text = {

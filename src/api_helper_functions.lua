@@ -38,47 +38,32 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
 
     local text, _, poker_hands, scoring_hand, _ = G.FUNCS.get_poker_hand_info(valid_cards)
 
-    local pures = {}
+    local final_scoring_hand = {}
     for i = 1, #valid_cards do
-        local inside = false
-        for j = 1, #scoring_hand do
-            if scoring_hand[j] == valid_cards[i] then
-                inside = true
+        local splashed = SMODS.always_scores(valid_cards[i]) or next(find_joker('Splash'))
+        local unsplashed = SMODS.never_scores(valid_cards[i])
+        if not splashed then
+            for _, card in pairs(scoring_hand) do
+                if card == valid_cards[i] then splashed = true end
             end
         end
-        if not inside and valid_cards[i].ability.effect == 'Stone Card' then
-            table.insert(pures, valid_cards[i])
-            inside = true
-        end
-        if not inside and G.jokers then
-            for _, area in ipairs(JokerDisplay.get_display_areas()) do
-                for _, joker in pairs(area.cards) do
-                    local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
-                    local scoring_function = not joker.debuff and joker.joker_display_values and
-                        ((joker_display_definition and joker_display_definition.scoring_function) or
-                            (joker.joker_display_values.blueprint_ability_key and
-                                not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
-                                JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
-                                JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].scoring_function))
-
-                    if scoring_function then
-                        inside = scoring_function(valid_cards[i], scoring_hand,
-                            joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
-                            joker.joker_display_values.blueprint_ability_joker or joker)
-                    end
-                    if inside then
-                        table.insert(pures, valid_cards[i])
-                        break
-                    end
-                end
-            end
-        end
-    end
-    for i = 1, #pures do
-        table.insert(scoring_hand, pures[i])
+        local effects = {}
+        SMODS.calculate_context(
+            {
+                modify_scoring_hand = true,
+                other_card = valid_cards[i],
+                full_hand = valid_cards,
+                scoring_hand =
+                    scoring_hand
+            }, effects)
+        local flags = SMODS.trigger_effects(effects, valid_cards[i])
+        flags = flags or {}
+        if flags.add_to_hand then splashed = true end
+        if flags.remove_from_hand then unsplashed = true end
+        if splashed and not unsplashed then table.insert(final_scoring_hand, valid_cards[i]) end
     end
 
-    return (has_facedown and "Unknown" or text), poker_hands, scoring_hand
+    return (has_facedown and "Unknown" or text), poker_hands, final_scoring_hand
 end
 
 ---Returns what Joker the current Blueprint-like card is copying.
