@@ -544,6 +544,8 @@ end
 ---Gets information about the current highlighted/played hand. If you want to evaluate the current hand:
 ---@see JokerDisplay.evaluate_hand
 JokerDisplay.get_scoring_hand = function()
+    if G.in_delete_run then return end
+
     local count_facedowns = false
     if G.STATE ~= G.STATES.HAND_PLAYED then
         JokerDisplay.current_hand = {}
