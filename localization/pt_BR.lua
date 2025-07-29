@@ -18,7 +18,8 @@ return {
 					"Tradução pro italiano: {C:green}fleshness{}",
 					"Tradução pro alemão: {C:green}GunnableScum{}",
 					"Tradução pro holandês: {C:green}Soulsphere{}",
-					"Tradução pro chinês tradicional: {C:green}wilfredam0418{}"
+					"Tradução pro chinês tradicional: {C:green}wilfredam0418{}",
+					"Simplified Chinese localization by: {C:green}ChromaPIE",
 				},
 			},
 		},

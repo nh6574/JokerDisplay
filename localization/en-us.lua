@@ -18,7 +18,8 @@ return {
 					"Italian localization by: {C:green}fleshness{}",
 					"German localization by: {C:green}GunnableScum{}",
 					"Traditional Chinese localization by: {C:green}wilfredlam0418{}",
-					"Dutch localization by: {C:green}Soulsphere{}"
+					"Dutch localization by: {C:green}Soulsphere{}",
+					"Simplified Chinese localization by: {C:green}ChromaPIE",
 				},
 			}
 		}

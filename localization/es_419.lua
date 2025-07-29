@@ -18,7 +18,8 @@ return {
 					"Traducción al italiano por: {C:green}fleshness{}",
 					"Traducción al alemán por: {C:green}GunnableScum{}",
 					"Traducción al neerlandés por: {C:green}Soulsphere{}",
-					"Traducción al chino tradicional por: {C:green}wilfredlam0418{}"
+					"Traducción al chino tradicional por: {C:green}wilfredlam0418{}",
+					"Traducción al chino simplificado by: {C:green}ChromaPIE",
 				},
 			}
 		}

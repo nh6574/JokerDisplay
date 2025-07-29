@@ -18,7 +18,8 @@ return {
 					"義大利文翻譯由: {C:green}fleshness{}",
 					"德文翻譯由: {C:green}GunnableScum{}",
 					"繁體中文由: {C:green}wilfredlam0418{}",
-					"Dutch localization by: {C:green}Soulsphere{}"
+					"Dutch localization by: {C:green}Soulsphere{}",
+					"Simplified Chinese localization by: {C:green}ChromaPIE",
 				},
 			}
 		}

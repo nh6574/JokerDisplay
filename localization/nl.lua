@@ -18,7 +18,8 @@
                     "Italiaanse lokalisatie door: {C:green}fleshness{}",
                     "Duitse lokalisatie door: {C:green}GunnableScum{}",
                     "Traditioneel Chinese lokalisatie door: {C:green}wilfredlam0418{}",
-                    "Nederlandse lokalisatie door: {C:green}Soulsphere{}"
+                    "Nederlandse lokalisatie door: {C:green}Soulsphere{}",
+                    "Simplified Chinese localization by: {C:green}ChromaPIE",
                 },
             }
         }
