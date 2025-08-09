@@ -226,7 +226,7 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
         end
     end
 
-    triggers = triggers + (card:get_seal() == 'Red' and 1 or 0)
+    triggers = triggers + (card:get_seal() == 'Red' and 1 or 0) + (card.ability.perma_repetitions or 0)
 
     return triggers
 end
