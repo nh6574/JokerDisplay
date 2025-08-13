@@ -233,7 +233,7 @@ function Card:update_joker_display(force_update, force_reload, _from)
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
             self.joker_display_values = {}
-            self.joker_display_values.disabled = JokerDisplay.config.hide_by_default
+            self.joker_display_values.disabled = JokerDisplay.config.hide_by_default or false
             self.joker_display_values.small = false
 
             --Regular Display
@@ -324,9 +324,7 @@ function Card:update_joker_display(force_update, force_reload, _from)
                 self.children.joker_display_rental.name = "JokerDisplay"
             end
         else
-            if force_update or (JokerDisplay.config.enabled and
-                    ((self:joker_display_has_info() or not JokerDisplay.config.hide_empty)
-                        and (not self.joker_display_values.disabled) or self.joker_display_values.blueprint_force_update)) then
+            if force_update or (JokerDisplay.config.enabled and (not self.joker_display_values.disabled or self.joker_display_values.blueprint_force_update)) then
                 if force_reload then
                     self:initialize_joker_display()
                 else

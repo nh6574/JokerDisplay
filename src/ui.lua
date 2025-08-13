@@ -333,7 +333,8 @@ function UIElement:update_text()
         local card = self.UIBox.parent
         if JokerDisplay.config.enabled and (card.joker_display_values and not card.joker_display_values.disabled) and self.config.ref_table then
             local formatted_text = JokerDisplay.text_format(self.config.ref_table[self.config.ref_value], self)
-            local prev_value = self.config.prev_value_joker_display or JokerDisplay.text_format(self.config.prev_value, self)
+            local prev_value = self.config.prev_value_joker_display or
+                JokerDisplay.text_format(self.config.prev_value, self)
             if formatted_text ~= prev_value then
                 self.config.text = formatted_text
                 self.config.text_drawable:set(self.config.text)
