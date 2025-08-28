@@ -516,3 +516,32 @@ JokerDisplay.create_display_border_text_object = function(nodes, border_color)
         nodes = nodes
     }
 end
+
+-- Joker slot count over display
+local cardarea_draw_ref = CardArea.draw
+function CardArea:draw(...)
+    cardarea_draw_ref(self, ...)
+    if self == G.jokers then
+        if not self.children.joker_display_count then
+            self.children.joker_display_count = UIBox {
+                definition =
+                { n = G.UIT.ROOT, config = { align = 'cm', colour = G.C.CLEAR }, nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = 'cl', padding = 0.03, no_fill = true },
+                        nodes = {
+                            { n = G.UIT.B, config = { w = 0.1, h = 0.1 } },
+                            { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE } },
+                            { n = G.UIT.T, config = { text = '/', scale = 0.3, colour = G.C.WHITE } },
+                            { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'true_card_limit', scale = 0.3, colour = G.C.WHITE } },
+                            { n = G.UIT.B, config = { w = 0.1, h = 0.1 } }
+                        }
+                    }
+                } },
+                config = { align = 'cm', offset = { x = 0, y = 0 }, major = self.children.area_uibox.UIRoot.children[2], parent = self.children.area_uibox.UIRoot.children[2], instance_type = "ALERT" }
+            }
+        end
+        self.children.joker_display_count.T = self.children.area_uibox.UIRoot.children[2].T
+        self.children.joker_display_count.states.visible = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
+    end
+end

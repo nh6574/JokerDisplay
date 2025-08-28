@@ -19,7 +19,7 @@ return {
 					"Traducción al alemán por: {C:green}GunnableScum{}",
 					"Traducción al neerlandés por: {C:green}Soulsphere{}",
 					"Traducción al chino tradicional por: {C:green}wilfredlam0418{}",
-					"Traducción al chino simplificado by: {C:green}ChromaPIE",
+					"Traducción al chino simplificado por: {C:green}ChromaPIE",
 				},
 			}
 		}
@@ -30,6 +30,7 @@ return {
 			jdis_hide_by_default = "Ocultar por defecto",
 			jdis_hide_empty = "Ocultar vacíos",
 			jdis_shift_to_hide = "Shift + Click Derecho para ocultar",
+			jdis_joker_count = "Mostrar ranuras de comodín por sobre información",
 			jdis_disable_collapse = "Dehabilitar colapsado",
 			jdis_disable_perishable = "Dehabilitar Perecedero",
 			jdis_disable_rental = "Dehabilitar Alquiler",

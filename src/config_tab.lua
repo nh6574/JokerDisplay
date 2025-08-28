@@ -1,5 +1,13 @@
 --- MOD CONFIG
 
+SMODS.current_mod.ui_config = {
+    bg_colour = HEX("44D72344"),
+    back_colour = HEX("D63939"),
+    tab_button_colour = HEX("D63939"),
+    collection_option_cycle_colour = HEX("D63939"),
+    author_colour = HEX("D63939")
+}
+
 SMODS.current_mod.description_loc_vars = function()
     return { background_colour = G.C.CLEAR, text_colour = G.C.WHITE, scale = 1.2 }
 end
@@ -32,7 +40,7 @@ SMODS.current_mod.config_tab = function()
                         nodes = {
                             {
                                 n = G.UIT.R,
-                                config = { align = "cm", padding = 0.01 },
+                                config = { align = "cr", padding = 0.01 },
                                 nodes = {
                                     create_toggle({
                                         label = localize('jdis_enabled'),
@@ -43,7 +51,7 @@ SMODS.current_mod.config_tab = function()
                             },
                             {
                                 n = G.UIT.R,
-                                config = { padding = 0.01, align = "cm" },
+                                config = { padding = 0.01, align = "cr" },
                                 nodes = {
                                     create_toggle({
                                         label = localize('jdis_hide_by_default'),
@@ -55,7 +63,7 @@ SMODS.current_mod.config_tab = function()
                             },
                             {
                                 n = G.UIT.R,
-                                config = { padding = 0.01, align = "cm" },
+                                config = { padding = 0.01, align = "cr" },
                                 nodes = {
                                     create_toggle({
                                         label = localize('jdis_hide_empty'),
@@ -73,7 +81,7 @@ SMODS.current_mod.config_tab = function()
                         nodes = {
                             {
                                 n = G.UIT.R,
-                                config = { padding = 0.01, align = "cm" },
+                                config = { padding = 0.01, align = "cr" },
                                 nodes = {
                                     create_toggle({
                                         label = localize('jdis_disable_collapse'),
@@ -85,7 +93,7 @@ SMODS.current_mod.config_tab = function()
                             },
                             {
                                 n = G.UIT.R,
-                                config = { padding = 0.01, align = "cm" },
+                                config = { padding = 0.01, align = "cr" },
                                 nodes = {
                                     create_toggle({
                                         label = localize('jdis_disable_perishable'),
@@ -97,7 +105,7 @@ SMODS.current_mod.config_tab = function()
                             },
                             {
                                 n = G.UIT.R,
-                                config = { padding = 0.01, align = "cm" },
+                                config = { padding = 0.01, align = "cr" },
                                 nodes = {
                                     create_toggle({
                                         label = localize('jdis_disable_rental'),
@@ -137,30 +145,45 @@ SMODS.current_mod.config_tab = function()
                                                     },
                                                 }
                                             },
-                                            create_toggle({
-                                                label = localize('jdis_modifiers'),
-                                                ref_table = JokerDisplay.config
-                                                    .default_rows,
-                                                callback = update_display,
-                                                ref_value = 'modifiers',
-                                                w = 2
-                                            }),
-                                            create_toggle({
-                                                label = localize('jdis_reminders'),
-                                                ref_table = JokerDisplay.config
-                                                    .default_rows,
-                                                callback = update_display,
-                                                ref_value = 'reminder',
-                                                w = 2
-                                            }),
-                                            create_toggle({
-                                                label = localize('jdis_extras'),
-                                                ref_table = JokerDisplay.config
-                                                    .default_rows,
-                                                callback = update_display,
-                                                ref_value = 'extra',
-                                                w = 2
-                                            })
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cr" },
+                                                nodes = {
+                                                    create_toggle({
+                                                        label = localize('jdis_modifiers'),
+                                                        ref_table = JokerDisplay.config.default_rows,
+                                                        callback = update_display,
+                                                        ref_value = 'modifiers',
+                                                        w = 2,
+                                                    }),
+                                                }
+                                            },
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cr" },
+                                                nodes = {
+                                                    create_toggle({
+                                                        label = localize('jdis_reminders'),
+                                                        ref_table = JokerDisplay.config.default_rows,
+                                                        callback = update_display,
+                                                        ref_value = 'reminder',
+                                                        w = 2
+                                                    }),
+                                                }
+                                            },
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cr" },
+                                                nodes = {
+                                                    create_toggle({
+                                                        label = localize('jdis_extras'),
+                                                        ref_table = JokerDisplay.config.default_rows,
+                                                        callback = update_display,
+                                                        ref_value = 'extra',
+                                                        w = 2
+                                                    })
+                                                }
+                                            },
                                         }
                                     },
                                     {
@@ -174,30 +197,45 @@ SMODS.current_mod.config_tab = function()
                                                     { n = G.UIT.T, config = { text = localize('jdis_small_display'), colour = G.C.UI.TEXT_LIGHT, scale = 0.5, align = "cr" } },
                                                 }
                                             },
-                                            create_toggle({
-                                                label = localize('jdis_modifiers'),
-                                                ref_table = JokerDisplay.config
-                                                    .small_rows,
-                                                callback = update_display,
-                                                ref_value = 'modifiers',
-                                                w = 2
-                                            }),
-                                            create_toggle({
-                                                label = localize('jdis_reminders'),
-                                                ref_table = JokerDisplay.config
-                                                    .small_rows,
-                                                callback = update_display,
-                                                ref_value = 'reminder',
-                                                w = 2
-                                            }),
-                                            create_toggle({
-                                                label = localize('jdis_extras'),
-                                                ref_table = JokerDisplay.config
-                                                    .small_rows,
-                                                callback = update_display,
-                                                ref_value = 'extra',
-                                                w = 2
-                                            })
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cr" },
+                                                nodes = {
+                                                    create_toggle({
+                                                        label = localize('jdis_modifiers'),
+                                                        ref_table = JokerDisplay.config.small_rows,
+                                                        callback = update_display,
+                                                        ref_value = 'modifiers',
+                                                        w = 2
+                                                    }),
+                                                }
+                                            },
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cr" },
+                                                nodes = {
+                                                    create_toggle({
+                                                        label = localize('jdis_reminders'),
+                                                        ref_table = JokerDisplay.config.small_rows,
+                                                        callback = update_display,
+                                                        ref_value = 'reminder',
+                                                        w = 2
+                                                    }),
+                                                }
+                                            },
+                                            {
+                                                n = G.UIT.R,
+                                                config = { align = "cr" },
+                                                nodes = {
+                                                    create_toggle({
+                                                        label = localize('jdis_extras'),
+                                                        ref_table = JokerDisplay.config.small_rows,
+                                                        callback = update_display,
+                                                        ref_value = 'extra',
+                                                        w = 2
+                                                    })
+                                                }
+                                            },
                                         }
                                     }
                                 }
@@ -215,13 +253,25 @@ SMODS.current_mod.config_tab = function()
             },
             {
                 n = G.UIT.R,
-                config = { padding = 0.01, align = "cm" },
+                config = { padding = 0.01, align = "cr" },
                 nodes = {
                     create_toggle({
                         label = localize('jdis_shift_to_hide'),
                         ref_table = JokerDisplay.config,
                         ref_value =
                         'shift_to_hide'
+                    })
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { padding = 0.01, align = "cr" },
+                nodes = {
+                    create_toggle({
+                        label = localize('jdis_joker_count'),
+                        ref_table = JokerDisplay.config,
+                        ref_value =
+                        'joker_count'
                     })
                 }
             },

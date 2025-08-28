@@ -30,6 +30,7 @@ return {
 			jdis_hide_by_default = "Hide by default",
 			jdis_hide_empty = "Hide empty",
 			jdis_shift_to_hide = "Shift + Right Click to hide",
+			jdis_joker_count = "Show Joker slot count over displays",
 			jdis_disable_collapse = "Disable collapsing",
 			jdis_disable_perishable = "Disable Perishable",
 			jdis_disable_rental = "Disable Rental",
@@ -40,7 +41,7 @@ return {
 			jdis_small_display = "Collapsed",
 			jdis_active = "Active!",
 			jdis_inactive = "Inactive",
-			jdis_all_suits = "All Suits"
+			jdis_all_suits = "All Suits",
 		},
 		v_dictionary = {
 			jdis_odds = "#1# in #2#",

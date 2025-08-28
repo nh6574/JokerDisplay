@@ -7,6 +7,7 @@ return {
 	hide_by_default = false,
 	hide_empty = true,
 	shift_to_hide = false,
+	joker_count = true,
 	disable_collapse = false,
 	disable_perishable = false,
 	disable_rental = false,
