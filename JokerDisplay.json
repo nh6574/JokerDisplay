@@ -7,6 +7,6 @@
   "prefix": "JokerDisplay",
   "main_file": "JokerDisplay.lua",
   "priority": -100000,
-  "version": "1.8.7",
+  "version": "1.8.7.1",
   "dependencies": ["Steamodded (>=1.0.0~BETA-0624a)"]
 }

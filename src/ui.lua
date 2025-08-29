@@ -533,7 +533,7 @@ function CardArea:draw(...)
                             { n = G.UIT.B, config = { w = 0.1, h = 0.1 } },
                             { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE } },
                             { n = G.UIT.T, config = { text = '/', scale = 0.3, colour = G.C.WHITE } },
-                            { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'true_card_limit', scale = 0.3, colour = G.C.WHITE } },
+                            { n = G.UIT.T, config = { ref_table = self.config, ref_value = self.config.true_card_limit and 'true_card_limit' or 'card_limit', scale = 0.3, colour = G.C.WHITE } },
                             { n = G.UIT.B, config = { w = 0.1, h = 0.1 } }
                         }
                     }
@@ -541,6 +541,7 @@ function CardArea:draw(...)
                 config = { align = 'cm', offset = { x = 0, y = 0 }, major = self.children.area_uibox.UIRoot.children[2], parent = self.children.area_uibox.UIRoot.children[2], instance_type = "ALERT" }
             }
         end
+
         self.children.joker_display_count.T = self.children.area_uibox.UIRoot.children[2].T
         self.children.joker_display_count.states.visible = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
     end
