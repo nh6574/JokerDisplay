@@ -229,7 +229,7 @@ end
 ---@param force_reload boolean? Force re-initialization
 ---@param _from string? Debug string
 function Card:update_joker_display(force_update, force_reload, _from)
-    if self.ability and self.ability.set == 'Joker' then
+    if self.ability then
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
             self.joker_display_values = {}

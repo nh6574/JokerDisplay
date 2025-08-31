@@ -34,7 +34,7 @@ function Controller:queue_R_cursor_press(x, y)
                     if press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
                         press_node.parent:joker_display_toggle()
                     end
-                    if press_node.ability and press_node.ability.set == 'Joker' then
+                    if press_node.ability then
                         press_node:joker_display_toggle()
                     end
                 end
