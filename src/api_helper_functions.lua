@@ -14,19 +14,28 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
     if not cards then
         local hand_info = JokerDisplay.current_hand_info
         return hand_info.text, hand_info.poker_hands, hand_info.scoring_hand
-    elseif not type(cards) == "table" then
+    elseif type(cards) ~= "table" then
         return "Unknown", {}, {}
     end
     for i = 1, #cards do
-        if not type(cards[i]) == "table" or not (cards[i].ability.set == 'Enhanced' or cards[i].ability.set == 'Default') then
+        if type(cards[i]) ~= "table" or not cards[i].ability or not (cards[i].ability.set == 'Enhanced' or cards[i].ability.set == 'Default') then
             return "Unknown", {}, {}
+        end
+    end
+
+    -- To prevent crashing during poker hand eval
+    if G.play then
+        for i = 1, #G.play.cards do
+            if type(G.play.cards[i]) ~= "table" or not G.play.cards[i].ability or not (G.play.cards[i].ability.set == 'Enhanced' or G.play.cards[i].ability.set == 'Default') then
+                return "Unknown", {}, {}
+            end
         end
     end
 
     if not count_facedowns then
         valid_cards = {}
         for i = 1, #cards do
-            if cards[i].facing and not (cards[i].facing == 'back') then
+            if cards[i].facing and cards[i].facing ~= 'back' then
                 table.insert(valid_cards, cards[i])
             else
                 has_facedown = true
@@ -98,8 +107,8 @@ end
 ---@param bypass_debuff boolean? Bypass debuff.
 ---@param stop_func_copy boolean? Don't copy other functions such as mod_function, retrigger_function, etc.
 JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_debuff, stop_func_copy)
-    local changed = not (copied_joker == card.joker_display_values.blueprint_ability_joker) or
-        not (card.joker_display_values.blueprint_debuff == is_debuffed)
+    local changed = copied_joker ~= card.joker_display_values.blueprint_ability_joker or
+        card.joker_display_values.blueprint_debuff ~= is_debuffed
     card.joker_display_values.blueprint_ability_joker = copied_joker
     card.joker_display_values.blueprint_ability_name = copied_joker and copied_joker.ability.name
     card.joker_display_values.blueprint_ability_key = copied_joker and copied_joker.config.center.key
