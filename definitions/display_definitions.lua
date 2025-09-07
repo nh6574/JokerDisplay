@@ -1934,8 +1934,8 @@ return {
             card.joker_display_values.idol_card = localize { type = 'variable', key = "jdis_rank_of_suit", vars = { localize(G.GAME.current_round.idol_card.rank, 'ranks'), localize(G.GAME.current_round.idol_card.suit, 'suits_plural') } }
         end,
         style_function = function(card, text, reminder_text, extra)
-            if reminder_text and reminder_text.children[4] then
-                reminder_text.children[4].config.colour = lighten(G.C.SUITS[G.GAME.current_round.idol_card.suit], 0.35)
+            if reminder_text and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.idol_card.suit], 0.35)
             end
             return false
         end
