@@ -29,23 +29,6 @@ This mod only supports vanilla jokers but you can add support for it in your own
 
 Check out the [wiki](https://github.com/nh6574/JokerDisplay/wiki) for API documentation.
 
-| Mods with JokerDisplay support |  |
-|---|---|
-| [Aikoyori's Shenanigans](https://github.com/Aikoyori/Balatro-Aikoyoris-Shenanigans) | [Baladrone](https://github.com/fantasygone/Baladrone) |
-| [BalatroOlympus](https://github.com/lshtech/BalatroOlympus) | [Balatro Multiplayer](https://github.com/Balatro-Multiplayer/BalatroMultiplayer) |
-| [Betmma Jokers](https://github.com/betmma/my_balatro_mods) | [Bird Jokers](https://github.com/JustinBanzon/Bird-Jokers) |
-| [Boss Jokers](https://github.com/KilledByLava/BossJokers) | [Bunco](https://github.com/Firch/Bunco) |
-| | [D6-Jokers](https://github.com/GauntletGames-2086/D6-Jokers) |
-| [Diceylatro](https://nriomoder.itch.io/diceylatro) | [Emporium](https://github.com/krokshut/Emporium) |
-| [Friends Vs. Balatro](https://github.com/rae-vyn/FriendsVsBalatro/tree/main) | [Inscrybed Jokers](https://github.com/LunaAstraCassiopeia/LunasBalatroMods) |
-| [Jank Jonklers](https://github.com/spikeof2010/JankJonklers) | [Joker Evolution](https://github.com/SDM0/Joker-Evolution) |
-| [JamMod](https://github.com/WilsontheWolf/JamMod) | [Lobotomy Corporation](https://github.com/Mysthaps/LobotomyCorp) |
-| [Pampa Joker Pack](https://github.com/lshtech/balatro-pampa-joker-pack) | [Redux Arcanum](https://github.com/jumbocarrot0/Redux-Arcanum) |
-| [Reverie](https://github.com/dvrp0/reverie/tree/main) | [Revo's Vault](https://github.com/Cdrvo/Revos-Vault---Balatro-Mod/tree/main) |
-| [SDM_0's Stuff](https://github.com/SDM0/SDM_0-s-Stuff/) | [Snow-s-Mods](https://github.com/RattlingSnow353/Snow-s-Mods) |
-| [SpicyJokers](https://github.com/RitchieDimaria/SpicyJokers) | [The World Ends With Jimbo](https://github.com/parchmentEngineer/The-World-Ends-With-Jimbo) |
-| [Valkyrie](https://github.com/dainekoichi/Valkyrie-BalatroMod) |  |
-
 ## Contributing
 
 This mod will probably not get any new features after 1.8, so please feel free to fork or do PRs if you feel like you can improve on this or fix any issues!
