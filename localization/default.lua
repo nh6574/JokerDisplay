@@ -19,7 +19,8 @@ return {
 					"German localization by: {C:green}GunnableScum{}",
 					"Traditional Chinese localization by: {C:green}wilfredlam0418{}",
 					"Dutch localization by: {C:green}Soulsphere{}",
-					"Simplified Chinese localization by: {C:green}ChromaPIE"
+					"Simplified Chinese localization by: {C:green}ChromaPIE",
+					"Japanese localization by: {C:green}koukichi_kkc",
 				},
 			}
 		}

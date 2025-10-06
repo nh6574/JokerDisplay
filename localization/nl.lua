@@ -20,6 +20,7 @@
                     "Traditioneel Chinese lokalisatie door: {C:green}wilfredlam0418{}",
                     "Nederlandse lokalisatie door: {C:green}Soulsphere{}",
                     "Simplified Chinese localization by: {C:green}ChromaPIE",
+                    "Japanese localization by: {C:green}koukichi_kkc",
                 },
             }
         }

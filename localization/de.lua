@@ -19,7 +19,8 @@ return {
 					"Deutsche Übersetzung von: {C:green}GunnableScum{}",
 					"Traditionelles Chinesisch Übersetzung von: {C:green}wilfredlam0418{}",
 					"Niederländische Übersetzung von: {C:green}Soulsphere{}",
-					"Simplified Chinese localization by: {C:green}ChromaPIE"
+					"Simplified Chinese localization by: {C:green}ChromaPIE",
+					"Japanese localization by: {C:green}koukichi_kkc",
 				},
 			}
 		}

@@ -20,6 +20,7 @@ return {
 					"Traducción al neerlandés por: {C:green}Soulsphere{}",
 					"Traducción al chino tradicional por: {C:green}wilfredlam0418{}",
 					"Traducción al chino simplificado por: {C:green}ChromaPIE",
+					"Traducción al japonés por: {C:green}koukichi_kkc",
 				},
 			}
 		}
