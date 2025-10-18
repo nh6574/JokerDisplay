@@ -1735,6 +1735,7 @@ return {
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
             local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+            local count = 0
             if text ~= 'Unknown' then
                 for _, scoring_card in pairs(scoring_hand) do
                     if scoring_card:is_suit("Hearts") then
