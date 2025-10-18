@@ -6,7 +6,7 @@
   "description": "Display useful information under Jokers. Controls: Right-click or B - hide/show. Left-click or Up - collapse/expand.",
   "prefix": "JokerDisplay",
   "main_file": "JokerDisplay.lua",
-  "priority": -100000,
-  "version": "1.8.7.4",
+  "priority": -1000000000,
+  "version": "1.8.8",
   "dependencies": ["Steamodded (>=1.0.0~BETA-0624a)"]
 }

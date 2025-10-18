@@ -445,6 +445,7 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
     end
     local default_text_colour = defaults_config and defaults_config.colour or G.C.UI.TEXT_LIGHT
     local default_text_scale = defaults_config and defaults_config.scale or 0.4
+    local default_text_font = defaults_config and defaults_config.font or nil
 
     local node = {}
     if display_config.dynatext then
@@ -473,19 +474,29 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
                 ref_table = ref_table[table_path[i]]
             end
         end
+        local colour = display_config.colour or default_text_colour
+        if colour.ref_table then
+            colour = colour.ref_table[colour.ref_value]
+        end
         return JokerDisplay.create_display_text_object({
             ref_table = ref_table,
             ref_value = display_config.ref_value,
-            colour = display_config.colour or default_text_colour,
+            colour = colour,
             scale = display_config.scale or default_text_scale,
+            font = display_config.font or default_text_font,
             retrigger_type = display_config.retrigger_type
         })
     end
     if display_config.text then
+        local colour = display_config.colour or default_text_colour
+        if colour.ref_table then
+            colour = colour.ref_table[colour.ref_value]
+        end
         return JokerDisplay.create_display_text_object({
             text = display_config.text,
-            colour = display_config.colour or default_text_colour,
+            colour = colour,
             scale = display_config.scale or default_text_scale,
+            font = display_config.font or default_text_font,
             retrigger_type = display_config.retrigger_type
         })
     end
@@ -498,9 +509,9 @@ end
 JokerDisplay.create_display_text_object = function(config)
     local text_node = {}
     if config.ref_table then
-        text_node = { n = G.UIT.T, config = { ref_table = config.ref_table, ref_value = config.ref_value, scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT, retrigger_type = config.retrigger_type } }
+        text_node = { n = G.UIT.T, config = { ref_table = config.ref_table, ref_value = config.ref_value, scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT, font = ((SMODS or {}).Fonts or {})[config.font] or G.FONTS[tonumber(config.font)], retrigger_type = config.retrigger_type } }
     else
-        text_node = { n = G.UIT.T, config = { text = config.text or "ERROR", scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT, retrigger_type = config.retrigger_type } }
+        text_node = { n = G.UIT.T, config = { text = config.text or "ERROR", scale = config.scale or 0.4, colour = config.colour or G.C.UI.TEXT_LIGHT, font = ((SMODS or {}).Fonts or {})[config.font] or G.FONTS[tonumber(config.font)], retrigger_type = config.retrigger_type } }
     end
     return text_node
 end
