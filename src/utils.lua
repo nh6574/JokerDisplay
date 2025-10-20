@@ -59,15 +59,45 @@ function JokerDisplay.number_format(num, e_switch_point, places)
         end
         num = num:to_number()
     end
-    -- Copied from the main game.. with some changes :)
+    -- Copied from smods.. with some changes :)
+    local sign = (num >= 0 and "") or "-"
+    num = math.abs(num)
     if num >= (e_switch_point or 1000000) then
         local x = string.format("%.4g", num)
         local fac = math.floor(math.log(tonumber(x), 10))
-        return string.format("%." .. (places or 2) .. "f", x / (10 ^ fac)):gsub("(%.%d-)0+$", "%1"):gsub("%.$", "") ..
-            'e' .. fac
+        if num == math.huge then
+            return sign .. "naneinf"
+        end
+
+        local mantissa = round_number(x / (10 ^ fac), 3)
+        if mantissa >= 10 then
+            mantissa = mantissa / 10
+            fac = fac + 1
+        end
+        return sign ..
+            (string.format(fac >= 100 and "%.1fe%i" or fac >= 10 and "%.2fe%i" or "%." .. (places or 2) .. "fe%i", mantissa, fac))
     end
-    return string.format(num ~= math.floor(num) and (num >= 100 and "%.0f" or num >= 10 and "%.1f" or "%.2f") or "%.0f",
-        num):gsub("(%.%d-)0+$", "%1"):gsub("%.$", ""):reverse():gsub("(%d%d%d)", "%1,"):gsub(",$", ""):reverse()
+    local formatted
+    if num ~= math.floor(num) and num < 100 then
+        formatted = string.format(num >= 10 and "%.1f" or "%.2f", num)
+        if formatted:sub(-1) == "0" then
+            formatted = formatted:gsub("%.?0+$", "")
+        end
+        -- Return already to avoid comas being added
+        if num < 0.01 then return tostring(num) end
+    else
+        formatted = string.format("%.0f", num)
+    end
+    return sign .. (formatted:reverse():gsub("(%d%d%d)", "%1,"):gsub(",$", ""):reverse())
+
+    -- if num >= (e_switch_point or 1000000) then
+    --     local x = string.format("%.4g", num)
+    --     local fac = math.floor(math.log(tonumber(x), 10))
+    --     return string.format("%." .. (places or 2) .. "f", x / (10 ^ fac)):gsub("(%.%d-)0+$", "%1"):gsub("%.$", "") ..
+    --         'e' .. fac
+    -- end
+    -- return string.format(num ~= math.floor(num) and (num >= 100 and "%.0f" or num >= 10 and "%.1f" or "%.2f") or "%.0f",
+    --     num):gsub("(%.%d-)0+$", "%1"):gsub("%.$", ""):reverse():gsub("(%d%d%d)", "%1,"):gsub(",$", ""):reverse()
 end
 
 ---Get all areas available for JokerDisplay
