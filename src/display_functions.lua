@@ -573,7 +573,7 @@ end
 local draw_card_ref = draw_card
 function draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
     draw_card_ref(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
-    if G.hand and from ~= G.hand or to ~= G.play then
+    if from and (from == G.play or from == G.discard or from == G.deck or (from == G.hand and to ~= G.play)) then
         JokerDisplay.get_scoring_hand()
     end
 end
