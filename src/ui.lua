@@ -371,6 +371,9 @@ function JokerDisplayBox:calculate_xywh(node, _T, recalculate, _scale)
         end
         if not node.config.text then node.config.text = '[UI ERROR]' end
         node.config.lang = node.config.lang or G.LANG
+
+        if type(node.config.text) ~= "string" then node.config.text = "" .. node.config.text end
+
         local tx = node.config.lang.font.FONT:getWidth(node.config.text) * node.config.lang.font.squish * scale *
             G.TILESCALE * node.config.lang.font.FONTSCALE
         local ty = node.config.lang.font.FONT:getHeight() * scale * G.TILESCALE * node.config.lang.font.FONTSCALE *
@@ -544,7 +547,7 @@ function CardArea:draw(...)
                             { n = G.UIT.B, config = { w = 0.1, h = 0.1 } },
                             { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE } },
                             { n = G.UIT.T, config = { text = '/', scale = 0.3, colour = G.C.WHITE } },
-                            { n = G.UIT.T, config = { ref_table = self.config, ref_value = self.config.true_card_limit and 'true_card_limit' or 'card_limit', scale = 0.3, colour = G.C.WHITE } },
+                            { n = G.UIT.T, config = { ref_table = self.config.card_limits, ref_value = 'total_slots', scale = 0.3, colour = G.C.WHITE } },
                             { n = G.UIT.B, config = { w = 0.1, h = 0.1 } }
                         }
                     }
