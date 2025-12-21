@@ -24,12 +24,14 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
     end
 
     -- To prevent crashing during poker hand eval
-    if G.play then
+    if G.play and G.play.cards then
         for i = 1, #G.play.cards do
             if type(G.play.cards[i]) ~= "table" or not G.play.cards[i].ability or not (G.play.cards[i].ability.set == 'Enhanced' or G.play.cards[i].ability.set == 'Default') then
                 return "Unknown", {}, {}
             end
         end
+    else
+        return "Unknown", {}, {}
     end
 
     if not count_facedowns then
