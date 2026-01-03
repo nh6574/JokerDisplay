@@ -488,8 +488,16 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_left <= 1 and
-                localize("jdis_active") or localize("jdis_inactive")
+            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and G.GAME.current_round.hands_left <= 1
+            card.joker_display_values.active = card.joker_display_values.is_active and localize("jdis_active") or
+                localize("jdis_inactive")
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            return false
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
@@ -844,7 +852,16 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.active = (G.GAME and G.GAME.current_round.hands_played == 0 and localize("jdis_active") or localize("jdis_inactive"))
+            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played == 0
+            card.joker_display_values.active = (card.joker_display_values.is_active and localize("jdis_active") or
+                localize("jdis_inactive"))
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            return false
         end
     },
     j_splash = {     -- Splash
@@ -1623,10 +1640,20 @@ return {
         },
         calc_function = function(card)
             -- Talisman compatibility
-            local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
-            card.joker_display_values.active = G.GAME and G.GAME.chips and G.GAME.blind.chips and
-                blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) and localize("jdis_active") or
-                localize("jdis_inactive")
+            local is_active = false
+            if G.GAME and G.GAME.chips and G.GAME.blind and G.GAME.blind.chips then
+                local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
+                is_active = blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) or false
+            end
+            card.joker_display_values.is_active = is_active
+            card.joker_display_values.active = is_active and localize("jdis_active") or localize("jdis_inactive")
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            return false
         end
     },
     j_acrobat = { -- Acrobat
@@ -2271,7 +2298,17 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.active = (G.GAME and G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0 and localize("jdis_active") or localize("jdis_inactive"))
+            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and
+                G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0
+            card.joker_display_values.active = (card.joker_display_values.is_active and localize("jdis_active") or
+                localize("jdis_inactive"))
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            return false
         end
     },
     j_bootstraps = { -- Bootstraps
