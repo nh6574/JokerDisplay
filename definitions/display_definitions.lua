@@ -2209,9 +2209,17 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.active = card.ability.invis_rounds >= card.ability.extra and
-                localize("k_active") or
+            card.joker_display_values.is_active = card.ability.invis_rounds >= card.ability.extra
+            card.joker_display_values.active = card.joker_display_values.is_active and
+                localize("jdis_active") or
                 (card.ability.invis_rounds .. "/" .. card.ability.extra)
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            return false
         end
     },
     j_brainstorm = { -- Brainstorm
