@@ -1177,19 +1177,20 @@ return {
     },
     j_luchador = {   -- Luchador
         reminder_text = {
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
                 ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
             card.joker_display_values.active = disableable
-            card.joker_display_values.active_text = localize(disableable and 'k_active' or 'ph_no_boss_active')
+            card.joker_display_values.active_text = localize(disableable and 'jdis_active' or 'jdis_inactive')
         end,
         style_function = function(card, text, reminder_text, extra)
-            if reminder_text and reminder_text.children[1] then
-                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or G.C.RED
-                reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
-                return true
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
             end
             return false
         end
@@ -2034,7 +2035,9 @@ return {
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             local dollars = 0
@@ -2053,14 +2056,12 @@ return {
                 end
             end
             card.joker_display_values.dollars = dollars
-            card.joker_display_values.active_text = localize(boss_active and 'k_active' or 'ph_no_boss_active')
+            card.joker_display_values.active_text = localize(boss_active and 'jdis_active' or 'jdis_inactive')
         end,
         style_function = function(card, text, reminder_text, extra)
-            if reminder_text and reminder_text.children[1] and card.joker_display_values then
-                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
-                    G.C.RED
-                reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
-                return true
+            if reminder_text and reminder_text.children and reminder_text.children[2] and card.joker_display_values then
+                reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
             end
             return false
         end
@@ -2408,19 +2409,19 @@ return {
     },
     j_chicot = { -- Chicot
         reminder_text = {
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and (G.GAME.blind:get_type() == 'Boss')
             card.joker_display_values.active = disableable
-            card.joker_display_values.active_text = localize(disableable and 'k_active' or 'ph_no_boss_active')
+            card.joker_display_values.active_text = localize(disableable and 'jdis_active' or 'jdis_inactive')
         end,
         style_function = function(card, text, reminder_text, extra)
-            if reminder_text and reminder_text.children[1] then
-                reminder_text.children[1].config.colour = card.joker_display_values.active and G.C.GREEN or
-                    G.C.RED
-                reminder_text.children[1].config.scale = card.joker_display_values.active and 0.35 or 0.3
-                return true
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
             end
             return false
         end
