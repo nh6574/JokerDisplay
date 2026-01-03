@@ -2286,13 +2286,26 @@ return {
             }
         },
         reminder_text = {
-            { text = "(" },
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.ability", ref_value = "driver_tally" },
-            { text = "/16)" },
+            { text = "/16" },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             card.joker_display_values.active = card.ability.driver_tally and card.ability.driver_tally >= 16
             card.joker_display_values.x_mult = card.joker_display_values.active and card.ability.extra or 1
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children then
+                local colour = card.joker_display_values.active and G.C.GREEN or G.C.UI.TEXT_INACTIVE
+                if reminder_text.children[2] then
+                    reminder_text.children[2].config.colour = colour
+                end
+                if reminder_text.children[3] then
+                    reminder_text.children[3].config.colour = colour
+                end
+            end
+            return false
         end
     },
     j_cartomancer = { -- Cartomancer
