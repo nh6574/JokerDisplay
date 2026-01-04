@@ -422,8 +422,20 @@ return {
         },
         calc_function = function(card)
             local loyalty_remaining = card.ability.loyalty_remaining + (next(G.play.cards) and 1 or 0)
-            card.joker_display_values.loyalty_text = localize { type = 'variable', key = (loyalty_remaining % (card.ability.extra.every + 1) == 0 and 'loyalty_active' or 'loyalty_inactive'), vars = { loyalty_remaining } }
-            card.joker_display_values.x_mult = (loyalty_remaining % (card.ability.extra.every + 1) == 0 and card.ability.extra.Xmult or 1)
+            card.joker_display_values.is_active = loyalty_remaining % (card.ability.extra.every + 1) == 0
+            card.joker_display_values.loyalty_text = localize {
+                type = 'variable',
+                key = (card.joker_display_values.is_active and 'loyalty_active' or 'loyalty_inactive'),
+                vars = { loyalty_remaining }
+            }
+            card.joker_display_values.x_mult = (card.joker_display_values.is_active and card.ability.extra.Xmult or 1)
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            return false
         end
     },
     j_8_ball = { -- 8 Ball
