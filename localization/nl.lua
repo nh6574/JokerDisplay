@@ -29,7 +29,7 @@
         dictionary = {
             jdis_enabled = "Ingeschakeld",
             jdis_hide_by_default = "Standaard verbergen",
-            jdis_hide_empty = "Verberg lege info",
+            jdis_hide_empty = "Verberg lege weergaves",
             jdis_shift_to_hide = "Shift + rechtermuisknop om te verbergen",
             jdis_joker_count = "Toon aantal Joker-slots voor de weergaves",
             jdis_disable_collapse = "Schakel inklappen uit",
