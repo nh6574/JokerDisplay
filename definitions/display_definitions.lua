@@ -1249,6 +1249,18 @@ return {
         reminder_text_config = { scale = 0.35 },
         calc_function = function(card)
             card.joker_display_values.start_count = card.joker_display_values.start_count or card.ability.extra.h_size
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local children = reminder_text and reminder_text.children
+            if not children then return false end
+
+            local colour = (card.ability.extra.h_size == 1) and G.C.RED or G.C.UI.TEXT_INACTIVE
+            for i = 2, 4 do
+                local child = children[i]
+                if child then child.config.colour = colour end
+            end
+
+            return false
         end
     },
     j_erosion = { -- Erosion
