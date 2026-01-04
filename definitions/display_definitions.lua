@@ -389,8 +389,7 @@ return {
         },
         text_config = { colour = G.C.CHIPS },
         calc_function = function(card)
-            card.joker_display_values.chips = card.ability.extra *
-                (G.GAME and G.GAME.current_round and G.GAME.current_round.discards_left or 0)
+            card.joker_display_values.chips = card.ability.extra * (G.GAME.current_round.discards_left or 0)
         end
     },
     j_mystic_summit = { -- Mystic Summit
@@ -401,7 +400,7 @@ return {
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
             card.joker_display_values.mult = card.ability.extra.mult *
-                (G.GAME and G.GAME.current_round and G.GAME.current_round.discards_left <= card.ability.extra.d_remaining and 1 or 0)
+                (G.GAME.current_round.discards_left <= card.ability.extra.d_remaining and 1 or 0)
         end
     },
     j_marble = {       -- Marble Joker
@@ -496,13 +495,13 @@ return {
     j_dusk = { -- Dusk
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "active" },
+            { ref_table = "card.joker_display_values", ref_value = "active_text" },
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and G.GAME.current_round.hands_left <= 1
-            card.joker_display_values.active = card.joker_display_values.is_active and localize("jdis_active") or
-                localize("jdis_inactive")
+            card.joker_display_values.is_active = G.GAME.current_round.hands_left <= 1
+            card.joker_display_values.active_text = localize("jdis_" ..
+                (card.joker_display_values.is_active and "active" or "inactive"))
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children and reminder_text.children[2] then
@@ -513,7 +512,7 @@ return {
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return SMODS.in_scoring(playing_card, scoring_hand) and G.GAME and G.GAME.current_round.hands_left <= 1 and
+            return SMODS.in_scoring(playing_card, scoring_hand) and G.GAME.current_round.hands_left <= 1 and
                 joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
@@ -630,7 +629,7 @@ return {
             { ref_table = "card.joker_display_values", ref_value = "localized_text" }
         },
         calc_function = function(card)
-            card.joker_display_values.dollars = (G.GAME and G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0 and G.GAME.current_round.discards_left * card.ability.extra or 0)
+            card.joker_display_values.dollars = (G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0 and G.GAME.current_round.discards_left * card.ability.extra or 0)
             card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
         end
     },
@@ -782,7 +781,7 @@ return {
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
             local text, _, _ = JokerDisplay.evaluate_hand()
-            card.joker_display_values.mult = (text ~= 'Unknown' and G.GAME and G.GAME.hands[text] and G.GAME.hands[text].played + (next(G.play.cards) and 0 or 1)) or
+            card.joker_display_values.mult = (text ~= 'Unknown' and G.GAME.hands[text] and G.GAME.hands[text].played + (next(G.play.cards) and 0 or 1)) or
                 0
         end
     },
@@ -860,13 +859,13 @@ return {
     j_dna = { -- DNA
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "active" },
+            { ref_table = "card.joker_display_values", ref_value = "active_text" },
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played == 0
-            card.joker_display_values.active = (card.joker_display_values.is_active and localize("jdis_active") or
-                localize("jdis_inactive"))
+            card.joker_display_values.is_active = G.GAME.current_round.hands_played == 0
+            card.joker_display_values.active_text = localize("jdis_" ..
+                (card.joker_display_values.is_active and "active" or "inactive"))
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children and reminder_text.children[2] then
@@ -899,7 +898,7 @@ return {
         calc_function = function(card)
             local _, _, scoring_hand = JokerDisplay.evaluate_hand()
             local sixth_sense_eval = #scoring_hand == 1 and scoring_hand[1]:get_id() == 6
-            card.joker_display_values.active = G.GAME and G.GAME.current_round.hands_played == 0
+            card.joker_display_values.active = G.GAME.current_round.hands_played == 0
             card.joker_display_values.count = sixth_sense_eval and 1 or 0
         end,
         style_function = function(card, text, reminder_text, extra)
@@ -1108,7 +1107,7 @@ return {
         },
         text_config = { colour = G.C.SECONDARY_SET.Tarot },
         calc_function = function(card)
-            card.joker_display_values.active = G.GAME and to_big(G.GAME.dollars) < to_big(5)
+            card.joker_display_values.active = to_big(G.GAME.dollars) < to_big(5)
             card.joker_display_values.count = card.joker_display_values.active and 1 or 0
         end
     },
@@ -1174,7 +1173,7 @@ return {
             local hand = G.hand.highlighted
             local text, _, _ = JokerDisplay.evaluate_hand(hand)
             local play_more_than = 0
-            local hand_exists = text ~= 'Unknown' and G.GAME and G.GAME.hands and G.GAME.hands[text]
+            local hand_exists = text ~= 'Unknown' and G.GAME.hands and G.GAME.hands[text]
             if hand_exists then
                 for _, poker_hand in pairs(G.GAME.hands) do
                     if poker_hand.played and poker_hand.played >= play_more_than and poker_hand.visible then
@@ -1189,12 +1188,12 @@ return {
     },
     j_luchador = {   -- Luchador
         reminder_text = {
-            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
-            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
-            local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
+            local disableable = G.GAME.blind and G.GAME.blind.get_type and
                 ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
             card.joker_display_values.active = disableable
             card.joker_display_values.active_text = localize(disableable and 'jdis_active' or 'jdis_inactive')
@@ -1327,8 +1326,8 @@ return {
             { ref_table = "card.joker_display_values", ref_value = "localized_text" },
         },
         calc_function = function(card)
-            card.joker_display_values.dollars = G.GAME and G.GAME.dollars and
-                math.max(math.min(math.floor(G.GAME.dollars / 5), G.GAME.interest_cap / 5), 0) * card.ability.extra
+            card.joker_display_values.dollars = math.max(
+                math.min(math.floor(G.GAME.dollars / 5), G.GAME.interest_cap / 5), 0) * card.ability.extra
             card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
         end
     },
@@ -1354,7 +1353,7 @@ return {
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
-            card.joker_display_values.mult = G.GAME and G.GAME.consumeable_usage_total and
+            card.joker_display_values.mult = G.GAME.consumeable_usage_total and
                 G.GAME.consumeable_usage_total.tarot or 0
         end
     },
@@ -1436,16 +1435,14 @@ return {
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD, retrigger_type = "mult" },
         },
         reminder_text = {
-            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
-            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             local highlighted = (G.hand and G.hand.highlighted) or {}
             local is_trading_card_discard = #highlighted == 1
-            local is_in_blind_state = G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED or
-                G.STATE == G.STATES.DRAW_TO_HAND
-            card.joker_display_values.active = G.GAME and G.GAME.current_round and is_in_blind_state and
+            card.joker_display_values.active = G.GAME.blind and G.GAME.blind.in_blind and
                 G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0
             card.joker_display_values.is_active = card.joker_display_values.active
             card.joker_display_values.active_text = localize(card.joker_display_values.is_active and "jdis_active" or
@@ -1663,18 +1660,17 @@ return {
     j_mr_bones = { -- Mr. Bones
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "active" },
+            { ref_table = "card.joker_display_values", ref_value = "active_text" },
             { text = ")" },
         },
         calc_function = function(card)
             -- Talisman compatibility
             local is_active = false
-            if G.GAME and G.GAME.chips and G.GAME.blind and G.GAME.blind.chips then
-                local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
-                is_active = blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) or false
-            end
+            local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
+            is_active = blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) or false
+
             card.joker_display_values.is_active = is_active
-            card.joker_display_values.active = is_active and localize("jdis_active") or localize("jdis_inactive")
+            card.joker_display_values.active_text = is_active and localize("jdis_active") or localize("jdis_inactive")
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children and reminder_text.children[2] then
@@ -1694,8 +1690,7 @@ return {
             }
         },
         calc_function = function(card)
-            card.joker_display_values.x_mult = G.GAME and
-                ((G.GAME.current_round.hands_left == 1 and not next(G.play.cards)) or
+            card.joker_display_values.x_mult = ((G.GAME.current_round.hands_left == 1 and not next(G.play.cards)) or
                     (G.GAME.current_round.hands_left == 0 and next(G.play.cards))) and
                 card.ability.extra or
                 1
@@ -2062,14 +2057,14 @@ return {
         },
         text_config = { colour = G.C.GOLD },
         reminder_text = {
-            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
-            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             local dollars = 0
             local text, poker_hands, scoring_hand = JokerDisplay.evaluate_hand()
-            local boss_active = G.GAME and G.GAME.blind and G.GAME.blind.get_type and
+            local boss_active = G.GAME.blind and G.GAME.blind.get_type and
                 ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))
             card.joker_display_values.active = boss_active
 
@@ -2314,10 +2309,10 @@ return {
             }
         },
         reminder_text = {
-            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
+            { text = "(",                 colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.ability", ref_value = "driver_tally" },
             { text = "/16" },
-            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
+            { text = ")",                 colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
             card.joker_display_values.active = card.ability.driver_tally and card.ability.driver_tally >= 16
@@ -2347,9 +2342,7 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            local is_in_blind_state = G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED or
-                G.STATE == G.STATES.DRAW_TO_HAND
-            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and is_in_blind_state and
+            card.joker_display_values.is_active = G.GAME.blind and G.GAME.blind.in_blind and
                 G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0
             card.joker_display_values.active = (card.joker_display_values.is_active and localize("jdis_active") or
                 localize("jdis_inactive"))
@@ -2369,9 +2362,8 @@ return {
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
-            card.joker_display_values.mult = G.GAME and
-                card.ability.extra.mult *
-                (math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.extra.dollars)) or 0
+            card.joker_display_values.mult = card.ability.extra.mult *
+                (math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.extra.dollars))
         end
     },
     j_caino = { -- Canio
@@ -2438,12 +2430,12 @@ return {
     },
     j_chicot = { -- Chicot
         reminder_text = {
-            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
+            { text = "(",                              colour = G.C.UI.TEXT_INACTIVE },
             { ref_table = "card.joker_display_values", ref_value = "active_text" },
-            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
+            { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
-            local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and (G.GAME.blind:get_type() == 'Boss')
+            local disableable = G.GAME.blind and G.GAME.blind.get_type and (G.GAME.blind:get_type() == 'Boss')
             card.joker_display_values.active = disableable
             card.joker_display_values.active_text = localize(disableable and 'jdis_active' or 'jdis_inactive')
         end,
