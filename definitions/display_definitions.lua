@@ -1251,15 +1251,13 @@ return {
             card.joker_display_values.start_count = card.joker_display_values.start_count or card.ability.extra.h_size
         end,
         style_function = function(card, text, reminder_text, extra)
-            if not (reminder_text and reminder_text.children) then return false end
+            local children = reminder_text and reminder_text.children
+            if not children then return false end
 
-            local h_size = card.ability.extra.h_size
-            local colour = (h_size == 1) and G.C.RED or G.C.UI.TEXT_INACTIVE
-
+            local colour = (card.ability.extra.h_size == 1) and G.C.RED or G.C.UI.TEXT_INACTIVE
             for i = 2, 4 do
-                if reminder_text.children[i] then
-                    reminder_text.children[i].config.colour = colour
-                end
+                local child = children[i]
+                if child then child.config.colour = colour end
             end
 
             return false
