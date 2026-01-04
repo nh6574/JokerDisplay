@@ -1703,11 +1703,6 @@ return {
                 }
             }
         },
-        reminder_text = {
-            { text = "(" },
-            { text = "Final Hand", colour = G.C.ORANGE },
-            { text = ")" },
-        },
         calc_function = function(card)
             card.joker_display_values.x_mult = ((G.GAME.current_round.hands_left == 1 and not next(G.play.cards)) or
                     (G.GAME.current_round.hands_left == 0 and next(G.play.cards))) and
