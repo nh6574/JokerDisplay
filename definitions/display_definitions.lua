@@ -1423,10 +1423,21 @@ return {
         text = {
             { ref_table = "card.joker_display_values", ref_value = "dollars", colour = G.C.GOLD, retrigger_type = "mult" },
         },
+        reminder_text = {
+            { text = "(", colour = G.C.UI.TEXT_INACTIVE },
+            { ref_table = "card.joker_display_values", ref_value = "active_text" },
+            { text = ")", colour = G.C.UI.TEXT_INACTIVE },
+        },
         calc_function = function(card)
-            local is_trading_card_discard = #G.hand.highlighted == 1
-            card.joker_display_values.active = G.GAME and G.GAME.current_round.discards_used == 0 and
-                G.GAME.current_round.discards_left > 0
+            local highlighted = (G.hand and G.hand.highlighted) or {}
+            local is_trading_card_discard = #highlighted == 1
+            local is_in_blind_state = G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED or
+                G.STATE == G.STATES.DRAW_TO_HAND
+            card.joker_display_values.active = G.GAME and G.GAME.current_round and is_in_blind_state and
+                G.GAME.current_round.discards_used == 0 and G.GAME.current_round.discards_left > 0
+            card.joker_display_values.is_active = card.joker_display_values.active
+            card.joker_display_values.active_text = localize(card.joker_display_values.is_active and "jdis_active" or
+                "jdis_inactive")
             card.joker_display_values.dollars = card.joker_display_values.active and
                 ("+$" .. (is_trading_card_discard and card.ability.extra and JokerDisplay.number_format(card.ability.extra) or 0)) or
                 "-"
@@ -1434,6 +1445,10 @@ return {
         style_function = function(card, text, reminder_text, extra)
             if text and text.children[1] then
                 text.children[1].config.colour = card.joker_display_values.active and G.C.GOLD or
+                    G.C.UI.TEXT_INACTIVE
+            end
+            if reminder_text and reminder_text.children and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
             return false
@@ -2320,7 +2335,9 @@ return {
             { text = ")" },
         },
         calc_function = function(card)
-            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and
+            local is_in_blind_state = G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED or
+                G.STATE == G.STATES.DRAW_TO_HAND
+            card.joker_display_values.is_active = G.GAME and G.GAME.current_round and is_in_blind_state and
                 G.GAME.current_round.discards_used <= 0 and G.GAME.current_round.discards_left > 0
             card.joker_display_values.active = (card.joker_display_values.is_active and localize("jdis_active") or
                 localize("jdis_inactive"))
