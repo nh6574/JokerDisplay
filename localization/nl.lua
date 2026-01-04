@@ -19,8 +19,8 @@
                     "Duitse lokalisatie door: {C:green}GunnableScum{}",
                     "Traditioneel Chinese lokalisatie door: {C:green}wilfredlam0418{}",
                     "Nederlandse lokalisatie door: {C:green}Soulsphere{}",
-                    "Simplified Chinese localization by: {C:green}ChromaPIE",
-                    "Japanese localization by: {C:green}koukichi_kkc",
+                    "Vereenvoudigde Chinese lokalisatie door: {C:green}ChromaPIE{}",
+                    "Japanse lokalisatie door: {C:green}koukichi_kkc{}",
                 },
             }
         }
@@ -29,23 +29,24 @@
         dictionary = {
             jdis_enabled = "Ingeschakeld",
             jdis_hide_by_default = "Standaard verbergen",
-            jdis_hide_empty = "Verberg leeg",
-            jdis_shift_to_hide = "Shift + Rechter-muisknop om te verbergen",
-            jdis_disable_collapse = "Schakel inkrimpeling uit",
-            jdis_disable_perishable = "Schakel bederfelijk uit",
-            jdis_disable_rental = "Schakel huur uit",
-            jdis_modifiers = "Modificators",
+            jdis_hide_empty = "Verberg lege info",
+            jdis_shift_to_hide = "Shift + rechtermuisknop om te verbergen",
+            jdis_joker_count = "Toon aantal Joker-slots voor de weergaves",
+            jdis_disable_collapse = "Schakel inklappen uit",
+            jdis_disable_perishable = "Schakel 'Vergankelijk' uit",
+            jdis_disable_rental = "Schakel 'Huur' uit",
+            jdis_modifiers = "Modificatoren",
             jdis_reminders = "Herinneringen",
             jdis_extras = "Extra's",
-            jdis_default_display = "Default",
-            jdis_small_display = "Ingekrimpeld",
+            jdis_default_display = "Standaard",
+            jdis_small_display = "Ingeklapt",
             jdis_active = "Actief!",
             jdis_inactive = "Inactief",
             jdis_all_suits = "Alle kleuren"
         },
         v_dictionary = {
-            jdis_odds = "#1# in #2#",
-            jdis_rank_of_suit = "#1# of #2#"
+            jdis_odds = "#1# op #2#",
+            jdis_rank_of_suit = "#1# van #2#"
         }
     },
 }
