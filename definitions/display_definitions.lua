@@ -1025,6 +1025,11 @@ return {
                 }
             }
         },
+        reminder_text = {
+            { text = "(" },
+            { text = "Played Hands", colour = G.C.ORANGE },
+            { text = ")" },
+        },
         calc_function = function(card)
             local text, _, _ = JokerDisplay.evaluate_hand()
             local is_card_sharp_hand = text ~= 'Unknown' and G.GAME.hands and G.GAME.hands[text] and
