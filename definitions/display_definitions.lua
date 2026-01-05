@@ -1579,6 +1579,18 @@ return {
         calc_function = function(card)
             card.joker_display_values.start_count = card.joker_display_values.start_count or card.ability.extra
         end,
+        style_function = function(card, text, reminder_text, extra)
+            local children = reminder_text and reminder_text.children
+            if not children then return false end
+
+            local colour = (card.ability.extra == 1) and G.C.RED or G.C.UI.TEXT_INACTIVE
+            for i = 2, 4 do
+                local child = children[i]
+                if child then child.config.colour = colour end
+            end
+
+            return false
+        end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
             return SMODS.in_scoring(playing_card, scoring_hand) and JokerDisplay.calculate_joker_triggers(joker_card)
