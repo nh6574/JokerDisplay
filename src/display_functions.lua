@@ -460,11 +460,21 @@ G.FUNCS.joker_display_style_override = function(e)
         local style_function = joker_display_definition and joker_display_definition.style_function
 
         if style_function then
-            local recalculate = style_function(
-                is_blueprint_copying and card.joker_display_values.blueprint_ability_joker or card, text, reminder_text,
-                extra)
+            local style_card = card
+            if is_blueprint_copying then
+                local copied = card.joker_display_values and card.joker_display_values.blueprint_ability_joker
+                if copied and copied.joker_display_values then
+                    style_card = copied
+                else
+                    style_card = nil
+                end
+            end
+
+            if style_card then
+                local recalculate = style_function(style_card, text, reminder_text, extra)
             if recalculate then
                 JokerDisplayBox.recalculate(e.UIBox, true)
+            end
             end
         end
     end
