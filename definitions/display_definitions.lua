@@ -21,7 +21,6 @@ return {
             {
                 ref_table = "card.joker_display_values",
                 ref_value = "localized_text",
-                colour = lighten(loc_colour(G.P_CENTERS["j_greedy_joker"].config.extra.suit:lower()), 0.35)
             },
             { text = ")" },
         },
@@ -39,6 +38,10 @@ return {
             end
             card.joker_display_values.mult = mult
             card.joker_display_values.localized_text = localize(card.ability.extra.suit, 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Diamonds"], 0.35) end
         end
     },
     j_lusty_joker = { -- Lusty Joker
@@ -52,7 +55,6 @@ return {
             {
                 ref_table = "card.joker_display_values",
                 ref_value = "localized_text",
-                colour = lighten(loc_colour(G.P_CENTERS["j_lusty_joker"].config.extra.suit:lower()), 0.35)
             },
             { text = ")", colour = G.C.UI.TEXT_INACTIVE },
         },
@@ -70,6 +72,10 @@ return {
             end
             card.joker_display_values.mult = mult
             card.joker_display_values.localized_text = localize(card.ability.extra.suit, 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Hearts"], 0.35) end
         end
     },
     j_wrathful_joker = { -- Wrathful Joker
@@ -83,7 +89,6 @@ return {
             {
                 ref_table = "card.joker_display_values",
                 ref_value = "localized_text",
-                colour = lighten(loc_colour(G.P_CENTERS["j_wrathful_joker"].config.extra.suit:lower()), 0.35)
             },
             { text = ")", colour = G.C.UI.TEXT_INACTIVE },
         },
@@ -101,6 +106,10 @@ return {
             end
             card.joker_display_values.mult = mult
             card.joker_display_values.localized_text = localize(card.ability.extra.suit, 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Spades"], 0.35) end
         end
     },
     j_gluttenous_joker = { -- Gluttonous Joker
@@ -114,7 +123,6 @@ return {
             {
                 ref_table = "card.joker_display_values",
                 ref_value = "localized_text",
-                colour = lighten(loc_colour(G.P_CENTERS["j_gluttenous_joker"].config.extra.suit:lower()), 0.35)
             },
             { text = ")" },
         },
@@ -132,6 +140,10 @@ return {
             end
             card.joker_display_values.mult = mult
             card.joker_display_values.localized_text = localize(card.ability.extra.suit, 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Clubs"], 0.35) end
         end
     },
     j_jolly = { -- Jolly Joker
@@ -434,7 +446,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_8_ball = { -- 8 Ball
@@ -508,7 +519,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
@@ -872,7 +882,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_splash = {     -- Splash
@@ -908,7 +917,6 @@ return {
                 text.children[2].config.colour = card.joker_display_values.active and G.C.SECONDARY_SET.Spectral or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_constellation = { -- Constellation
@@ -1203,7 +1211,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_photograph = { -- Photograph
@@ -1252,15 +1259,13 @@ return {
         end,
         style_function = function(card, text, reminder_text, extra)
             local children = reminder_text and reminder_text.children
-            if not children then return false end
+            if not children then return end
 
             local colour = (card.ability.extra.h_size == 1) and G.C.RED or G.C.UI.TEXT_INACTIVE
             for i = 2, 4 do
                 local child = children[i]
                 if child then child.config.colour = colour end
             end
-
-            return false
         end
     },
     j_erosion = { -- Erosion
@@ -1472,7 +1477,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_flash = { -- Flash Card
@@ -1522,14 +1526,12 @@ return {
                 end
             end
             card.joker_display_values.x_mult = card.ability.extra ^ count
-            card.joker_display_values.ancient_card_suit = localize(G.GAME.current_round.ancient_card.suit,
-                'suits_singular')
+            card.joker_display_values.ancient_card_suit = localize(G.GAME.current_round.ancient_card.suit, 'suits_plural')
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children[2] then
                 reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.ancient_card.suit], 0.35)
             end
-            return false
         end
     },
     j_ramen = { -- Ramen
@@ -1581,15 +1583,13 @@ return {
         end,
         style_function = function(card, text, reminder_text, extra)
             local children = reminder_text and reminder_text.children
-            if not children then return false end
+            if not children then return end
 
             local colour = (card.ability.extra == 1) and G.C.RED or G.C.UI.TEXT_INACTIVE
             for i = 2, 4 do
                 local child = children[i]
                 if child then child.config.colour = colour end
             end
-
-            return false
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
@@ -1608,13 +1608,12 @@ return {
             { text = ")" }
         },
         calc_function = function(card)
-            card.joker_display_values.castle_card_suit = localize(G.GAME.current_round.castle_card.suit, 'suits_singular')
+            card.joker_display_values.castle_card_suit = localize(G.GAME.current_round.castle_card.suit, 'suits_plural')
         end,
         style_function = function(card, text, reminder_text, extra)
             if reminder_text and reminder_text.children[2] then
                 reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.castle_card.suit], 0.35)
             end
-            return false
         end
     },
     j_smiley = { -- Smiley Face
@@ -1701,7 +1700,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_acrobat = { -- Acrobat
@@ -1766,7 +1764,7 @@ return {
         text_config = { colour = G.C.GOLD },
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = lighten(G.C.SUITS["Diamonds"], 0.35) },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
             { text = ")" }
         },
         calc_function = function(card)
@@ -1782,6 +1780,10 @@ return {
             end
             card.joker_display_values.dollars = dollars
             card.joker_display_values.localized_text = localize("Diamonds", 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Diamonds"], 0.35) end
         end
     },
     j_bloodstone = { -- Bloodstone
@@ -1797,7 +1799,7 @@ return {
         },
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = lighten(G.C.SUITS["Hearts"], 0.35) },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
             { text = ")" }
         },
         extra = {
@@ -1823,6 +1825,10 @@ return {
             local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'bloodstone')
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
             card.joker_display_values.localized_text = localize("Hearts", 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Hearts"], 0.35) end
         end
     },
     j_arrowhead = { -- Arrowhead
@@ -1833,7 +1839,7 @@ return {
         text_config = { colour = G.C.CHIPS },
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = lighten(G.C.SUITS["Spades"], 0.35) },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
             { text = ")" }
         },
         calc_function = function(card)
@@ -1849,6 +1855,10 @@ return {
             end
             card.joker_display_values.chips = chips
             card.joker_display_values.localized_text = localize("Spades", 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Spades"], 0.35) end
         end
     },
     j_onyx_agate = { -- Onyx Agate
@@ -1859,7 +1869,7 @@ return {
         text_config = { colour = G.C.MULT },
         reminder_text = {
             { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = lighten(G.C.SUITS["Clubs"], 0.35) },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
             { text = ")" }
         },
         calc_function = function(card)
@@ -1875,6 +1885,10 @@ return {
             end
             card.joker_display_values.mult = mult
             card.joker_display_values.localized_text = localize("Clubs", 'suits_plural')
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            local suit_node = reminder_text and reminder_text.children and reminder_text.children[2]
+            if suit_node then suit_node.config.colour = lighten(G.C.SUITS["Clubs"], 0.35) end
         end
     },
     j_glass = { -- Glass Joker
@@ -2008,7 +2022,6 @@ return {
             if reminder_text and reminder_text.children[2] then
                 reminder_text.children[2].config.colour = lighten(G.C.SUITS[G.GAME.current_round.idol_card.suit], 0.35)
             end
-            return false
         end
     },
     j_seeing_double = { -- Seeing Double
@@ -2109,7 +2122,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_hit_the_road = { -- Hit the Road
@@ -2266,7 +2278,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_brainstorm = { -- Brainstorm
@@ -2352,7 +2363,6 @@ return {
                     reminder_text.children[3].config.colour = colour
                 end
             end
-            return false
         end
     },
     j_cartomancer = { -- Cartomancer
@@ -2376,7 +2386,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.is_active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_bootstraps = { -- Bootstraps
@@ -2468,7 +2477,6 @@ return {
                 reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
                     G.C.UI.TEXT_INACTIVE
             end
-            return false
         end
     },
     j_perkeo = { -- Perkeo
