@@ -98,7 +98,7 @@ function JokerDisplay.number_format(num, e_switch_point, places)
     return sign .. (formatted:reverse():gsub("(%d%d%d)", "%1,"):gsub(",$", ""):reverse())
 end
 
----Get all areas available for JokerDisplay
+---Get all areas available for JokerDisplay \
 ---Hook to add more areas
 ---@return table
 function JokerDisplay.get_display_areas()
