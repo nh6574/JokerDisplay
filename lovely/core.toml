@@ -1,0 +1,11 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 50     # after smods
+
+# Copied from cg-223/Joker-Loadouts <3
+[[patches]]
+[patches.copy]
+target = "main.lua"
+position = "append"
+sources = ["lovely.lua"]

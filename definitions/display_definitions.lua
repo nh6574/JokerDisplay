@@ -474,7 +474,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra, '8ball')
+            local numerator, denominator = 1, card.ability.extra
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, '8ball') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -522,7 +523,7 @@ return {
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return SMODS.in_scoring(playing_card, scoring_hand) and G.GAME.current_round.hands_left <= 1 and
+            return JokerDisplay.in_scoring(playing_card, scoring_hand) and G.GAME.current_round.hands_left <= 1 and
                 joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
@@ -649,7 +650,7 @@ return {
         },
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return SMODS.in_scoring(playing_card, scoring_hand) and
+            return JokerDisplay.in_scoring(playing_card, scoring_hand) and
                 (playing_card:get_id() == 2 or playing_card:get_id() == 3 or
                     playing_card:get_id() == 4 or playing_card:get_id() == 5) and
                 joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
@@ -672,7 +673,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'gros_michel')
+            local numerator, denominator = 1, card.ability.extra.odds
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, 'gros_michel') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -779,7 +781,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra, 'business')
+            local numerator, denominator = 1, card.ability.extra
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, 'business') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -814,7 +817,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra, 'space')
+            local numerator, denominator = 1, card.ability.extra
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, 'space') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1020,7 +1024,8 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cavendish')
+            local numerator, denominator = 1, card.ability.extra.odds
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, 'cavendish') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1305,7 +1310,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'parking')
+            local numerator, denominator = 1, card.ability.extra.odds
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, 'parking') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1358,8 +1364,11 @@ return {
         },
         extra_config = { colour = G.C.GREEN, scale = 0.3 },
         calc_function = function(card)
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra,
-                'halu' .. G.GAME.round_resets.ante)
+            local numerator, denominator = 1, card.ability.extra
+            if SMODS then
+                numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator,
+                    'halu' .. G.GAME.round_resets.ante)
+            end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
         end
     },
@@ -1593,7 +1602,8 @@ return {
         end,
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return SMODS.in_scoring(playing_card, scoring_hand) and JokerDisplay.calculate_joker_triggers(joker_card)
+            return JokerDisplay.in_scoring(playing_card, scoring_hand) and
+                JokerDisplay.calculate_joker_triggers(joker_card)
         end
     },
     j_castle = { -- Castle
@@ -1721,7 +1731,7 @@ return {
     j_sock_and_buskin = { -- Sock and Buskin
         retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
             if held_in_hand then return 0 end
-            return playing_card:is_face() and SMODS.in_scoring(playing_card, scoring_hand) and
+            return playing_card:is_face() and JokerDisplay.in_scoring(playing_card, scoring_hand) and
                 joker_card.ability.extra * JokerDisplay.calculate_joker_triggers(joker_card) or 0
         end
     },
@@ -1822,7 +1832,8 @@ return {
                 end
             end
             card.joker_display_values.count = count
-            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'bloodstone')
+            local numerator, denominator = 1, card.ability.extra.odds
+            if SMODS then numerator, denominator = SMODS.get_probability_vars(card, numerator, denominator, 'bloodstone') end
             card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }
             card.joker_display_values.localized_text = localize("Hearts", 'suits_plural')
         end,

@@ -1,5 +1,12 @@
 --- UTILITY FUNCTIONS
 
+JokerDisplay.current_hand = {}
+JokerDisplay.current_hand_info = {
+    text = "Unknown",
+    poker_hands = {},
+    scoring_hand = {}
+}
+
 --- Splits text by a separator.
 ---@param str string String to split.
 ---@param sep string? Separator. Defaults to whitespace.
@@ -96,4 +103,14 @@ end
 ---@return table
 function JokerDisplay.get_display_areas()
     return { G.jokers }
+end
+
+---Checks if a value is in a table. Used as a drop in replacement to SMODS.in_scoring
+---@param card any
+---@param scoring_hand any
+---@return boolean?
+function JokerDisplay.in_scoring(card, scoring_hand)
+    for _, _card in pairs(scoring_hand) do
+        if card == _card then return true end
+    end
 end

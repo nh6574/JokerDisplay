@@ -547,7 +547,7 @@ function CardArea:draw(...)
                             { n = G.UIT.B, config = { w = 0.1, h = 0.1 } },
                             { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE } },
                             { n = G.UIT.T, config = { text = '/', scale = 0.3, colour = G.C.WHITE } },
-                            { n = G.UIT.T, config = { ref_table = self.config.card_limits, ref_value = 'total_slots', scale = 0.3, colour = G.C.WHITE } },
+                            { n = G.UIT.T, config = { ref_table = SMODS and self.config.card_limits or self.config, ref_value = SMODS and 'total_slots' or 'card_limit', scale = 0.3, colour = G.C.WHITE } },
                             { n = G.UIT.B, config = { w = 0.1, h = 0.1 } }
                         }
                     }

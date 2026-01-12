@@ -51,23 +51,26 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
 
     local final_scoring_hand = {}
     for i = 1, #valid_cards do
-        local splashed = SMODS.always_scores(valid_cards[i]) or next(find_joker('Splash'))
-        local unsplashed = SMODS.never_scores(valid_cards[i])
+        local splashed = SMODS and SMODS.always_scores(valid_cards[i]) or next(find_joker('Splash'))
+        local unsplashed = SMODS and SMODS.never_scores(valid_cards[i]) or false
         if not splashed then
             for _, card in pairs(scoring_hand) do
                 if card == valid_cards[i] then splashed = true end
             end
         end
         local effects = {}
-        SMODS.calculate_context(
-            {
-                modify_scoring_hand = true,
-                other_card = valid_cards[i],
-                full_hand = valid_cards,
-                scoring_hand =
-                    scoring_hand
-            }, effects)
-        local flags = SMODS.trigger_effects(effects, valid_cards[i])
+        local flags
+        if SMODS then
+            SMODS.calculate_context(
+                {
+                    modify_scoring_hand = true,
+                    other_card = valid_cards[i],
+                    full_hand = valid_cards,
+                    scoring_hand =
+                        scoring_hand
+                }, effects)
+            flags = SMODS.trigger_effects(effects, valid_cards[i])
+        end
         flags = flags or {}
         if flags.add_to_hand then splashed = true end
         if flags.remove_from_hand then unsplashed = true end

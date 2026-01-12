@@ -1,18 +1,6 @@
 --- MOD CONFIG
 
-SMODS.current_mod.ui_config = {
-    bg_colour = HEX("44D72344"),
-    back_colour = HEX("D63939"),
-    tab_button_colour = HEX("D63939"),
-    collection_option_cycle_colour = HEX("D63939"),
-    author_colour = HEX("D63939")
-}
-
-SMODS.current_mod.description_loc_vars = function()
-    return { background_colour = G.C.CLEAR, text_colour = G.C.WHITE, scale = 1.2 }
-end
-
-SMODS.current_mod.config_tab = function()
+JokerDisplay.config_tab = function()
     -- Create a card area that will display an example joker
     G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
         { card_limit = 1, type = 'title', highlight_limit = 0, })
@@ -278,6 +266,24 @@ SMODS.current_mod.config_tab = function()
             { n = G.UIT.R, config = { minh = 0.1 } }
         }
     }
+end
+
+if SMODS then
+    SMODS.current_mod.ui_config = {
+        bg_colour = HEX("44D72344"),
+        back_colour = HEX("D63939"),
+        tab_button_colour = HEX("D63939"),
+        collection_option_cycle_colour = HEX("D63939"),
+        author_colour = HEX("D63939")
+    }
+
+    SMODS.current_mod.description_loc_vars = function()
+        return { background_colour = G.C.CLEAR, text_colour = G.C.WHITE, scale = 1.2 }
+    end
+
+    SMODS.current_mod.config_tab = function()
+        return JokerDisplay.config_tab()
+    end
 end
 
 -- Callback function for config toggles, updates the example joker and any current jokers if a game is being played
