@@ -4,15 +4,17 @@ Balatro mod that displays information such as modifiers or relevant hands, ranks
 
 ## Installation
 
-1. Install [Steamodded](https://github.com/Steamopollys/Steamodded) [(version >1.0.0)](https://github.com/Steamodded/smods/wiki)
+1. Install [Lovely](https://github.com/ethangreen-dev/lovely-injector?tab=readme-ov-file#manual-installation)
 2. Download the [latest release](https://github.com/nh6574/JokerDisplay/releases)
 3. Extract the zip file into its own folder inside your Balatro mods folder (%appdata%\Balatro\Mods)
+
+Compatible with SMODS >= 1.0.0~BETA-0624a
 
 ## Usage
 
 * Right-click the display or a Joker to hide/unhide displays (or use the back button on your controller over a Joker). This will disable all calculations for that joker (in case of crashes).
 * Left-click the display to collapse/expand extra rows of text. (or use the up button on your controller over a Joker).
-* Go to Mods > JokerDisplay > Config for more options.
+* Go to `Settings > JokerDisplay` (or `Mods > JokerDisplay > Config` with SMODS) for more options.
 
 Feel free to [open an issue](https://github.com/nh6574/JokerDisplay/issues) for suggestions or bug reports.
 
