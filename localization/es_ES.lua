@@ -42,7 +42,8 @@ return {
 			jdis_small_display = "Colapsado",
 			jdis_active = "¡Activado!",
 			jdis_inactive = "Inactivo",
-			jdis_all_suits = "Todos los palos"
+			jdis_all_suits = "Todos los palos",
+			jdis_author = 'Autor/a'
 		},
 		v_dictionary = {
 			jdis_odds = "#1# en #2#",

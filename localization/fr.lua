@@ -14,7 +14,8 @@ return {
 			jdis_small_display = "Réduit",
 			jdis_active = "Actif!",
 			jdis_inactive = "Inactif",
-			jdis_all_suits = "Toutes les couleurs"
+			jdis_all_suits = "Toutes les couleurs",
+			jdis_author = 'Auteur',
 		},
 		v_dictionary = {
 			jdis_odds = "#1# chance(s) sur #2#"

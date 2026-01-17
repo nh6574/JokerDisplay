@@ -14,7 +14,8 @@ return {
 			jdis_small_display = "Свернутый вид",
 			jdis_active = "Активно!",
 			jdis_inactive = "Неактивно",
-			jdis_all_suits = "Все масти"
+			jdis_all_suits = "Все масти",
+			jdis_author = 'Автор',
 		},
 		v_dictionary = {
 			jdis_odds = "#1# к #2#"

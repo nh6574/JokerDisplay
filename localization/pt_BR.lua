@@ -42,6 +42,7 @@ return {
 			jdis_active = "Ativo!",
 			jdis_inactive = "Inativo",
 			jdis_all_suits = "Todos naipes",
+			jdis_author = 'Autor'
 		},
 		v_dictionary = {
 			jdis_odds = "#1# em #2#",

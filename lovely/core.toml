@@ -25,3 +25,18 @@ if not SMODS then
 end
 '''
 match_indent = true
+
+# localize (Copied from SMODS for the mod description)
+[[patches]]
+[patches.regex]
+target = 'functions/misc_functions.lua'
+position = 'after'
+pattern = '\(part\.control\.C and loc_colour\(part\.control\.C\)\)'
+payload = ' or args.text_colour'
+
+[[patches]]
+[patches.regex]
+target = 'functions/misc_functions.lua'
+position = 'at'
+pattern = 'loc_colour\(part\.control\.C or nil, args\.default_col\)'
+payload = 'not part.control.C and args.text_colour or loc_colour(part.control.C or nil, args.default_col)'

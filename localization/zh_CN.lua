@@ -40,7 +40,8 @@ return {
 			jdis_small_display = "折叠",
 			jdis_active = "激活！",
 			jdis_inactive = "未激活",
-			jdis_all_suits = "所有花色"
+			jdis_all_suits = "所有花色",
+			jdis_author = '作者',
 		},
 		v_dictionary = {
 			jdis_odds = "#1#/#2#几率",

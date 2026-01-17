@@ -42,7 +42,8 @@ return {
 			jdis_small_display = "Collapsed",
 			jdis_active = "Active!",
 			jdis_inactive = "Inactive",
-			jdis_all_suits = "All Suits"
+			jdis_all_suits = "All Suits",
+			jdis_author = "Author"
 		},
 		v_dictionary = {
 			jdis_odds = "#1# in #2#",

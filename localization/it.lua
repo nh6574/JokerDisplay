@@ -41,7 +41,8 @@ return {
             jdis_small_display = "Ridotto",
             jdis_active = "Attivo!",
             jdis_inactive = "Inattivo",
-            jdis_all_suits = "Tutti i semi"
+            jdis_all_suits = "Tutti i semi",
+            jdis_author = 'Autore',
         },
         v_dictionary = {
             jdis_odds = "#1# su #2#",
