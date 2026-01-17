@@ -539,7 +539,9 @@ function CardArea:draw(...)
         if not self.children.joker_display_count then
             self.children.joker_display_count = UIBox {
                 definition =
-                { n = G.UIT.ROOT, config = { align = 'cm', colour = G.C.CLEAR }, nodes = {
+                { n = G.UIT.ROOT, config = { align = 'cl', colour = G.C.CLEAR }, nodes = {
+                    { n = G.UIT.R, config = { minw = self.T.w, minh = self.T.h, align = "cm", padding = 0.1, mid = true, r = 0.1, ref_table = self }, nodes = {
+                    } },
                     {
                         n = G.UIT.R,
                         config = { align = 'cl', padding = 0.03, no_fill = true },
@@ -552,11 +554,10 @@ function CardArea:draw(...)
                         }
                     }
                 } },
-                config = { align = 'cm', offset = { x = 0, y = 0 }, major = self.children.area_uibox.UIRoot.children[2], parent = self.children.area_uibox.UIRoot.children[2], instance_type = "ALERT" }
+                config = { align = 'cm', offset = { x = 0, y = 0 }, major = self, parent = self, instance_type = "ALERT" }
             }
         end
 
-        self.children.joker_display_count.T = self.children.area_uibox.UIRoot.children[2].T
         self.children.joker_display_count.states.visible = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
     end
 end
