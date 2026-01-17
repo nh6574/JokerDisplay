@@ -558,6 +558,9 @@ function CardArea:draw(...)
             }
         end
 
+        self.children.joker_display_count.states.click.can = false
+        self.children.joker_display_count.states.collide.can = false
+        self.children.joker_display_count.states.drag.can = false
         self.children.joker_display_count.states.visible = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
     end
 end
