@@ -15,10 +15,98 @@ if not SMODS then
 
     JokerDisplay.path = JokerDisplay_find_self()
 
-    JokerDisplay.load_file = function(path)
-        return load(fs.read(JokerDisplay.path .. path))
+    JokerDisplay.load_file = function(path, target)
+        return load(fs.read(JokerDisplay.path .. path),
+            ('=[JokerDisplay _ "%s"]'):format(target or string.match(path, '[^/]+/[^/]+$')))
     end
-    JokerDisplay.config = JokerDisplay.load_file("config.lua")()
+
+    -- Copied from SMODS <3
+    local function load_mod_config()
+        local s1, config = pcall(function()
+            return load(fs.read('config/JokerDisplay.jkr'), '=[JokerDisplay _ "config"]')()
+        end)
+        local s2, default_config = pcall(function()
+            return JokerDisplay.load_file('config.lua', "default_config")()
+        end)
+        if not s1 or type(config) ~= 'table' then config = {} end
+        if not s2 or type(default_config) ~= 'table' then default_config = {} end
+        JokerDisplay.config = default_config
+
+        local function insert_saved_config(savedCfg, defaultCfg)
+            for savedKey, savedVal in pairs(savedCfg) do
+                local savedValType = type(savedVal)
+                local defaultValType = type(defaultCfg[savedKey])
+                if not defaultCfg[savedKey] then
+                    defaultCfg[savedKey] = savedVal
+                elseif savedValType ~= defaultValType then
+                elseif savedValType == "table" and defaultValType == "table" then
+                    insert_saved_config(savedVal, defaultCfg[savedKey])
+                elseif savedVal ~= defaultCfg[savedKey] then
+                    defaultCfg[savedKey] = savedVal
+                end
+            end
+        end
+
+        insert_saved_config(config, JokerDisplay.config)
+
+        return JokerDisplay.config
+    end
+
+    load_mod_config()
+    local function serialize(t, indent)
+        local function serialize_string(s)
+            return string.format("%q", s)
+        end
+        indent = indent or ''
+        local str = '{\n'
+        for k, v in ipairs(t) do
+            str = str .. indent .. '\t'
+            if type(v) == 'number' then
+                str = str .. v
+            elseif type(v) == 'boolean' then
+                str = str .. (v and 'true' or 'false')
+            elseif type(v) == 'string' then
+                str = str .. serialize_string(v)
+            elseif type(v) == 'table' then
+                str = str .. serialize(v, indent .. '\t')
+            else
+                -- not serializable
+                str = str .. 'nil'
+            end
+            str = str .. ',\n'
+        end
+        for k, v in pairs(t) do
+            if type(k) == 'string' then
+                str = str .. indent .. '\t' .. '[' .. serialize_string(k) .. '] = '
+
+                if type(v) == 'number' then
+                    str = str .. v
+                elseif type(v) == 'boolean' then
+                    str = str .. (v and 'true' or 'false')
+                elseif type(v) == 'string' then
+                    str = str .. serialize_string(v)
+                elseif type(v) == 'table' then
+                    str = str .. serialize(v, indent .. '\t')
+                else
+                    -- not serializable
+                    str = str .. 'nil'
+                end
+                str = str .. ',\n'
+            end
+        end
+        str = str .. indent .. '}'
+        return str
+    end
+
+    function JokerDisplay.save_config()
+        local success = pcall(function()
+            fs.createDirectory('config')
+            local serialized = 'return ' .. serialize(JokerDisplay.config)
+            fs.write(('config/JokerDisplay.jkr'), serialized)
+        end)
+        return success
+    end
+
     JokerDisplay.load_file("src/utils.lua")()
     JokerDisplay.load_file("src/ui.lua")()
     JokerDisplay.load_file("src/display_functions.lua")()

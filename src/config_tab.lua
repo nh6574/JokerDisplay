@@ -8,6 +8,8 @@ local ui_config = {
     author_colour = HEX("D63939")
 }
 
+JokerDisplay.save_config = JokerDisplay.save_config or function() end
+
 JokerDisplay.config_tab = function()
     -- Create a card area that will display an example joker
     G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
@@ -73,7 +75,8 @@ JokerDisplay.config_tab = function()
                                 create_toggle({
                                     label = localize('jdis_enabled'),
                                     ref_table = JokerDisplay.config,
-                                    ref_value = 'enabled'
+                                    ref_value = 'enabled',
+                                    callback = JokerDisplay.save_config
                                 })
                             }
                         },
@@ -85,7 +88,8 @@ JokerDisplay.config_tab = function()
                                     label = localize('jdis_hide_by_default'),
                                     ref_table = JokerDisplay.config,
                                     ref_value =
-                                    'hide_by_default'
+                                    'hide_by_default',
+                                    callback = JokerDisplay.save_config
                                 })
                             }
                         },
@@ -97,7 +101,8 @@ JokerDisplay.config_tab = function()
                                     label = localize('jdis_hide_empty'),
                                     ref_table = JokerDisplay.config,
                                     ref_value =
-                                    'hide_empty'
+                                    'hide_empty',
+                                    callback = JokerDisplay.save_config
                                 })
                             }
                         },
@@ -115,7 +120,8 @@ JokerDisplay.config_tab = function()
                                     label = localize('jdis_disable_collapse'),
                                     ref_table = JokerDisplay.config,
                                     ref_value =
-                                    'disable_collapse'
+                                    'disable_collapse',
+                                    callback = JokerDisplay.save_config
                                 })
                             }
                         },
@@ -127,7 +133,8 @@ JokerDisplay.config_tab = function()
                                     label = localize('jdis_disable_perishable'),
                                     ref_table = JokerDisplay.config,
                                     ref_value =
-                                    'disable_perishable'
+                                    'disable_perishable',
+                                    callback = JokerDisplay.save_config
                                 })
                             }
                         },
@@ -139,7 +146,8 @@ JokerDisplay.config_tab = function()
                                     label = localize('jdis_disable_rental'),
                                     ref_table = JokerDisplay.config,
                                     ref_value =
-                                    'disable_rental'
+                                    'disable_rental',
+                                    callback = JokerDisplay.save_config
                                 })
                             }
                         },
@@ -287,7 +295,8 @@ JokerDisplay.config_tab = function()
                     label = localize('jdis_shift_to_hide'),
                     ref_table = JokerDisplay.config,
                     ref_value =
-                    'shift_to_hide'
+                    'shift_to_hide',
+                    callback = JokerDisplay.save_config
                 })
             }
         },
@@ -299,7 +308,8 @@ JokerDisplay.config_tab = function()
                     label = localize('jdis_joker_count'),
                     ref_table = JokerDisplay.config,
                     ref_value =
-                    'joker_count'
+                    'joker_count',
+                    callback = JokerDisplay.save_config
                 })
             }
         },
@@ -355,6 +365,8 @@ end
 
 -- Callback function for config toggles, updates the example joker and any current jokers if a game is being played
 function update_display()
+    JokerDisplay.save_config()
+
     G.config_card_area.cards[1]:update_joker_display(false, true, "config_update")
     if G.jokers then
         for _, area in ipairs(JokerDisplay.get_display_areas()) do
