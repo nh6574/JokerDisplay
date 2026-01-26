@@ -11,6 +11,13 @@ if not SMODS then
                 return start_dir .. "/" .. file .. "/"
             end
         end
+        start_dir = "mods"
+        files = fs.getDirectoryItems(start_dir)
+        for _, file in ipairs(files) do
+            if fs.getInfo(start_dir .. "/" .. file .. "/" .. "JokerDisplay.json") then
+                return start_dir .. "/" .. file .. "/"
+            end
+        end
     end
 
     JokerDisplay.path = JokerDisplay_find_self()
