@@ -19,7 +19,8 @@ return {
 					"德文译者：{C:green}GunnableScum",
 					"繁体中文译者：{C:green}wilfredlam0418",
 					"荷兰文译者：{C:green}Soulsphere",
-					"简体中文译者：{C:green}ChromaPIE"
+					"简体中文译者：{C:green}ChromaPIE",
+					"日文译者：{C:green}koukichi_kkc"
 				},
 			}
 		}
@@ -30,6 +31,7 @@ return {
 			jdis_hide_by_default = "默认隐藏",
 			jdis_hide_empty = "隐藏空项",
 			jdis_shift_to_hide = "Shift + 右击以隐藏",
+			jdis_joker_count = "小丑牌数量显示在信息上方",
 			jdis_disable_collapse = "禁用折叠",
 			jdis_disable_perishable = "禁用易腐",
 			jdis_disable_rental = "禁用租用",
