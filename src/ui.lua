@@ -534,6 +534,9 @@ end
 -- Joker slot count over display
 local cardarea_draw_ref = CardArea.draw
 function CardArea:draw(...)
+    if self == G.jokers then
+        self.config.no_card_count = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
+    end
     cardarea_draw_ref(self, ...)
     if self == G.jokers then
         if not self.children.joker_display_count then

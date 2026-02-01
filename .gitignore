@@ -48,3 +48,4 @@ JokerDisplay.zip
 JokerDisplay/
 .luarc.json
 .lovelyignore
+.DS_Store
