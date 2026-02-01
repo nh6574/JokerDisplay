@@ -7,6 +7,6 @@
   "prefix": "JokerDisplay",
   "main_file": "JokerDisplay.lua",
   "priority": -1000000000,
-  "version": "1.9.2",
+  "version": "1.9.3",
   "conflicts": ["Steamodded (<<1.0.0~BETA-0624a)"]
 }
