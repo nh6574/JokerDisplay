@@ -11,6 +11,7 @@ local ui_config = {
 JokerDisplay.save_config = JokerDisplay.save_config or function() end
 
 JokerDisplay.config_tab = function()
+    if not JokerDisplay.init_loc then init_localization() end
     -- Create a card area that will display an example joker
     G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
         { card_limit = 1, type = 'title', highlight_limit = 0, })

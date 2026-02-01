@@ -1,14 +1,35 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = 50     # after smods
+priority = 50
 
-# Copied from cg-223/Joker-Loadouts <3
+# Copied from SMODS
 [[patches]]
-[patches.copy]
-target = "main.lua"
-position = "append"
-sources = ["lovely.lua"]
+[patches.module]
+source = "libs/nativefs/nativefs.lua" #for absolute paths. with SMODS stuff I don't use but I was lazy to copy the OG
+name = "JokerDisplay.nativefs"
+
+[[patches]]
+[patches.module]
+before = "main.lua"
+source = "lovely.lua"
+name = "JokerDisplay.core"
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "set_profile_progress()"
+position = "before"
+payload = 'require "JokerDisplay.core"'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[lovely JokerDisplay.core "lovely.lua"]'
+pattern = "local mod_path = false -- patched in"
+position = "at"
+payload = """local mod_path = [[{{lovely_hack:patch_dir}}]]"""
+match_indent = true
 
 # Add the config tab to the settings (Copied from DebugPlus)
 [[patches]]

@@ -1,36 +1,48 @@
 if not SMODS then
     JokerDisplay = {}
 
-    -- Copied from cg-223/Joker-Loadouts <3
-    local fs = love.filesystem
-    local function JokerDisplay_find_self()
-        local start_dir = "Mods"
-        local files = fs.getDirectoryItems(start_dir)
-        for _, file in ipairs(files) do
-            if fs.getInfo(start_dir .. "/" .. file .. "/" .. "JokerDisplay.json") then
-                return start_dir .. "/" .. file .. "/"
-            end
-        end
-        start_dir = "mods"
-        files = fs.getDirectoryItems(start_dir)
-        for _, file in ipairs(files) do
-            if fs.getInfo(start_dir .. "/" .. file .. "/" .. "JokerDisplay.json") then
-                return start_dir .. "/" .. file .. "/"
-            end
-        end
-    end
+    -- pls copy lovely loading from someone more competent than me
+    -- Copied from SMODS
+    local fs = require "JokerDisplay.nativefs"
+    local lovely = require "lovely"
 
-    JokerDisplay.path = JokerDisplay_find_self()
+    local lovely_mod_dir = lovely.mod_dir:gsub("/$", "")
+    fs.setWorkingDirectory(lovely_mod_dir)
+    lovely_mod_dir = fs.getWorkingDirectory()
+    fs.setWorkingDirectory(love.filesystem.getSaveDirectory())
+
+    local mod_path = false -- patched in
+
+    JokerDisplay.path = assert(mod_path, "JokerDisplay could not find itself"):gsub("\\", "/")
+    if JokerDisplay.path:lower():match("%.zip$") then
+        local mount_name = "JokerDisplay.mnt"
+        local res = fs.mount(JokerDisplay.path, mount_name)
+        assert(res, "JokerDisplay could not load as a zip")
+        local items = love.filesystem.getDirectoryItems(mount_name)
+        if #items == 1 then
+            local item = items[1]
+            local info = love.filesystem.getInfo(mount_name .. "/" .. item)
+            if info.type == "directory" then
+                mount_name = mount_name .. "/" .. item
+            end
+        end
+        JokerDisplay.path = mount_name
+        fs = love.filesystem -- nfs doesnt load the mounts and i dont care to figure out why
+    end
+    JokerDisplay.path = JokerDisplay.path .. "/"
 
     JokerDisplay.load_file = function(path, target)
-        return load(fs.read(JokerDisplay.path .. path),
-            ('=[JokerDisplay _ "%s"]'):format(target or string.match(path, '[^/]+/[^/]+$')))
+        local full_path = JokerDisplay.path .. path
+        local file = fs.read(full_path)
+
+        assert(file, "JokerDisplay: Failed to read " .. full_path)
+        return load(file,
+            ('=[SMODS JokerDisplay "%s"]'):format(target or string.match(path, '[^/]+/[^/]+$')))
     end
 
-    -- Copied from SMODS <3
     local function load_mod_config()
         local s1, config = pcall(function()
-            return load(fs.read('config/JokerDisplay.jkr'), '=[JokerDisplay _ "config"]')()
+            return load(fs.read('config/JokerDisplay.jkr'), '=[SMODS JokerDisplay "config"]')()
         end)
         local s2, default_config = pcall(function()
             return JokerDisplay.load_file('config.lua', "default_config")()
@@ -168,6 +180,8 @@ if not SMODS then
                 table_merge(G.localization, current_loc)
             end
         end
+
+        JokerDisplay.init_loc = true
 
         return jokerdisplay_init_localization_ref(...)
     end
