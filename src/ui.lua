@@ -534,36 +534,32 @@ end
 -- Joker slot count over display
 local cardarea_draw_ref = CardArea.draw
 function CardArea:draw(...)
-    if self == G.jokers then
-        self.config.no_card_count = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
-    end
-    cardarea_draw_ref(self, ...)
-    if self == G.jokers then
-        if not self.children.joker_display_count then
-            self.children.joker_display_count = UIBox {
-                definition =
-                { n = G.UIT.ROOT, config = { align = 'cl', colour = G.C.CLEAR }, nodes = {
-                    { n = G.UIT.R, config = { minw = self.T.w, minh = self.T.h, align = "cm", padding = 0.1, mid = true, r = 0.1, ref_table = self }, nodes = {
-                    } },
-                    {
-                        n = G.UIT.R,
-                        config = { align = 'cl', padding = 0.03, no_fill = true },
-                        nodes = {
-                            { n = G.UIT.B, config = { w = 0.1, h = 0.1 } },
-                            { n = G.UIT.T, config = { ref_table = self.config, ref_value = 'card_count', scale = 0.3, colour = G.C.WHITE } },
-                            { n = G.UIT.T, config = { text = '/', scale = 0.3, colour = G.C.WHITE } },
-                            { n = G.UIT.T, config = { ref_table = SMODS and self.config.card_limits or self.config, ref_value = SMODS and 'total_slots' or 'card_limit', scale = 0.3, colour = G.C.WHITE } },
-                            { n = G.UIT.B, config = { w = 0.1, h = 0.1 } }
-                        }
-                    }
-                } },
-                config = { align = 'cm', offset = { x = 0, y = 0 }, major = self, parent = self, instance_type = "ALERT" }
-            }
+    if self == G.jokers and JokerDisplay and JokerDisplay.config and JokerDisplay.config.joker_count and not G.OVERLAY_MENU then
+        -- Skip vanilla label draw
+        if self.children and self.children.area_uibox then
+            self.children.area_uibox.FRAME.DRAW = G.FRAMES.DRAW
         end
-
-        self.children.joker_display_count.states.click.can = false
-        self.children.joker_display_count.states.collide.can = false
-        self.children.joker_display_count.states.drag.can = false
-        self.children.joker_display_count.states.visible = JokerDisplay.config.joker_count and not G.OVERLAY_MENU
+        -- Draw background box first (behind jokers)
+        if self.children and self.children.area_uibox and self.children.area_uibox.UIRoot then
+            local container_row = self.children.area_uibox.UIRoot.children[1]
+            if container_row and container_row.draw_self then
+                container_row:draw_self()  -- Draws just the background box
+            end
+        end
+        cardarea_draw_ref(self, ...) -- Draw jokers (vanilla)
+        -- Draw label on top (after jokers)
+        if self.children and self.children.area_uibox then
+            -- Draw only text children
+            local card_count_row = self.children.area_uibox.UIRoot.children[2]
+            if card_count_row and card_count_row.children then
+                for _, child in ipairs(card_count_row.children) do
+                    if child.draw_self then
+                        child:draw_self()
+                    end
+                end
+            end
+        end
+    else
+        cardarea_draw_ref(self, ...) -- over display disabled
     end
 end
