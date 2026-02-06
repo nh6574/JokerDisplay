@@ -1699,7 +1699,7 @@ return {
         calc_function = function(card)
             -- Talisman compatibility
             local is_active = false
-            local blind_ratio = to_big(G.GAME.chips / G.GAME.blind.chips)
+            local blind_ratio = to_big((G.GAME.chips or 0) / ((G.GAME.blind or {}).chips or 1))
             is_active = blind_ratio and blind_ratio ~= to_big(0) and blind_ratio >= to_big(0.25) or false
 
             card.joker_display_values.is_active = is_active
