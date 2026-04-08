@@ -230,6 +230,95 @@ end
 ---@param _from string? Debug string
 function Card:update_joker_display(force_update, force_reload, _from)
     if self.ability then
+
+        --Perishable display
+        local should_display_perishable = self.ability.perishable
+            and self.facing ~= 'back'
+            and JokerDisplay.config.enabled
+            and not (self.joker_display_values or {}).disabled
+            and not JokerDisplay.config.disable_perishable
+
+        if should_display_perishable and not self.children.joker_display_perishable then
+            self.children.joker_display_perishable = UIBox {
+                definition = {
+                    n = G.UIT.ROOT,
+                    config = {
+                        minh = 0.5,
+                        maxh = 0.5,
+                        minw = 0.75,
+                        maxw = 0.75,
+                        r = 0.001,
+                        padding = 0.1,
+                        align = 'cm',
+                        colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                        shadow = false,
+                        ref_table = self
+                    },
+                    nodes = {
+                        JokerDisplay.create_display_text_object({
+                            ref_table = self.joker_display_values, ref_value = "perishable",
+                            colour = lighten(G.C.PERISHABLE, 0.35), scale = 0.35
+                        })
+                    }
+                },
+                config = {
+                    align = "tl",
+                    bond = 'Strong',
+                    parent = self,
+                    offset = { x = 0.8, y = 0 },
+                },
+            }
+            self.children.joker_display_perishable.states.collide.can = true
+            self.children.joker_display_perishable.name = "JokerDisplay"
+        elseif not should_display_perishable and self.children.joker_display_perishable then
+            self.children.joker_display_perishable:remove()
+            self.children.joker_display_perishable = nil
+        end
+
+        --Rental display
+        local should_display_rental = self.ability.rental
+            and JokerDisplay.config.enabled
+            and self.facing ~= 'back'
+            and not (self.joker_display_values or {}).disabled
+            and not JokerDisplay.config.disable_rental
+
+        if should_display_rental and not self.children.joker_display_rental then
+            self.children.joker_display_rental = UIBox {
+                definition = {
+                    n = G.UIT.ROOT,
+                    config = {
+                        minh = 0.5,
+                        maxh = 0.5,
+                        minw = 0.75,
+                        maxw = 0.75,
+                        r = 0.001,
+                        padding = 0.1,
+                        align = 'cm',
+                        colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                        shadow = false,
+                        ref_table = self
+                    },
+                    nodes = {
+                        JokerDisplay.create_display_text_object({
+                            ref_table = self.joker_display_values, ref_value = "rental",
+                            colour = G.C.GOLD, scale = 0.35
+                        })
+                    }
+                },
+                config = {
+                    align = "tr",
+                    bond = 'Strong',
+                    parent = self,
+                    offset = { x = -0.8, y = 0 },
+                },
+            }
+            self.children.joker_display_rental.states.collide.can = true
+            self.children.joker_display_rental.name = "JokerDisplay"
+        elseif not should_display_rental and self.children.joker_display_rental then
+            self.children.joker_display_rental:remove()
+            self.children.joker_display_rental = nil
+        end
+
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
             self.joker_display_values = {}
@@ -241,88 +330,6 @@ function Card:update_joker_display(force_update, force_reload, _from)
             self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", { type = "SMALL" })
             self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff", { type = "DEBUFF" })
             self:initialize_joker_display()
-
-            --Perishable Display
-            self.config.joker_display_perishable = {
-                n = G.UIT.ROOT,
-                config = {
-                    minh = 0.5,
-                    maxh = 0.5,
-                    minw = 0.75,
-                    maxw = 0.75,
-                    r = 0.001,
-                    padding = 0.1,
-                    align = 'cm',
-                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = false,
-                    func = 'joker_display_perishable',
-                    ref_table = self
-                },
-                nodes = {
-                    {
-                        n = G.UIT.R,
-                        config = { align = "cm" },
-                        nodes = { { n = G.UIT.R, config = { align = "cm" }, nodes = { JokerDisplay.create_display_text_object({ ref_table = self.joker_display_values, ref_value = "perishable", colour = lighten(G.C.PERISHABLE, 0.35), scale = 0.35 }) } } }
-                    }
-
-                }
-            }
-
-            self.config.joker_display_perishable_config = {
-                align = "tl",
-                bond = 'Strong',
-                parent = self,
-                offset = { x = 0.8, y = 0 },
-            }
-            if self.config.joker_display_perishable then
-                self.children.joker_display_perishable = UIBox {
-                    definition = self.config.joker_display_perishable,
-                    config = self.config.joker_display_perishable_config,
-                }
-                self.children.joker_display_perishable.states.collide.can = true
-                self.children.joker_display_perishable.name = "JokerDisplay"
-            end
-
-            --Rental Display
-            self.config.joker_display_rental = {
-                n = G.UIT.ROOT,
-                config = {
-                    minh = 0.5,
-                    maxh = 0.5,
-                    minw = 0.75,
-                    maxw = 0.75,
-                    r = 0.001,
-                    padding = 0.1,
-                    align = 'cm',
-                    colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
-                    shadow = false,
-                    func = 'joker_display_rental',
-                    ref_table = self
-                },
-                nodes = {
-                    {
-                        n = G.UIT.R,
-                        config = { align = "cm" },
-                        nodes = { { n = G.UIT.R, config = { align = "cm" }, nodes = { JokerDisplay.create_display_text_object({ ref_table = self.joker_display_values, ref_value = "rental", colour = G.C.GOLD, scale = 0.35 }) } } }
-                    }
-
-                }
-            }
-
-            self.config.joker_display_rental_config = {
-                align = "tr",
-                bond = 'Strong',
-                parent = self,
-                offset = { x = -0.8, y = 0 },
-            }
-            if self.config.joker_display_rental then
-                self.children.joker_display_rental = UIBox {
-                    definition = self.config.joker_display_rental,
-                    config = self.config.joker_display_rental_config,
-                }
-                self.children.joker_display_rental.states.collide.can = true
-                self.children.joker_display_rental.name = "JokerDisplay"
-            end
         else
             if force_update or (JokerDisplay.config.enabled and (not self.joker_display_values.disabled or self.joker_display_values.blueprint_force_update)) then
                 if force_reload then
@@ -413,32 +420,6 @@ G.FUNCS.joker_display_debuff = function(e)
     if not (card.facing == 'back') and card.debuff then
         e.states.visible = JokerDisplay.config.enabled and not card.joker_display_values.disabled
         e.parent.states.collide.can = JokerDisplay.config.enabled and not card.joker_display_values.disabled
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
-G.FUNCS.joker_display_perishable = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.ability.perishable then
-        e.states.visible = JokerDisplay.config.enabled and not card.joker_display_values.disabled and
-            not JokerDisplay.config.disable_perishable
-        e.parent.states.collide.can = JokerDisplay.config.enabled and not card.joker_display_values.disabled and
-            not JokerDisplay.config.disable_perishable
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
-    end
-end
-
-G.FUNCS.joker_display_rental = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.ability.rental then
-        e.states.visible = JokerDisplay.config.enabled and not card.joker_display_values.disabled and
-            not JokerDisplay.config.disable_rental
-        e.parent.states.collide.can = JokerDisplay.config.enabled and not card.joker_display_values.disabled and
-            not JokerDisplay.config.disable_rental
     else
         e.states.visible = false
         e.parent.states.collide.can = false
