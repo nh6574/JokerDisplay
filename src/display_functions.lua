@@ -63,6 +63,9 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
                 replace_debuff_text_config)
         end
     end
+
+    self.joker_display_values.blueprint_loaded = false
+
     if replace_modifiers then
         self.children.joker_display.stop_modifiers = true
         self.children.joker_display_small.stop_modifiers = true
@@ -351,6 +354,7 @@ function Card:update_joker_display(force_update, force_reload, _from)
         elseif not should_display_debuff and self.children.joker_display_debuff then
             self.children.joker_display_debuff:remove()
             self.children.joker_display_debuff = nil
+            should_reload = true
         end
 
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
