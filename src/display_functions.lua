@@ -53,29 +53,39 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         self.children.joker_display_small:remove_extra()
         self.children.joker_display:remove_modifiers()
         self.children.joker_display_small:remove_modifiers()
-        self.children.joker_display_debuff:remove_modifiers()
-        self.children.joker_display_debuff:remove_text()
 
-        self.children.joker_display_debuff:add_text(
-            replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } },
-            replace_debuff_text_config)
+        if self.children.joker_display_debuff then
+            self.children.joker_display_debuff:remove_modifiers()
+            self.children.joker_display_debuff:remove_text()
+
+            self.children.joker_display_debuff:add_text(
+                replace_debuff_text or { { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } },
+                replace_debuff_text_config)
+        end
     end
     if replace_modifiers then
         self.children.joker_display.stop_modifiers = true
         self.children.joker_display_small.stop_modifiers = true
-        self.children.joker_display_debuff.stop_modifiers = true
+        if self.children.joker_display_debuff then
+            self.children.joker_display_debuff.stop_modifiers = true
+        end
     else
         self.children.joker_display.stop_modifiers = false
         self.children.joker_display_small.stop_modifiers = false
-        self.children.joker_display_debuff.stop_modifiers = false
+        if self.children.joker_display_debuff then
+            self.children.joker_display_debuff.stop_modifiers = false
+        end
     end
-    self.children.joker_display_debuff:remove_reminder_text()
-    if replace_debuff_reminder then
-        self.children.joker_display_debuff:add_reminder_text(replace_debuff_reminder, replace_debuff_reminder_config)
-    end
-    self.children.joker_display_debuff:remove_extra()
-    if replace_debuff_extra then
-        self.children.joker_display_debuff:add_extra(replace_debuff_extra, replace_debuff_extra_config)
+
+    if self.children.joker_display_debuff then
+        self.children.joker_display_debuff:remove_reminder_text()
+        if replace_debuff_reminder then
+            self.children.joker_display_debuff:add_reminder_text(replace_debuff_reminder, replace_debuff_reminder_config)
+        end
+        self.children.joker_display_debuff:remove_extra()
+        if replace_debuff_extra then
+            self.children.joker_display_debuff:add_extra(replace_debuff_extra, replace_debuff_extra_config)
+        end
     end
 
     self.joker_display_stop_calc = replace_stop_calc
@@ -148,11 +158,15 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
     if custom_parent then
         custom_parent.children.joker_display:recalculate(true, true)
         custom_parent.children.joker_display_small:recalculate(true, true)
-        custom_parent.children.joker_display_debuff:recalculate(true, true)
+        if custom_parent.children.joker_display_debuff then
+            custom_parent.children.joker_display_debuff:recalculate(true, true)
+        end
     else
         self.children.joker_display:recalculate(true, true)
         self.children.joker_display_small:recalculate(true, true)
-        self.children.joker_display_debuff:recalculate(true, true)
+        if self.children.joker_display_debuff then
+            self.children.joker_display_debuff:recalculate(true, true)
+        end
     end
 end
 
@@ -206,7 +220,7 @@ function Card:calculate_joker_display(custom_parent)
             if not self.children.joker_display.stop_modifiers then
                 self.children.joker_display:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
             end
-            if not self.children.joker_display_debuff.stop_modifiers then
+            if self.children.joker_display_debuff and not self.children.joker_display_debuff.stop_modifiers then
                 self.children.joker_display_debuff:change_modifiers(JokerDisplay.calculate_joker_modifiers(self), true)
             end
         end
@@ -230,6 +244,10 @@ end
 ---@param _from string? Debug string
 function Card:update_joker_display(force_update, force_reload, _from)
     if self.ability then
+        self.joker_display_values = self.joker_display_values or {
+            disabled = JokerDisplay.config.hide_by_default or false,
+            small = false,
+        }
 
         --Perishable display
         local should_display_perishable = self.ability.perishable
@@ -319,25 +337,44 @@ function Card:update_joker_display(force_update, force_reload, _from)
             self.children.joker_display_rental = nil
         end
 
+        local should_reload = false
+
+        local should_display_debuff = self.debuff
+            and self.facing ~= "back"
+            and JokerDisplay.config.enabled
+            and not (self.joker_display_values or {}).disabled
+
+        if should_display_debuff and not self.children.joker_display_debuff then
+            self.children.joker_display_debuff = JokerDisplayBox(self, nil, { type = "DEBUFF" })
+            self.children.joker_display_debuff.states.collide.can = false
+            should_reload = true
+        elseif not should_display_debuff and self.children.joker_display_debuff then
+            self.children.joker_display_debuff:remove()
+            self.children.joker_display_debuff = nil
+        end
+
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
-            self.joker_display_values = {}
-            self.joker_display_values.disabled = JokerDisplay.config.hide_by_default or false
-            self.joker_display_values.small = false
+            self.joker_display_values = {
+                disabled = JokerDisplay.config.hide_by_default or false,
+                small = false,
+            }
 
             --Regular Display
             self.children.joker_display = JokerDisplayBox(self, "joker_display_disable", { type = "NORMAL" })
             self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", { type = "SMALL" })
-            self.children.joker_display_debuff = JokerDisplayBox(self, "joker_display_debuff", { type = "DEBUFF" })
-            self:initialize_joker_display()
+            should_reload = true
         else
             if force_update or (JokerDisplay.config.enabled and (not self.joker_display_values.disabled or self.joker_display_values.blueprint_force_update)) then
                 if force_reload then
-                    self:initialize_joker_display()
+                    should_reload = true
                 else
                     self:calculate_joker_display()
                 end
             end
+        end
+        if should_reload then
+            self:initialize_joker_display()
         end
     end
 end
@@ -411,18 +448,6 @@ G.FUNCS.joker_display_small_enable = function(e)
     else
         e.states.visible = JokerDisplay.config.enabled and not card.joker_display_values.disabled
         e.parent.states.collide.can = JokerDisplay.config.enabled and not card.joker_display_values.disabled
-    end
-end
-
-
-G.FUNCS.joker_display_debuff = function(e)
-    local card = e.config.ref_table
-    if not (card.facing == 'back') and card.debuff then
-        e.states.visible = JokerDisplay.config.enabled and not card.joker_display_values.disabled
-        e.parent.states.collide.can = JokerDisplay.config.enabled and not card.joker_display_values.disabled
-    else
-        e.states.visible = false
-        e.parent.states.collide.can = false
     end
 end
 
