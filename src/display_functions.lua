@@ -355,11 +355,6 @@ function Card:update_joker_display(force_update, force_reload, _from)
 
         --print(tostring(self.ability.name) .. " : " .. tostring(_from))
         if not self.children.joker_display then
-            self.joker_display_values = {
-                disabled = JokerDisplay.config.hide_by_default or false,
-                small = false,
-            }
-
             --Regular Display
             self.children.joker_display = JokerDisplayBox(self, "joker_display_disable", { type = "NORMAL" })
             self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", { type = "SMALL" })
