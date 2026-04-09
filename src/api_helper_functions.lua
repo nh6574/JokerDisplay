@@ -123,15 +123,21 @@ JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_deb
     card.joker_display_values.blueprint_force_update = true
 
     if card.joker_display_values.blueprint_initialized and (changed or not card.joker_display_values.blueprint_loaded) then
-        card.children.joker_display:remove_text()
-        card.children.joker_display:remove_reminder_text()
-        card.children.joker_display:remove_extra()
-        card.children.joker_display_small:remove_text()
-        card.children.joker_display_small:remove_reminder_text()
-        card.children.joker_display_small:remove_extra()
+        if card.children.joker_display then            
+            card.children.joker_display:remove_text()
+            card.children.joker_display:remove_reminder_text()
+            card.children.joker_display:remove_extra()
+        end
+        if card.children.joker_display_small then
+            card.children.joker_display_small:remove_text()
+            card.children.joker_display_small:remove_reminder_text()
+            card.children.joker_display_small:remove_extra()
+        end
         if copied_joker then
             if card.joker_display_values.blueprint_debuff then
-                card.children.joker_display:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
+                if card.children.joker_display then
+                    card.children.joker_display:add_text({ { text = "" .. localize("k_debuffed"), colour = G.C.UI.TEXT_INACTIVE } })
+                end
             elseif copied_joker.joker_display_values then
                 copied_joker:initialize_joker_display(card)
                 card.joker_display_values.blueprint_loaded = true
