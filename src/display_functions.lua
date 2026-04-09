@@ -383,9 +383,9 @@ end
 ---@param force_reload boolean? Force re-initialization
 ---@param _from string? Debug string
 function JokerDisplay.update_all_joker_display(force_update, force_reload, _from)
-    if G.jokers then
-        for _, area in ipairs(JokerDisplay.get_display_areas()) do
-            for _, card in pairs(area.cards) do
+    if JokerDisplay.should_display() then
+        for _, area in pairs(JokerDisplay.get_display_areas()) do
+            for _, card in pairs(area.cards or {}) do
                 card:update_joker_display(force_update, force_reload, _from)
             end
         end
@@ -490,10 +490,10 @@ end
 local card_update_ref = Card.update
 function Card:update(dt)
     card_update_ref(self, dt)
-    if JokerDisplay.config.enabled and G.jokers then
+    if JokerDisplay.config.enabled and JokerDisplay.should_display() then
         local is_display_area = false
         if self.area then
-            for _, area in ipairs(JokerDisplay.get_display_areas()) do
+            for _, area in pairs(JokerDisplay.get_display_areas()) do
                 if self.area == area then
                     is_display_area = true
                     break
@@ -538,10 +538,10 @@ end
 local card_set_ability_ref = Card.set_ability
 function Card:set_ability(center, initial, delay_sprites)
     card_set_ability_ref(self, center, initial, delay_sprites)
-    if JokerDisplay.config.enabled and G.jokers and self.joker_display_values then
+    if JokerDisplay.config.enabled and JokerDisplay.should_display() and self.joker_display_values then
         local is_display_area = false
         if self.area then
-            for _, area in ipairs(JokerDisplay.get_display_areas()) do
+            for _, area in pairs(JokerDisplay.get_display_areas()) do
                 if self.area == area then
                     is_display_area = true
                     break

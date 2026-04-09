@@ -218,9 +218,9 @@ JokerDisplay.calculate_card_triggers = function(card, scoring_hand, held_in_hand
 
     local triggers = 1
 
-    if G.jokers then
-        for _, area in ipairs(JokerDisplay.get_display_areas()) do
-            for _, joker in pairs(area.cards) do
+    if JokerDisplay.should_display() then
+        for _, area in pairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards or {}) do
                 local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
                 local retrigger_function = not joker.debuff and joker.joker_display_values and
                     ((joker_display_definition and joker_display_definition.retrigger_function) or
@@ -281,9 +281,9 @@ JokerDisplay.calculate_joker_modifiers = function(card)
         end
     end
 
-    if G.jokers then
-        for _, area in ipairs(JokerDisplay.get_display_areas()) do
-            for _, joker in pairs(area.cards) do
+    if JokerDisplay.should_display() then
+        for _, area in pairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards or {}) do
                 local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
                 local mod_function = not joker.debuff and joker.joker_display_values and
                     ((joker_display_definition and joker_display_definition.mod_function) or
@@ -354,9 +354,9 @@ JokerDisplay.calculate_joker_triggers = function(card)
 
     local triggers = 1
 
-    if G.jokers then
-        for _, area in ipairs(JokerDisplay.get_display_areas()) do
-            for _, joker in pairs(area.cards) do
+    if JokerDisplay.should_display() then
+        for _, area in pairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards or {}) do
                 local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
                 local retrigger_joker_function = not joker.debuff and joker.joker_display_values and
                     ((joker_display_definition and joker_display_definition.retrigger_joker_function) or

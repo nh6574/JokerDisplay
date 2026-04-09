@@ -13,17 +13,25 @@ JokerDisplay.save_config = JokerDisplay.save_config or function() end
 JokerDisplay.config_tab = function()
     if not JokerDisplay.init_loc then init_localization() end
     -- Create a card area that will display an example joker
-    G.config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
+    G.jokerdisplay_config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
         { card_limit = 1, type = 'title', highlight_limit = 0, })
     local center = G.P_CENTERS['j_bloodstone']
-    local card = Card(G.config_card_area.T.x + G.config_card_area.T.w / 2, G.config_card_area.T.y, G.CARD_W, G.CARD_H,
+    local card = Card(G.jokerdisplay_config_card_area.T.x + G.jokerdisplay_config_card_area.T.w / 2, G.jokerdisplay_config_card_area.T.y, G.CARD_W, G.CARD_H,
         nil, center)
     card:set_edition('e_foil', true, true)
     card:set_perishable(true)
     card:set_rental(true)
-    G.config_card_area:emplace(card)
-    G.config_card_area.cards[1]:update_joker_display()
-    G.config_card_area.cards[1].joker_display_values.disabled = false
+    G.jokerdisplay_config_card_area:emplace(card)
+    G.jokerdisplay_config_card_area.cards[1]:update_joker_display()
+    G.jokerdisplay_config_card_area.cards[1].joker_display_values.disabled = false
+
+    local old_remove = G.jokerdisplay_config_card_area.remove
+    function G.jokerdisplay_config_card_area:remove()
+        old_remove(self)
+        if G.jokerdisplay_config_card_area == self then
+            G.jokerdisplay_config_card_area = nil
+        end
+    end
 
     local modNodes = {}
 
@@ -283,7 +291,7 @@ JokerDisplay.config_tab = function()
                     n = G.UIT.C,
                     config = { align = "tm", padding = 0.1, no_fill = true },
                     nodes = {
-                        { n = G.UIT.O, config = { object = G.config_card_area } }
+                        { n = G.UIT.O, config = { object = G.jokerdisplay_config_card_area } }
                     }
                 }
             }
@@ -368,11 +376,13 @@ end
 function update_display()
     JokerDisplay.save_config()
 
-    G.config_card_area.cards[1]:update_joker_display(false, true, "config_update")
-    if G.jokers then
-        for _, area in ipairs(JokerDisplay.get_display_areas()) do
-            for _, joker in pairs(area.cards) do
-                joker:update_joker_display(false, true, "config_update")
+    if G.jokerdisplay_config_card_area then
+        G.jokerdisplay_config_card_area.cards[1]:update_joker_display(true, true, "config_update")
+    end
+    if JokerDisplay.should_display() then
+        for _, area in pairs(JokerDisplay.get_display_areas()) do
+            for _, joker in pairs(area.cards or {}) do
+                joker:update_joker_display(true, true, "config_update")
             end
         end
     end
