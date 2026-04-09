@@ -4,6 +4,9 @@
 ---@param custom_parent table? Another card the display should be under
 ---@param stop_calc boolean? Don't call calculate_joker_display
 function Card:initialize_joker_display(custom_parent, stop_calc)
+    self.joker_display_values.blueprint_initialized = false
+    self.joker_display_values.blueprint_loaded = false
+
     if not JokerDisplay.Definitions[self.config.center.key] and
         self.config.center.joker_display_def and type(self.config.center.joker_display_def) == "function" then
         JokerDisplay.Definitions[self.config.center.key] = self.config.center.joker_display_def(JokerDisplay)
@@ -63,8 +66,6 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
                 replace_debuff_text_config)
         end
     end
-
-    self.joker_display_values.blueprint_loaded = false
 
     if replace_modifiers then
         self.children.joker_display.stop_modifiers = true
@@ -491,41 +492,43 @@ local card_update_ref = Card.update
 function Card:update(dt)
     card_update_ref(self, dt)
     if JokerDisplay.config.enabled and JokerDisplay.should_display() then
-        local is_display_area = false
-        if self.area then
-            for _, area in pairs(JokerDisplay.get_display_areas()) do
-                if self.area == area then
-                    is_display_area = true
-                    break
-                end
-            end
-        end
-        if is_display_area then
-            if G.STATE ~= G.STATES.HAND_PLAYED and G.STATE ~= G.STATES.SELECTING_HAND and G.STATE ~= G.STATES.DRAW_TO_HAND then
-                JokerDisplay.current_hand = {}
-                JokerDisplay.current_hand_info = {
-                    text = "Unknown",
-                    poker_hands = {},
-                    scoring_hand = {}
-                }
-            end
-            if not self.joker_display_last_update_time then
+        local amount_of_cards = G.jokers and #G.jokers.cards or 2
+        if not self.joker_display_last_update_time then
+            self.joker_display_last_update_time = 0
+            self.joker_display_update_time_variance = math.random()
+            local joker_number_delta_variance = math.max(0.01, amount_of_cards / 30)
+            self.joker_display_next_update_time = joker_number_delta_variance / 2 +
+                joker_number_delta_variance / 2 * self.joker_display_update_time_variance
+        elseif self.joker_display_values and G.real_dt > 0.05 and amount_of_cards > 20 then
+            self.joker_display_values.disabled = true
+        else
+            self.joker_display_last_update_time = self.joker_display_last_update_time + G.real_dt
+            if self.joker_display_last_update_time > self.joker_display_next_update_time then
                 self.joker_display_last_update_time = 0
-                self.joker_display_update_time_variance = math.random()
-                local joker_number_delta_variance = math.max(0.01, #G.jokers.cards / 20)
+                local joker_number_delta_variance = math.max(0.1, amount_of_cards / 30)
                 self.joker_display_next_update_time = joker_number_delta_variance / 2 +
                     joker_number_delta_variance / 2 * self.joker_display_update_time_variance
-            elseif self.joker_display_values and G.real_dt > 0.05 and #G.jokers.cards > 20 then
-                self.joker_display_values.disabled = true
-            else
-                self.joker_display_last_update_time = self.joker_display_last_update_time + G.real_dt
-                if self.joker_display_last_update_time > self.joker_display_next_update_time then
-                    self.joker_display_last_update_time = 0
-                    local joker_number_delta_variance = math.max(0.1, #G.jokers.cards / 20)
-                    self.joker_display_next_update_time = joker_number_delta_variance / 2 +
-                        joker_number_delta_variance / 2 * self.joker_display_update_time_variance
-                    self:update_joker_display(false, false, "Card:update")
 
+                local is_display_area = false
+                if self.area then
+                    for _, area in pairs(JokerDisplay.get_display_areas()) do
+                        if self.area == area then
+                            is_display_area = true
+                            break
+                        end
+                    end
+                end
+                if is_display_area then
+                    if G.STATE ~= G.STATES.HAND_PLAYED and G.STATE ~= G.STATES.SELECTING_HAND and G.STATE ~= G.STATES.DRAW_TO_HAND then
+                        JokerDisplay.current_hand = {}
+                        JokerDisplay.current_hand_info = {
+                            text = "Unknown",
+                            poker_hands = {},
+                            scoring_hand = {}
+                        }
+                    end
+                    self:update_joker_display(false, false, "Card:update")
+    
                     if self.children.joker_display then self.children.joker_display:recalculate(true) end
                     if self.children.joker_display_small then self.children.joker_display_small:recalculate(true) end
                     if self.children.joker_display_debuff then self.children.joker_display_debuff:recalculate(true) end
