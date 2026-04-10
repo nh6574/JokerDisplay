@@ -98,11 +98,15 @@ function JokerDisplay.number_format(num, e_switch_point, places)
     return sign .. (formatted:reverse():gsub("(%d%d%d)", "%1,"):gsub(",$", ""):reverse())
 end
 
+function JokerDisplay.should_display()
+    return (G.jokers or G.jokerdisplay_config_card_area) and true or false
+end
+
 ---Get all areas available for JokerDisplay \
 ---Hook to add more areas
 ---@return table
 function JokerDisplay.get_display_areas()
-    return { G.jokers }
+    return { G.jokers, G.jokerdisplay_config_card_area }
 end
 
 ---Checks if a value is in a table. Used as a drop in replacement to SMODS.in_scoring
