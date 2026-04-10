@@ -7,7 +7,13 @@ function Controller:queue_L_cursor_press(x, y)
     local press_node = self.hovering.target or self.focused.target
     if press_node and press_node.name and press_node.name == "JokerDisplay" and press_node.can_collapse and press_node.parent then
         if not JokerDisplay.config.disable_collapse and not press_node.parent.joker_display_values.disabled then
-            press_node.parent.joker_display_values.small = not press_node.parent.joker_display_values.small
+            local card = press_node.parent
+            card.joker_display_values.small = not card.joker_display_values.small
+            card:update_joker_display(false, false, "Controller:queue_L_cursor_press")
+    
+            if card.children.joker_display then card.children.joker_display:recalculate(true) end
+            if card.children.joker_display_small then card.children.joker_display_small:recalculate(true) end
+            if card.children.joker_display_debuff then card.children.joker_display_debuff:recalculate(true) end
         end
     end
 end
