@@ -1,10 +1,3 @@
-SMODS.Atlas({
-    key = "modicon",
-    path = "icon.png",
-    px = 32,
-    py = 32
-})
-
 JokerDisplay = {}
 JokerDisplay.path = SMODS.current_mod.path
 JokerDisplay.config = SMODS.current_mod.config
