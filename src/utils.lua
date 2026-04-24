@@ -50,7 +50,7 @@ end
 
 -- function taken from smods
 
-function round_number(num, precision)
+round_number = round_number or function(num, precision)
     precision = 10^(precision or 0)
 
     return math.floor(num * precision + 0.4999999999999994) / precision
