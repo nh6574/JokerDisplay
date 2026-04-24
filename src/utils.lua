@@ -48,6 +48,14 @@ if not _G["to_big"] then
     end
 end
 
+-- function taken from smods
+
+function round_number(num, precision)
+    precision = 10^(precision or 0)
+
+    return math.floor(num * precision + 0.4999999999999994) / precision
+end
+
 ---Formats number.
 ---@see number_format
 ---@param num any Number to format. Accepts Talisman's bignum/omeganum.
