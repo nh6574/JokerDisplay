@@ -48,3 +48,5 @@ And thank you to WholeHorse for the Russian localization and SDM0 for the French
 If you have any issues feel free to contact me on [Twitter](https://nh6574.com/), [Bluesky](https://bsky.app/profile/nh6574.com) or Discord as nh6574
 
 And here's my [ko-fi link](https://ko-fi.com/nh6574) if you feel especially grateful.
+
+Also check out my other Quality of Life mod [PlayLog](https://github.com/nh6574/PlayLog)!
