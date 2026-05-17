@@ -540,7 +540,7 @@ function CardArea:draw(...)
             self.children.area_uibox.FRAME.DRAW = G.FRAMES.DRAW
         end
         -- Draw background box first (behind jokers)
-        if self.children and self.children.area_uibox and self.children.area_uibox.UIRoot then
+        if self.children and self.children.area_uibox and self.children.area_uibox.UIRoot and self.states.visible then
             local container_row = self.children.area_uibox.UIRoot.children[1]
             if container_row and container_row.draw_self then
                 container_row:draw_self() -- Draws just the background box
@@ -548,7 +548,7 @@ function CardArea:draw(...)
         end
         cardarea_draw_ref(self, ...) -- Draw jokers (vanilla)
         -- Draw label on top (after jokers)
-        if self.children and self.children.area_uibox then
+        if self.children and self.children.area_uibox and self.states.visible then
             -- Draw only text children
             local card_count_row = self.children.area_uibox.UIRoot.children[2]
             if card_count_row and card_count_row.children then
