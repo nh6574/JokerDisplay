@@ -51,7 +51,7 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
 
     local final_scoring_hand = {}
     for i = 1, #valid_cards do
-        local splashed = SMODS and SMODS.always_scores(valid_cards[i]) or next(find_joker('Splash'))
+        local splashed = SMODS and SMODS.always_scores(valid_cards[i]) or valid_cards[i].config.center.key == "m_stone" or next(find_joker('Splash'))
         local unsplashed = SMODS and SMODS.never_scores(valid_cards[i]) or false
         if not splashed then
             for _, card in pairs(scoring_hand) do
