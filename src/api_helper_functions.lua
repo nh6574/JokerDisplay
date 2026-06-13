@@ -51,7 +51,8 @@ JokerDisplay.evaluate_hand = function(cards, count_facedowns)
 
     local final_scoring_hand = {}
     for i = 1, #valid_cards do
-        local splashed = SMODS and SMODS.always_scores(valid_cards[i]) or valid_cards[i].config.center.key == "m_stone" or next(find_joker('Splash'))
+        local splashed = SMODS and SMODS.always_scores(valid_cards[i]) or valid_cards[i].config.center.key == "m_stone" or
+            next(find_joker('Splash'))
         local unsplashed = SMODS and SMODS.never_scores(valid_cards[i]) or false
         if not splashed then
             for _, card in pairs(scoring_hand) do
@@ -123,7 +124,7 @@ JokerDisplay.copy_display = function(card, copied_joker, is_debuffed, bypass_deb
     card.joker_display_values.blueprint_force_update = true
 
     if card.joker_display_values.blueprint_initialized and (changed or not card.joker_display_values.blueprint_loaded) then
-        if card.children.joker_display then            
+        if card.children.joker_display then
             card.children.joker_display:remove_text()
             card.children.joker_display:remove_reminder_text()
             card.children.joker_display:remove_extra()
@@ -364,18 +365,25 @@ JokerDisplay.calculate_joker_triggers = function(card)
         for _, area in pairs(JokerDisplay.get_display_areas()) do
             for _, joker in pairs(area.cards or {}) do
                 local joker_display_definition = JokerDisplay.Definitions[joker.config.center.key]
-                local retrigger_joker_function = not joker.debuff and joker.joker_display_values and
-                    ((joker_display_definition and joker_display_definition.retrigger_joker_function) or
-                        (joker.joker_display_values.blueprint_ability_key and
-                            not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
-                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
-                            JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_joker_function))
+                local retrigger_joker_function
+                retrigger_joker_function = not joker.debuff and joker.joker_display_values and joker_display_definition and
+                    joker_display_definition.retrigger_joker_function
 
                 if retrigger_joker_function then
                     -- The rounding is for Cryptid compat
                     triggers = triggers +
+                        math.floor(retrigger_joker_function(card, joker) or 0)
+                end
+
+                retrigger_joker_function = not joker.debuff and joker.joker_display_values and
+                    (joker.joker_display_values.blueprint_ability_key and
+                        not joker.joker_display_values.blueprint_debuff and not joker.joker_display_values.blueprint_stop_func and
+                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key] and
+                        JokerDisplay.Definitions[joker.joker_display_values.blueprint_ability_key].retrigger_joker_function)
+
+                if retrigger_joker_function then
+                    triggers = triggers +
                         math.floor(retrigger_joker_function(card,
-                            joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
                             joker.joker_display_values.blueprint_ability_joker or joker) or 0)
                 end
             end
