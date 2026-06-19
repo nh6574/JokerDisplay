@@ -20,7 +20,8 @@ return {
 					"繁体中文译者：{C:green}wilfredlam0418",
 					"荷兰文译者：{C:green}Soulsphere",
 					"简体中文译者：{C:green}ChromaPIE",
-					"日文译者：{C:green}koukichi_kkc"
+					"日文译者：{C:green}koukichi_kkc",
+					"Polish localization by: {C:green}Sagiritarius{}"
 				},
 			}
 		}

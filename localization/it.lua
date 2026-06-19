@@ -21,6 +21,7 @@ return {
                     "Localizzazione cinese tradizionale a cura di: {C:green}wilfredlam0418{}",
                     "Simplified Chinese localization by: {C:green}ChromaPIE",
                     "Japanese localization by: {C:green}koukichi_kkc",
+                    "Polish localization by: {C:green}Sagiritarius{}"
                 },
             }
         }

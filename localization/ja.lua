@@ -20,7 +20,8 @@ return {
 					"中国語(繁体字)翻訳 {C:green}wilfredlam0418{}",
 					"オランダ語翻訳 {C:green}Soulsphere{}",
 					"中国語(簡体字)翻訳 {C:green}ChromaPIE{}",
-					"日本語翻訳 {C:green}koukichi_kkc{}"
+					"日本語翻訳 {C:green}koukichi_kkc{}",
+					"Polish localization by: {C:green}Sagiritarius{}"
 				},
 			}
 		}

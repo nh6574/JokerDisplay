@@ -7,7 +7,7 @@
   "prefix": "JokerDisplay",
   "main_file": "JokerDisplay.lua",
   "priority": -1000000000,
-  "version": "1.10.6",
+  "version": "1.10.7",
   "conflicts": ["Steamodded (<<1.0.0~BETA-0624a)"],
   "icon_path": "icon.png"
 }

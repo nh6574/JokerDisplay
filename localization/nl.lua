@@ -21,6 +21,7 @@
                     "Nederlandse lokalisatie door: {C:green}Soulsphere{}",
                     "Vereenvoudigde Chinese lokalisatie door: {C:green}ChromaPIE{}",
                     "Japanse lokalisatie door: {C:green}koukichi_kkc{}",
+                    "Polish localization by: {C:green}Sagiritarius{}"
                 },
             }
         }

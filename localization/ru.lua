@@ -21,6 +21,7 @@ return {
 					"Нидерландская локализация: {C:green}Soulsphere{}",
 					"Китайская (упр.) локализация: {C:green}ChromaPIE",
 					"Японская локализация: {C:green}koukichi_kkc",
+					"Polish localization by: {C:green}Sagiritarius{}"
 				},
 			}
 		}
