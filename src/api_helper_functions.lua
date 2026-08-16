@@ -282,7 +282,7 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                     edition_mods.x_mult or modifiers.x_mult,
                 dollars = (modifiers.dollars and edition_mods.dollars and modifiers.dollars + edition_mods.dollars) or
                     edition_mods.dollars or modifiers.dollars,
-                e_mult = (modifiers.e_mult and edition_mods.e_mult and modifiers.e_mult ^ edition_mods.e_mult) or
+                e_mult = (modifiers.e_mult and edition_mods.e_mult and modifiers.e_mult * edition_mods.e_mult) or
                     edition_mods.e_mult or modifiers.e_mult,
             }
         end
@@ -317,7 +317,7 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                             extra_mods.x_mult or modifiers.x_mult,
                         dollars = (modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars) or
                             extra_mods.dollars or modifiers.dollars,
-                        e_mult = (modifiers.e_mult and extra_mods.e_mult and modifiers.e_mult ^ extra_mods.e_mult) or
+                        e_mult = (modifiers.e_mult and extra_mods.e_mult and modifiers.e_mult * extra_mods.e_mult) or
                             extra_mods.e_mult or modifiers.e_mult,
                     }
                 end
