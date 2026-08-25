@@ -42,7 +42,7 @@ if not SMODS then
 
     local function load_mod_config()
         local s1, config = pcall(function()
-            return load(fs.read('config/JokerDisplay.jkr'), '=[SMODS JokerDisplay "config"]')()
+            return setfenv(load(fs.read('config/JokerDisplay.jkr'), '=[SMODS JokerDisplay "config"]'), {})()
         end)
         local s2, default_config = pcall(function()
             return JokerDisplay.load_file('config.lua', "default_config")()
