@@ -160,6 +160,19 @@ JokerDisplay.config_tab = function()
                                 })
                             }
                         },
+                        {
+                            n = G.UIT.R,
+                            config = { padding = 0.01, align = "cr" },
+                            nodes = {
+                                create_toggle({
+                                    label = localize('jdis_disable_misprint_top_card'),
+                                    ref_table = JokerDisplay.config,
+                                    ref_value =
+                                    'disable_misprint_top_card',
+                                    callback = JokerDisplay.save_config
+                                })
+                            }
+                        },
                     }
                 },
             }

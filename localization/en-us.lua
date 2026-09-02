@@ -36,6 +36,7 @@ return {
 			jdis_disable_collapse = "Disable collapsing",
 			jdis_disable_perishable = "Disable Perishable",
 			jdis_disable_rental = "Disable Rental",
+			jdis_disable_misprint_top_card = "Disable Misprint Top Card",
 			jdis_modifiers = "Modifiers",
 			jdis_reminders = "Reminders",
 			jdis_extras = "Extras",
@@ -48,7 +49,8 @@ return {
 		},
 		v_dictionary = {
 			jdis_odds = "#1# in #2#",
-			jdis_rank_of_suit = "#1# of #2#"
+			jdis_rank_of_suit = "#1# of #2#",
+			jdis_top_card = "(Top card: #1#)"
 		}
 	},
 }

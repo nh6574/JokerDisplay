@@ -11,6 +11,7 @@ return {
 	disable_collapse = false,
 	disable_perishable = false,
 	disable_rental = false,
+	disable_misprint_top_card = false,
 	small_rows = {
 		reminder = false,
 		extra = false,

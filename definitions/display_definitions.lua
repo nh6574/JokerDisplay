@@ -502,7 +502,36 @@ return {
                     min_cycle_time = 0
                 }
             }
-        }
+        },
+        reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "top_card", colour = G.C.FILTER },
+        },
+        calc_function = function(card)
+            card.joker_display_values.top_card = ""
+            card.joker_display_values.top_card_suit = nil
+            if JokerDisplay.config.disable_misprint_top_card then return end
+
+            local top_card = G.deck and G.deck.cards and G.deck.cards[#G.deck.cards]
+            if top_card and top_card.base and top_card.base.suit and top_card.base.value then
+                card.joker_display_values.top_card_suit = top_card.base.suit
+                card.joker_display_values.top_card = localize {
+                    type = 'variable',
+                    key = "jdis_top_card",
+                    vars = {
+                        localize {
+                            type = 'variable',
+                            key = "jdis_rank_of_suit",
+                            vars = { localize(top_card.base.value, 'ranks'), localize(top_card.base.suit, 'suits_plural') }
+                        }
+                    }
+                }
+            end
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children and reminder_text.children[1] and card.joker_display_values.top_card_suit then
+                reminder_text.children[1].config.colour = lighten(G.C.SUITS[card.joker_display_values.top_card_suit], 0.35)
+            end
+        end
     },
     j_dusk = { -- Dusk
         reminder_text = {
