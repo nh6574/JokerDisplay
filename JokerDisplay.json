@@ -3,11 +3,11 @@
   "name": "JokerDisplay",
   "display_name": "JokerDisplay",
   "author": ["nh6574"],
-  "description": "Display useful information under Jokers. Controls: Right-click or B - hide/show. Left-click or Up - collapse/expand.",
+  "description": "Please download the mod from the stable branch",
   "prefix": "JokerDisplay",
   "main_file": "JokerDisplay.lua",
   "priority": -1000000000,
-  "version": "1.10.9",
+  "version": "1.10.9~mighty no. 9 edition",
   "conflicts": ["Steamodded (<<1.0.0~BETA-0624a)"],
   "icon_path": "icon.png"
 }
