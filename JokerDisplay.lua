@@ -13,3 +13,5 @@ JokerDisplay.Global_Definitions = SMODS.load_file("definitions/global_definition
 JokerDisplay.Definitions = SMODS.load_file("definitions/display_definitions.lua")() or {}
 JokerDisplay.Blind_Definitions = SMODS.load_file("definitions/blind_definitions.lua")() or {}
 JokerDisplay.Edition_Definitions = SMODS.load_file("definitions/edition_definitions.lua")() or {}
+
+assert(nil)
