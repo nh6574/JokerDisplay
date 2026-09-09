@@ -29,7 +29,7 @@ end
 
 local function draw_pixel_rect(x, y, w, h, config)
     local shortest = math.min(w, h)
-    local resolution = config.res or (shortest > 3.5 and 0.8 or shortest > 0.3 and 0.6 or 0.15)
+    local resolution = config.render_res or config.res or (shortest > 3.5 and 0.8 or shortest > 0.3 and 0.6 or 0.15)
     local step = resolution / G.TILESIZE
     local right = w - 4 * step
     local bottom = h - 4 * step
@@ -79,12 +79,135 @@ local function text_size(font, text, scale)
 end
 
 local function draw_text(drawable, font, scale, x, y)
-    love.graphics.draw(drawable,
+    love.graphics.draw(
+        drawable,
         x + font.TEXT_OFFSET.x * scale * font.FONTSCALE / G.TILESIZE,
         y + font.TEXT_OFFSET.y * scale * font.FONTSCALE / G.TILESIZE,
         0,
         scale * font.squish * font.FONTSCALE / G.TILESIZE,
-        scale * font.FONTSCALE / G.TILESIZE)
+        scale * font.FONTSCALE / G.TILESIZE
+    )
+end
+
+JokerDisplay.display_colour_registry = JokerDisplay.display_colour_registry or {}
+local display_colour_ids = setmetatable({}, { __mode = "k" })
+local function suit_display_colour(suit) return lighten(G.C.SUITS[suit], 0.35) end
+
+local function same_colour(a, b)
+    return a and b and math.abs((a[1] or 0) - (b[1] or 0)) < 0.002
+        and math.abs((a[2] or 0) - (b[2] or 0)) < 0.002
+        and math.abs((a[3] or 0) - (b[3] or 0)) < 0.002
+end
+
+local function display_colour_id(colour)
+    if type(colour) ~= "table" then return end
+    if display_colour_ids[colour] then return display_colour_ids[colour] end
+    local known = {
+        { "chips", "Chips", G.C.CHIPS }, { "mult", "Mult", G.C.MULT },
+        { "xmult", "XMult", G.C.XMULT }, { "money", "Money", G.C.GOLD },
+        { "odds", "Chance", G.C.GREEN },
+        { "required", "Required text", G.C.ORANGE },
+        { "text", "Default text", G.C.UI.TEXT_LIGHT },
+        { "inactive", "Inactive text", G.C.UI.TEXT_INACTIVE }
+    }
+    for _, entry in ipairs(known) do
+        if colour == entry[3] then
+            display_colour_ids[colour] = entry[1]
+            JokerDisplay.display_colour_registry[entry[1]] = { label = entry[2], colour = colour, builtin = true }
+            return entry[1]
+        end
+    end
+    for _, suit in ipairs({ "Hearts", "Diamonds", "Spades", "Clubs" }) do
+        local themed = suit_display_colour(suit)
+        if same_colour(colour, themed) then
+            local id = "suit_" .. suit:lower()
+            display_colour_ids[colour] = id
+            JokerDisplay.display_colour_registry[id] = { label = suit, colour = themed, builtin = true }
+            return id
+        end
+    end
+    if colour[1] and colour[2] and colour[3] then
+        local id = string.format("custom_%02X%02X%02X", math.floor(colour[1] * 255 + 0.5),
+            math.floor(colour[2] * 255 + 0.5), math.floor(colour[3] * 255 + 0.5))
+        JokerDisplay.display_colour_registry[id] = { label = "Custom #" .. id:sub(8), colour = colour }
+        return id
+    end
+end
+
+JokerDisplay.get_display_colour = function(colour)
+    local id = display_colour_id(colour)
+    local override = id and JokerDisplay.config.text_colour_overrides
+        and JokerDisplay.config.text_colour_overrides[id]
+    if override then return override end
+    local suit = id and id:match("^suit_(.+)$")
+    if suit then return suit_display_colour(suit:sub(1, 1):upper() .. suit:sub(2)) end
+    return colour
+end
+
+JokerDisplay.get_background_colour = function()
+    if JokerDisplay.config.background_colour_override and JokerDisplay.config.background_colour then
+        return JokerDisplay.config.background_colour
+    end
+    local colour = G.C.UI.BACKGROUND_DARK
+    local default_ui = math.abs(colour[1] - 0x7A / 255) < 0.002
+        and math.abs(colour[2] - 0x9E / 255) < 0.002 and math.abs(colour[3] - 0x9F / 255) < 0.002
+    if default_ui then
+        colour = G.C.BLACK
+        local default_black = math.abs(colour[1] - 0x37 / 255) < 0.002
+            and math.abs(colour[2] - 0x42 / 255) < 0.002 and math.abs(colour[3] - 0x44 / 255) < 0.002
+        if default_black then colour = { 0, 0, 0, 1 } end
+    end
+    return adjust_alpha(darken(colour, 0.2), JokerDisplay.config.background_opacity or 0.8)
+end
+
+JokerDisplay.get_sticker_colour = function(kind)
+    local overrides = JokerDisplay.config.text_colour_overrides or {}
+    if overrides[kind] then return overrides[kind] end
+    if kind == "perishable" then return lighten(G.C.PERISHABLE, 0.35) end
+    if kind == "rental" then return G.C.GOLD end
+    return JokerDisplay.get_background_colour()
+end
+
+JokerDisplay.update_sticker_colours = function(card)
+    if not card or not card.children then return end
+    local function update(key, kind)
+        local box = card.children[key]
+        if not (box and box.UIRoot) then return end
+        box.UIRoot.config.colour = JokerDisplay.get_sticker_colour("sticker_background")
+        local function update_text(node)
+            if node.config and node.config.ref_value == kind then
+                node.config.colour = JokerDisplay.get_sticker_colour(kind)
+            end
+            for _, child in ipairs(node.children or {}) do update_text(child) end
+        end
+        update_text(box.UIRoot)
+    end
+    update("joker_display_perishable", "perishable")
+    update("joker_display_rental", "rental")
+end
+
+local palette_signature, palette_revision = nil, 0
+local function current_palette_revision()
+    local colours = { G.C.CHIPS, G.C.MULT, G.C.XMULT, G.C.GOLD, G.C.CHANCE, G.C.GREEN, G.C.ORANGE,
+        G.C.PERISHABLE, G.C.BLACK,
+        G.C.SUITS.Hearts, G.C.SUITS.Diamonds, G.C.SUITS.Spades, G.C.SUITS.Clubs,
+        G.C.UI.BACKGROUND_DARK, G.C.UI.TEXT_LIGHT,
+        G.C.UI.TEXT_INACTIVE, G.C.RED, G.C.BLUE, G.C.GREEN, G.C.PURPLE }
+    local parts = {}
+    for _, colour in ipairs(colours) do
+        parts[#parts + 1] = string.format(
+            "%.4f,%.4f,%.4f,%.4f",
+            colour[1] or 0,
+            colour[2] or 0,
+            colour[3] or 0,
+            colour[4] or 1
+        )
+    end
+    local signature = table.concat(parts, ";")
+    if signature ~= palette_signature then
+        palette_signature, palette_revision = signature, palette_revision + 1
+    end
+    return palette_revision
 end
 
 local function utf8_length(text)
@@ -162,7 +285,7 @@ end
 function JokerDisplayDynaText:_coloured_text()
     local result = {}
     for index, letter in ipairs(self.strings[self.focused_string].letters) do
-        table.insert(result, letter.colour or self.colours[index % #self.colours + 1])
+        table.insert(result, JokerDisplay.get_display_colour(letter.colour or self.colours[index % #self.colours + 1]))
         table.insert(result, letter.char)
     end
     return result
@@ -293,7 +416,7 @@ function JokerDisplayBox:init(parent, func, args)
             r = 0.001,
             padding = 0.1,
             align = 'cm',
-            colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+            colour = JokerDisplay.get_background_colour(),
             shadow = true,
             func = func,
             ref_table = parent
@@ -363,11 +486,13 @@ function JokerDisplayBox:init(parent, func, args)
         e_mult = nil,
     }
     self._layout_dirty = true
+    self._canvas_dirty = true
     self:recalculate(true)
 end
 
 function JokerDisplayBox:recalculate(from_update)
     if not from_update then return end
+    self._canvas_dirty = true
     if self._styling then self._layout_dirty = true end
     local old_min_height = self.text.config.minh
     local old_padding = self.text.config.padding
@@ -451,7 +576,7 @@ function JokerDisplayBox:_refresh_text(node)
             local colours = object.colours or { G.C.UI.TEXT_LIGHT }
             if #colours == 0 then colours = { G.C.UI.TEXT_LIGHT } end
             for index, letter in ipairs(focused.letters or {}) do
-                local colour = letter.prefix or letter.suffix or letter.colour or colours[index % #colours + 1]
+                local colour = JokerDisplay.get_display_colour(letter.prefix or letter.suffix or letter.colour or colours[index % #colours + 1])
                 table.insert(coloured_text, colour)
                 table.insert(coloured_text, letter.char)
             end
@@ -477,7 +602,7 @@ function JokerDisplayBox:_measure(node, scale)
     scale = scale or 1
     node._layout_scale = scale
     local config = node.config
-    local padding = (config.padding or 0) * scale
+    local padding = (config.render_padding or config.padding or 0) * scale
     if node.UIT == G.UIT.T then
         local font = self:_font(node)
         local text_scale = (config.scale or 0.4) * scale
@@ -522,7 +647,7 @@ end
 
 function JokerDisplayBox:_place(node, x, y)
     node.T.x, node.T.y = x, y
-    local padding = (node.config.padding or 0) * (node._layout_scale or 1)
+    local padding = (node.config.render_padding or node.config.padding or 0) * (node._layout_scale or 1)
     local cursor_x, cursor_y = x + padding, y + padding
     for _, child in ipairs(node.children or {}) do
         if child.UIT == G.UIT.R then
@@ -545,6 +670,7 @@ function JokerDisplayBox:_calculate_layout()
     self:_place(root, 0, 0)
     self.T.w, self.T.h = root.T.w, root.T.h
     self._layout_dirty = false
+    self._canvas_dirty = true
     self:align_to_text()
 end
 
@@ -751,50 +877,105 @@ function JokerDisplayBox:update(dt)
     self.states.visible = visible
     self.states.collide.can = visible and self.joker_display_type ~= "DEBUFF"
     if visible then
+        local revision = current_palette_revision()
+        if self._palette_revision ~= revision then
+            self._palette_revision = revision
+            self.UIRoot.config.colour = JokerDisplay.get_background_colour()
+            JokerDisplay.update_sticker_colours(self.parent)
+            local function refresh_colours(node)
+                if node.UIT == G.UIT.O and node.config.object then
+                    node._text = nil
+                    if node.config.object.joker_display_lightweight then node.config.object:_set_drawable() end
+                end
+                for _, child in ipairs(node.children or {}) do refresh_colours(child) end
+            end
+            refresh_colours(self.UIRoot)
+            self._canvas_dirty = true
+        end
         self:_refresh_text(self.UIRoot)
         if self._layout_dirty then self:_calculate_layout() end
     end
 end
 
-function JokerDisplayBox:_draw_node(node)
+function JokerDisplayBox:_draw_node(node, pass)
     local config = node.config
-    if node.UIT == G.UIT.T then
+    if node.UIT == G.UIT.T and pass ~= "shapes" then
         local font = self:_font(node)
         local scale = (config.scale or 0.4) * (node._render_scale or 1)
-        love.graphics.setColor(config.colour or G.C.UI.TEXT_LIGHT)
+        love.graphics.setColor(JokerDisplay.get_display_colour(config.colour or G.C.UI.TEXT_LIGHT))
         draw_text(node._drawable, font, scale, node.T.x, node.T.y)
-    elseif node.UIT == G.UIT.O and node._drawable then
+    elseif node.UIT == G.UIT.O and node._drawable and pass ~= "shapes" then
         local font = node._font or G.LANG.font
         local scale = (node._object_scale or 1) * (node._render_scale or 1)
         love.graphics.setColor(node._object_colour or G.C.UI.TEXT_LIGHT)
         draw_text(node._drawable, font, scale, node.T.x, node.T.y)
-    elseif (node.UIT == G.UIT.C or node.UIT == G.UIT.R) and config.colour and config.colour[4] > 0.01 then
-        love.graphics.setColor(config.colour)
+    elseif pass ~= "text" and (node.UIT == G.UIT.C or node.UIT == G.UIT.R) and config.colour and config.colour[4] > 0.01 then
+        love.graphics.setColor(JokerDisplay.get_display_colour(config.colour))
         if config.r then
             draw_pixel_rect(node.T.x, node.T.y, node.T.w, node.T.h, config)
         else
             love.graphics.rectangle("fill", node.T.x, node.T.y, node.T.w, node.T.h)
         end
     end
-    for _, child in ipairs(node.children or {}) do self:_draw_node(child) end
+    for _, child in ipairs(node.children or {}) do self:_draw_node(child, pass) end
+end
+
+function JokerDisplayBox:_draw_contents(width, height, pass)
+    if pass ~= "text" then
+        love.graphics.setColor(self.UIRoot.config.colour or G.C.CLEAR)
+        if self.UIRoot.config.r then
+            draw_pixel_rect(0, 0, width, height, self.UIRoot.config)
+        else
+            love.graphics.rectangle("fill", 0, 0, width, height)
+        end
+    end
+    self:_draw_node(self.UIRoot, pass)
+end
+
+function JokerDisplayBox:_update_canvas()
+    local supersample = 2
+    local width = math.max(1, math.ceil(self.VT.w * G.TILESIZE * supersample))
+    local height = math.max(1, math.ceil(self.VT.h * G.TILESIZE * supersample))
+    if not self.canvas or self.canvas:getWidth() ~= width or self.canvas:getHeight() ~= height then
+        if self.canvas and self.canvas.release then self.canvas:release() end
+        self.canvas = love.graphics.newCanvas(width, height, { dpiscale = 1 })
+        self.canvas:setFilter("linear", "linear")
+    end
+
+    love.graphics.push("all")
+    love.graphics.setCanvas(self.canvas)
+    love.graphics.origin()
+    love.graphics.clear(0, 0, 0, 0)
+    love.graphics.scale(G.TILESIZE * supersample)
+    self:_draw_contents(self.VT.w, self.VT.h, "shapes")
+    love.graphics.pop()
+    self._canvas_dirty = false
+    self._canvas_scale = supersample
+    self._canvas_width, self._canvas_height = self.VT.w, self.VT.h
 end
 
 function JokerDisplayBox:draw()
     if not self.states.visible then return end
     add_to_drawhash(self)
     prep_draw(self, 1)
-    love.graphics.setColor(self.UIRoot.config.colour or G.C.CLEAR)
-    if self.UIRoot.config.r then
-        draw_pixel_rect(0, 0, self.VT.w, self.VT.h, self.UIRoot.config)
+    if G.SETTINGS.GRAPHICS.texture_scaling == 2 then
+        if self._canvas_dirty or not self.canvas or self._canvas_width ~= self.VT.w or
+            self._canvas_height ~= self.VT.h then
+            self:_update_canvas()
+        end
+        love.graphics.setColor(G.C.WHITE)
+        local scale = 1 / (G.TILESIZE * self._canvas_scale)
+        love.graphics.draw(self.canvas, 0, 0, 0, scale, scale)
+        self:_draw_contents(self.VT.w, self.VT.h, "text")
     else
-        love.graphics.rectangle("fill", 0, 0, self.VT.w, self.VT.h)
+        self:_draw_contents(self.VT.w, self.VT.h)
     end
-    self:_draw_node(self.UIRoot)
     love.graphics.pop()
 end
 
 function JokerDisplayBox:remove()
     remove_compat_node(self.UIRoot)
+    if self.canvas and self.canvas.release then self.canvas:release() end
     Moveable.remove(self)
 end
 
@@ -1042,7 +1223,7 @@ JokerDisplay.create_display_border_text_object = function(nodes, border_color)
     local colour = type(border_color) == "function" and border_color() or border_color or G.C.XMULT
     return {
         n = G.UIT.C,
-        config = { colour = colour, r = 0.05, padding = 0.03, res = 0.15 },
+        config = { colour = colour, r = 0.05, padding = 0.03, res = 0.15, render_padding = 0.05, render_res = 0.2 },
         nodes = nodes
     }
 end

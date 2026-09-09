@@ -33,6 +33,7 @@ return {
 			jdis_disable_collapse = "Disable collapsing",
 			jdis_disable_perishable = "Disable Perishable",
 			jdis_disable_rental = "Disable Rental",
+			jdis_background_colour = "Display background",
 			jdis_modifiers = "Modifiers",
 			jdis_reminders = "Reminders",
 			jdis_extras = "Extras",

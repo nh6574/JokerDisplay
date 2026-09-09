@@ -11,6 +11,13 @@ return {
 	disable_collapse = false,
 	disable_perishable = false,
 	disable_rental = false,
+	background_colour = { 0, 0, 0, 0.8 },
+	background_opacity = 0.8,
+	background_colour_override = false,
+	text_colour_overrides = {},
+	background_hue = 0,
+	background_saturation = 0,
+	background_brightness = 0,
 	small_rows = {
 		reminder = false,
 		extra = false,

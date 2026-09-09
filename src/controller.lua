@@ -1,5 +1,16 @@
 --- CONTROLLER INPUT
 
+local function jokerdisplay_config_box_at(x, y)
+    if not (G.jokerdisplay_config_card_area and x and y) then return false end
+    local card = G.jokerdisplay_config_card_area.cards and G.jokerdisplay_config_card_area.cards[1]
+    local point = { x = x / (G.TILESCALE * G.TILESIZE), y = y / (G.TILESCALE * G.TILESIZE) }
+    for _, key in ipairs({ "joker_display", "joker_display_small", "joker_display_debuff" }) do
+        local box = card and card.children and card.children[key]
+        if box and box.states.visible and box:collides_with_point(point) then return true end
+    end
+    return false
+end
+
 -- Collapse
 local controller_queue_L_cursor_press_ref = Controller.queue_L_cursor_press
 function Controller:queue_L_cursor_press(x, y)
@@ -21,6 +32,10 @@ end
 -- Hide
 local controller_queue_R_cursor_press_ref = Controller.queue_R_cursor_press
 function Controller:queue_R_cursor_press(x, y)
+    if jokerdisplay_config_box_at(x, y) then
+        G.FUNCS.joker_display_open_colour_picker()
+        return
+    end
     controller_queue_R_cursor_press_ref(self, x, y)
     local press_node = self.hovering.target or self.focused.target
     if not JokerDisplay.config.shift_to_hide or love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift') then

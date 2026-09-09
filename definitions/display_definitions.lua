@@ -943,7 +943,7 @@ return {
         text_config = { colour = G.C.GOLD },
         calc_function = function(card)
             local count = 0
-            local hand = G.hand.highlighted
+            local hand = G.GAME.blind and G.GAME.blind.in_blind and G.hand.highlighted or {}
             for _, playing_card in pairs(hand) do
                 if playing_card.facing and not (playing_card.facing == 'back') and playing_card:is_face() then
                     count = count + 1
@@ -1183,7 +1183,7 @@ return {
             }
         },
         calc_function = function(card)
-            local hand = G.hand.highlighted
+            local hand = G.GAME.blind and G.GAME.blind.in_blind and G.hand.highlighted or {}
             local text, _, _ = JokerDisplay.evaluate_hand(hand)
             local play_more_than = 0
             local hand_exists = text ~= 'Unknown' and G.GAME.hands and G.GAME.hands[text]
@@ -1329,7 +1329,7 @@ return {
         reminder_text_config = { scale = 0.35 },
         calc_function = function(card)
             local dollars = 0
-            local hand = G.hand.highlighted
+            local hand = G.GAME.blind and G.GAME.blind.in_blind and G.hand.highlighted or {}
             for _, playing_card in pairs(hand) do
                 if playing_card.facing and not (playing_card.facing == 'back') and not playing_card.debuff and playing_card:get_id() and playing_card:get_id() == G.GAME.current_round.mail_card.id then
                     dollars = dollars + card.ability.extra
@@ -1466,7 +1466,7 @@ return {
             { text = ")",                              colour = G.C.UI.TEXT_INACTIVE },
         },
         calc_function = function(card)
-            local highlighted = (G.hand and G.hand.highlighted) or {}
+            local highlighted = G.GAME.blind and G.GAME.blind.in_blind and G.hand and G.hand.highlighted or {}
             local is_trading_card_discard = #highlighted == 1
             local in_blind = G.GAME.blind and G.GAME.blind.in_blind or G.STATE == G.STATES.SELECTING_HAND or
                 G.STATE == G.STATES.HAND_PLAYED or G.STATE == G.STATES.DRAW_TO_HAND
