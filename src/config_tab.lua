@@ -401,11 +401,11 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", panel_x, panel_y, panel_w, panel_h, 8, 8)
     love.graphics.setColor(0.95, 0.73, 0.25, 0.65)
-    love.graphics.print("COLOR PICKER  -  DRAG TO MOVE", panel_x + 12, panel_y + 5, 0, 0.48, 0.48)
+    love.graphics.print(localize("jdis_picker"), panel_x + 12, panel_y + 5, 0, 0.48, 0.48)
     love.graphics.setColor(0.95, 0.73, 0.25, 0.7)
     love.graphics.rectangle("fill", cx, cy, 60, 18, 3, 3)
     love.graphics.setColor(0, 0, 0, 0.8)
-    love.graphics.print("< BACK", cx + 4, cy + 2, 0, 0.7, 0.7)
+    love.graphics.print("< " .. localize("jdis_back"), cx + 4, cy + 2, 0, 0.7, 0.7)
     love.graphics.setColor(0.95, 0.73, 0.25, 1)
     local target = pk.targets[pk.target]
     local selector_x, selector_w = cx + 68, panel_w - 164
@@ -413,12 +413,12 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.rectangle("fill", selector_x, cy, selector_w, 18, 3, 3)
     love.graphics.setColor(0.95, 0.73, 0.25, 1)
     love.graphics.rectangle("line", selector_x, cy, selector_w, 18, 3, 3)
-    love.graphics.print("EDITING: " .. target.label, selector_x + 5, cy + 3, 0, 0.62, 0.62)
+    love.graphics.print(localize("jdis_editing") .. target.label, selector_x + 5, cy + 3, 0, 0.62, 0.62)
     love.graphics.print(pk.dropdown and "^" or "v", selector_x + selector_w - 13, cy + 3, 0, 0.62, 0.62)
     love.graphics.setColor(0.95, 0.73, 0.25, 0.7)
     love.graphics.rectangle("fill", panel_x + panel_w - 56, cy, 38, 18, 3, 3)
     love.graphics.setColor(0, 0, 0, 0.8)
-    love.graphics.print("RESET", panel_x + panel_w - 53, cy + 3, 0, 0.52, 0.52)
+    love.graphics.print(localize("jdis_reset"), panel_x + panel_w - 53, cy + 3, 0, 0.52, 0.52)
     local verts = {}
     for j = 0, 32 do
         local s = j / 32
@@ -458,7 +458,8 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.draw(love.graphics.newMesh(averts, "strip", "static"))
     local acur_x = hbar_x + pk.a * sq_w
     love.graphics.line(acur_x, alpha_y - 2, acur_x, alpha_y + hbar_h + 2)
-    love.graphics.print("Opacity " .. math.floor(pk.a * 100 + 0.5) .. "%", hbar_x, alpha_y + hbar_h + 2, 0, 0.6, 0.6)
+    love.graphics.print(localize("jdis_opacity") .. math.floor(pk.a * 100 + 0.5) .. "%", hbar_x, alpha_y + hbar_h + 2, 0,
+        0.6, 0.6)
     local hex_y, input_w = alpha_y + hbar_h + pad + 10, 120
     love.graphics.setColor(r, g, b, 1)
     love.graphics.rectangle("fill", cx, hex_y, 36, 26, 4, 4)
@@ -468,7 +469,7 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.print("#" .. (pk.hex_focus and (pk.hex_input or "") or colour_hex({ r, g, b }):sub(2)), cx + 46,
         hex_y + 5, 0, 0.8, 0.8)
     love.graphics.setColor(0.55, 0.55, 0.55, 0.7)
-    love.graphics.print("click to type hex", cx + 42 + input_w + 8, hex_y + 7, 0, 0.65, 0.65)
+    love.graphics.print(localize("jdis_hex"), cx + 42 + input_w + 8, hex_y + 7, 0, 0.65, 0.65)
     love.graphics.setColor(0.95, 0.73, 0.25, 0.8)
     local grip = 11
     love.graphics.line(panel_x + 4, panel_y + 4 + grip, panel_x + 4 + grip, panel_y + 4)

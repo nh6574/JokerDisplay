@@ -52,6 +52,13 @@ return {
 			k_jdis_playlog = "PlayLog",
 			k_jdis_vanillaremade = "VanillaRemade",
 
+			jdis_picker = "COLOR PICKER  -  DRAG TO MOVE",
+			jdis_editing = "Editing: ",
+			jdis_back = "BACK",
+			jdis_reset = "Reset",
+			jdis_opacity = "Opacity ",
+			jdis_hex = "click to type hex",
+
 			jdis_background_colour = "Display background",
 			jdis_chips_colour = "Chips",
 			jdis_mult_colour = "Mult",
