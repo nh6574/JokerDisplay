@@ -55,7 +55,7 @@ return {
 			jdis_picker = "COLOR PICKER  -  DRAG TO MOVE",
 			jdis_editing = "Editing: ",
 			jdis_back = "BACK",
-			jdis_reset = "Reset",
+			jdis_reset = "RESET",
 			jdis_opacity = "Opacity ",
 			jdis_hex = "click to type hex",
 

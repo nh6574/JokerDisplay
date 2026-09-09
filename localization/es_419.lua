@@ -51,7 +51,23 @@ return {
 			k_jdis_playlog = "PlayLog",
 			k_jdis_vanillaremade = "VanillaRemade",
 
+			jdis_picker = "SELECTOR DE COLORES - ARRASTRA PARA MOVER",
+			jdis_editing = "Editando: ",
+			jdis_back = "ATRÁS",
+			jdis_reset = "RESETEA",
+			jdis_opacity = "Opacidad ",
+			jdis_hex = "clickea aquí para hex",
+
 			jdis_background_colour = "Color de fondo",
+			jdis_chips_colour = "Fichas",
+			jdis_mult_colour = "Multi",
+			jdis_xmult_colour = "XMulti",
+			jdis_money_colour = "Dinero",
+			jdis_odds_colour = "Probabilidad",
+			jdis_required_colour = "Texto requerido",
+			jdis_sticker_background_colour = "Fondo de display de Stickers",
+			jdis_text_colour = "Texto por defecto",
+			jdis_inactive_colour = "Text inactivo",
 		},
 		v_dictionary = {
 			jdis_odds = "#1# en #2#",
