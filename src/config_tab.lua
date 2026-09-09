@@ -333,6 +333,50 @@ local function picker_apply(picker, save)
     end
 end
 
+local function refresh_picker_background()
+    local colour = JokerDisplay.get_background_colour()
+    if G.jokerdisplay_config_card_area then
+        update_box_colour(G.jokerdisplay_config_card_area.cards[1], colour)
+    end
+    if JokerDisplay.should_display() then
+        for _, area in pairs(JokerDisplay.get_display_areas()) do
+            for _, card in pairs(area.cards or {}) do update_box_colour(card, colour) end
+        end
+    end
+end
+
+local function reset_picker_target(picker)
+    local target = picker.targets[picker.target]
+    if target.id == "background" then
+        JokerDisplay.config.background_colour_override = false
+        JokerDisplay.config.background_colour = { 0, 0, 0, 0.8 }
+        JokerDisplay.config.background_hue = 0
+        JokerDisplay.config.background_saturation = 0
+        JokerDisplay.config.background_brightness = 0
+        JokerDisplay.config.background_opacity = 0.8
+        refresh_picker_background()
+    else
+        JokerDisplay.config.text_colour_overrides[target.id] = nil
+    end
+    picker_load_target(picker)
+    invalidate_display_colours()
+    JokerDisplay.save_config()
+end
+
+local function reset_all_picker_targets(picker)
+    JokerDisplay.config.text_colour_overrides = {}
+    JokerDisplay.config.background_colour_override = false
+    JokerDisplay.config.background_colour = { 0, 0, 0, 0.8 }
+    JokerDisplay.config.background_hue = 0
+    JokerDisplay.config.background_saturation = 0
+    JokerDisplay.config.background_brightness = 0
+    JokerDisplay.config.background_opacity = 0.8
+    refresh_picker_background()
+    picker_load_target(picker)
+    invalidate_display_colours()
+    JokerDisplay.save_config()
+end
+
 local function picker_contains(rect, x, y)
     return rect and x >= rect.x and x <= rect.x + rect.w and y >= rect.y and
         y <= rect.y + rect.h
@@ -418,7 +462,10 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.print("< " .. localize("jdis_back"), cx + 4, cy + 2, 0, 0.7, 0.7)
     love.graphics.setColor(0.95, 0.73, 0.25, 1)
     local target = pk.targets[pk.target]
-    local selector_x, selector_w = cx + 68, panel_w - 164
+    local selector_x = cx + 68
+    local reset_x, reset_w = panel_x + panel_w - 58, 42
+    local reset_all_x, reset_all_w = reset_x - 66, 62
+    local selector_w = reset_all_x - selector_x - 4
     love.graphics.setColor(0, 0, 0, 0.55)
     love.graphics.rectangle("fill", selector_x, cy, selector_w, 18, 3, 3)
     love.graphics.setColor(0.95, 0.73, 0.25, 1)
@@ -426,9 +473,22 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.print(localize("jdis_editing") .. target.label, selector_x + 5, cy + 3, 0, 0.62, 0.62)
     love.graphics.print(pk.dropdown and "^" or "v", selector_x + selector_w - 13, cy + 3, 0, 0.62, 0.62)
     love.graphics.setColor(0.95, 0.73, 0.25, 0.7)
-    love.graphics.rectangle("fill", panel_x + panel_w - 56, cy, 38, 18, 3, 3)
+    love.graphics.rectangle("fill", reset_all_x, cy, reset_all_w, 18, 3, 3)
+    love.graphics.rectangle("fill", reset_x, cy, reset_w, 18, 3, 3)
     love.graphics.setColor(0, 0, 0, 0.8)
-    love.graphics.print(localize("jdis_reset"), panel_x + panel_w - 53, cy + 3, 0, 0.52, 0.52)
+    local button_font, button_scale = love.graphics.getFont(), 0.52
+    local function draw_button_text(text, x, width)
+        love.graphics.print(
+            text,
+            x + (width - button_font:getWidth(text) * button_scale) / 2,
+            cy + (18 - button_font:getHeight() * button_scale) / 2,
+            0,
+            button_scale,
+            button_scale
+        )
+    end
+    draw_button_text(localize("jdis_reset_all"), reset_all_x, reset_all_w)
+    draw_button_text(localize("jdis_reset"), reset_x, reset_w)
     local verts = {}
     for j = 0, 32 do
         local s = j / 32
@@ -493,7 +553,8 @@ function JokerDisplay.draw_colour_picker()
     pk._hex_rect = { x = cx + 42, y = hex_y, w = input_w, h = 26 }
     pk._back_rect = { x = cx, y = cy, w = 60, h = 18 }
     pk._selector_rect = { x = selector_x, y = cy, w = selector_w, h = 18 }
-    pk._reset_rect = { x = panel_x + panel_w - 58, y = cy, w = 42, h = 18 }
+    pk._reset_rect = { x = reset_x, y = cy, w = reset_w, h = 18 }
+    pk._reset_all_rect = { x = reset_all_x, y = cy, w = reset_all_w, h = 18 }
     pk._dropdown_rows = {}
     if pk.dropdown then
         local row_h, visible = 20, math.min(8, #pk.targets)
@@ -572,26 +633,10 @@ function love.mousepressed(x, y, button, ...)
                 else
                     picker.dropdown = false
                 end
+            elseif picker_contains(picker._reset_all_rect, x, y) then
+                reset_all_picker_targets(picker)
             elseif picker_contains(picker._reset_rect, x, y) then
-                local target = picker.targets[picker.target]
-                if target.id == "background" then
-                    JokerDisplay.config.background_colour_override = false
-                    local colour = JokerDisplay.get_background_colour()
-                    if G.jokerdisplay_config_card_area then
-                        update_box_colour(G.jokerdisplay_config_card_area.cards[1],
-                            colour)
-                    end
-                    if JokerDisplay.should_display() then
-                        for _, area in pairs(JokerDisplay.get_display_areas()) do
-                            for _, card in pairs(area.cards or {}) do update_box_colour(card, colour) end
-                        end
-                    end
-                else
-                    JokerDisplay.config.text_colour_overrides[target.id] = nil
-                end
-                picker_load_target(picker)
-                invalidate_display_colours()
-                JokerDisplay.save_config()
+                reset_picker_target(picker)
             elseif picker_contains(picker._hex_rect, x, y) then
                 picker.hex_focus, picker.hex_input = true, ""
             elseif picker_contains(picker._sq_rect, x, y) then

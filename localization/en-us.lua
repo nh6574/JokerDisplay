@@ -58,6 +58,7 @@ return {
 			jdis_editing = "Editing: ",
 			jdis_back = "BACK",
 			jdis_reset = "RESET",
+			jdis_reset_all = "RESET ALL",
 			jdis_opacity = "Opacity ",
 			jdis_hex = "click to type hex",
 

@@ -57,6 +57,7 @@ return {
 			jdis_editing = "Editando: ",
 			jdis_back = "ATRÁS",
 			jdis_reset = "RESETEA",
+			jdis_reset_all = "RESETEA TODO",
 			jdis_opacity = "Opacidad ",
 			jdis_hex = "clickea aquí para hex",
 
