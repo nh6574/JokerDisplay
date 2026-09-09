@@ -51,6 +51,8 @@ return {
 			k_jdis_playlog = "PlayLog",
 			k_jdis_vanillaremade = "VanillaRemade",
 
+			jdis_picker_info = "Haz click derecho en el display para abrir el selector de colores ^",
+
 			jdis_picker = "SELECTOR DE COLORES - ARRASTRA PARA MOVER",
 			jdis_editing = "Editando: ",
 			jdis_back = "ATRÁS",

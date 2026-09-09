@@ -1024,6 +1024,20 @@ JokerDisplay.config_tab = function()
             n = G.UIT.R,
             config = { padding = 0.01, align = "cr" },
             nodes = {
+                {
+                    n = G.UIT.T,
+                    config = {
+                        text = localize('jdis_picker_info') .. "     ",
+                        colour = G.C.GOLD,
+                        scale = 0.35
+                    }
+                }
+            }
+        },
+        {
+            n = G.UIT.R,
+            config = { padding = 0.01, align = "cr" },
+            nodes = {
                 create_toggle({
                     label = localize('jdis_shift_to_hide'),
                     ref_table = JokerDisplay.config,
