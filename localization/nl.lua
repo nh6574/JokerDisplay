@@ -12,16 +12,12 @@
                     " ",
                     "Speciale dank aan {C:green}Eremel{} en {C:green}OppositeWolf770{}",
                     " ",
-                    "Russische lokalisatie door: {C:green}WholeHorse{}",
-                    "Franse lokalisatie door: {C:green}SDM_0{}",
-                    "Portugese lokalisatie door: {C:green}naumazeredo{}",
-                    "Italiaanse lokalisatie door: {C:green}fleshness{}",
-                    "Duitse lokalisatie door: {C:green}GunnableScum{}",
-                    "Traditioneel Chinese lokalisatie door: {C:green}wilfredlam0418{}",
-                    "Nederlandse lokalisatie door: {C:green}Soulsphere{}",
-                    "Vereenvoudigde Chinese lokalisatie door: {C:green}ChromaPIE{}",
-                    "Japanse lokalisatie door: {C:green}koukichi_kkc{}",
-                    "Polish localization by: {C:green}Sagiritarius{}"
+                    "{C:green}Localization:",
+                    "Russian: {C:green}WholeHorse{}  French: {C:green}SDM_0{}",
+                    "Portuguese: {C:green}naumazeredo{}  Italian: {C:green}fleshness{}",
+                    "German: {C:green}GunnableScum{}  Traditional Chinese: {C:green}wilfredlam0418{}",
+                    "Dutch: {C:green}Soulsphere{}  Simplified Chinese: {C:green}ChromaPIE",
+                    "Japanese: {C:green}koukichi_kkc{}  Polish: {C:green}Sagiritarius{}",
                 },
             }
         }

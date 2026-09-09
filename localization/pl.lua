@@ -12,16 +12,12 @@ return {
 					" ",
 					"Szczególne podziękowania dla {C:green}Eremel{} oraz {C:green}OppositeWolf770{}",
 					" ",
-					"Przekład na rosyjski: {C:green}WholeHorse{}",
-					"Przekład na francuski: {C:green}SDM_0{}",
-					"Przekład na portugalski: {C:green}naumazeredo{}",
-					"Przekład na włoski: {C:green}fleshness{}",
-					"Przekład na niemiecki: {C:green}GunnableScum{}",
-					"Przekład na chiński tradycyjny: {C:green}wilfredlam0418{}",
-					"Przekład na holenderski: {C:green}Soulsphere{}",
-					"Przekład na chiński uproszczony: {C:green}ChromaPIE",
-					"Przekład na japoński: {C:green}koukichi_kkc",
-					"Przekład na polski: {C:green}Sagiritarius{}"
+					"{C:green}Localization:",
+					"Russian: {C:green}WholeHorse{}  French: {C:green}SDM_0{}",
+					"Portuguese: {C:green}naumazeredo{}  Italian: {C:green}fleshness{}",
+					"German: {C:green}GunnableScum{}  Traditional Chinese: {C:green}wilfredlam0418{}",
+					"Dutch: {C:green}Soulsphere{}  Simplified Chinese: {C:green}ChromaPIE",
+					"Japanese: {C:green}koukichi_kkc{}  Polish: {C:green}Sagiritarius{}",
 				},
 			}
 		}

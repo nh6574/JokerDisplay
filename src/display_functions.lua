@@ -259,14 +259,14 @@ function Card:update_joker_display(force_update, force_reload, _from)
                         r = 0.001,
                         padding = 0.1,
                         align = 'cm',
-                        colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                        colour = JokerDisplay.get_sticker_colour("sticker_background"),
                         shadow = false,
                         ref_table = self
                     },
                     nodes = {
                         JokerDisplay.create_display_text_object({
                             ref_table = self.joker_display_values, ref_value = "perishable",
-                            colour = lighten(G.C.PERISHABLE, 0.35), scale = 0.35
+                            colour = JokerDisplay.get_sticker_colour("perishable"), scale = 0.35
                         })
                     }
                 },
@@ -303,14 +303,14 @@ function Card:update_joker_display(force_update, force_reload, _from)
                         r = 0.001,
                         padding = 0.1,
                         align = 'cm',
-                        colour = adjust_alpha(darken(G.C.BLACK, 0.2), 0.8),
+                        colour = JokerDisplay.get_sticker_colour("sticker_background"),
                         shadow = false,
                         ref_table = self
                     },
                     nodes = {
                         JokerDisplay.create_display_text_object({
                             ref_table = self.joker_display_values, ref_value = "rental",
-                            colour = G.C.GOLD, scale = 0.35
+                            colour = JokerDisplay.get_sticker_colour("rental"), scale = 0.35
                         })
                     }
                 },
@@ -388,6 +388,8 @@ function Card:update_joker_display(force_update, force_reload, _from)
             if self.children.joker_display then self.children.joker_display:recalculate(true) end
             if self.children.joker_display_small then self.children.joker_display_small:recalculate(true) end
             if self.children.joker_display_debuff then self.children.joker_display_debuff:recalculate(true) end
+            if self.children.joker_display_perishable then self.children.joker_display_perishable:recalculate() end
+            if self.children.joker_display_rental then self.children.joker_display_rental:recalculate() end
         end
     end
 end
@@ -545,6 +547,8 @@ function Card:update(dt)
                     if self.children.joker_display then self.children.joker_display:recalculate(true) end
                     if self.children.joker_display_small then self.children.joker_display_small:recalculate(true) end
                     if self.children.joker_display_debuff then self.children.joker_display_debuff:recalculate(true) end
+                    if self.children.joker_display_perishable then self.children.joker_display_perishable:recalculate() end
+                    if self.children.joker_display_rental then self.children.joker_display_rental:recalculate() end
                 end
             end
         end
@@ -578,7 +582,7 @@ JokerDisplay.get_scoring_hand = function()
     local count_facedowns = false
     if G.STATE ~= G.STATES.HAND_PLAYED then
         JokerDisplay.current_hand = {}
-        if G.STATE == G.STATES.SELECTING_HAND and G.hand and G.hand.highlighted then
+        if G.STATE == G.STATES.SELECTING_HAND and G.GAME.blind and G.GAME.blind.in_blind and G.hand and G.hand.highlighted then
             JokerDisplay.current_hand = JokerDisplay.sort_cards(G.hand.highlighted)
         end
     else

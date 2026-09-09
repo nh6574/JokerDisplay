@@ -12,16 +12,12 @@ return {
                     " ",
                     "Ringraziamenti speciali a {C:green}Eremel{} e {C:green}OppositeWolf770{}",
                     " ",
-                    "Localizzazione russa a cura di: {C:green}WholeHorse{}",
-                    "Localizzazione francese a cura di: {C:green}SDM_0{}",
-                    "Localizzazione portoghese a cura di: {C:green}naumazeredo{}",
-                    "Localizzazione italiana a cura di: {C:green}fleshness{}",
-                    "Localizzazione tedesca a cura di: {C:green}GunnableScum{}",
-                    "Localizzazione olandese a cura di: {C:green}Soulsphere{}",
-                    "Localizzazione cinese tradizionale a cura di: {C:green}wilfredlam0418{}",
-                    "Simplified Chinese localization by: {C:green}ChromaPIE",
-                    "Japanese localization by: {C:green}koukichi_kkc",
-                    "Polish localization by: {C:green}Sagiritarius{}"
+                    "{C:green}Localization:",
+                    "Russian: {C:green}WholeHorse{}  French: {C:green}SDM_0{}",
+                    "Portuguese: {C:green}naumazeredo{}  Italian: {C:green}fleshness{}",
+                    "German: {C:green}GunnableScum{}  Traditional Chinese: {C:green}wilfredlam0418{}",
+                    "Dutch: {C:green}Soulsphere{}  Simplified Chinese: {C:green}ChromaPIE",
+                    "Japanese: {C:green}koukichi_kkc{}  Polish: {C:green}Sagiritarius{}",
                 },
             }
         }

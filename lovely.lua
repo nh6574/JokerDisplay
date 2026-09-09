@@ -1,9 +1,6 @@
 if not SMODS then
     JokerDisplay = {}
 
-    error(
-        "\n\n --------------------------------------\nHi! Sorry for making the game crash but it appears that you have downloaded/cloned JokerDisplay from the main branch.\n\nIf you are not a developer or someone that knows what they're doing, I would recommend getting the mod from the latest GitHub release or from Thunderstore using the website, r2modman, Gale or frostice's in-game mod manager (this last one is my recommendation)\nIf you intended to clone from main I would encourage you to use the new stable branch instead.\n\nThe reason for the crash is because I'm tired of the Balatro Mod Manager providing the mod against my wishes despite my continued insistence. BMM is a vibecoded, poorly made manager that has caused more headaches for me and my fellow devs than it is worth. If you have installed the mod through BMM I would encourage you to switch to one of the above methods instead.\n\nSorry again\n\n --------------------------------------")
-
     -- pls copy lovely loading from someone more competent than me
     -- Copied from SMODS
     local fs = require "JokerDisplay.nativefs"
@@ -135,6 +132,8 @@ if not SMODS then
     JokerDisplay.load_file("src/api_helper_functions.lua")()
     JokerDisplay.load_file("src/controller.lua")()
     JokerDisplay.load_file("src/config_tab.lua")()
+    JokerDisplay.mod_keys = { "chips", "x_chips", "mult", "x_mult", "e_mult", "e_chips", "score", "xscore", "blindsize",
+        "xblindsize", "dollars", "xdollars", "edollars" }
 
     local jokerdisplay_game_main_menu_ref = Game.main_menu
     function Game:main_menu(...)
@@ -144,6 +143,7 @@ if not SMODS then
             JokerDisplay.Definitions = JokerDisplay.load_file("definitions/display_definitions.lua")() or {}
             JokerDisplay.Blind_Definitions = JokerDisplay.load_file("definitions/blind_definitions.lua")() or {}
             JokerDisplay.Edition_Definitions = JokerDisplay.load_file("definitions/edition_definitions.lua")() or {}
+            JokerDisplay.Modifier_Definitions = JokerDisplay.load_file("definitions/modifier_definitions.lua")() or {}
         end
 
         return jokerdisplay_game_main_menu_ref(self, ...)

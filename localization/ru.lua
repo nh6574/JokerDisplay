@@ -12,16 +12,12 @@ return {
 					" ",
 					"Особая благодарность {C:green}Eremel{} и {C:green}OppositeWolf770{}",
 					" ",
-					"Русская локализация: {C:green}WholeHorse{}",
-					"Французская локализация: {C:green}SDM_0{}",
-					"Португальская локализация: {C:green}naumazeredo{}",
-					"Итальянская локализация: {C:green}fleshness{}",
-					"Немецкая локализация: {C:green}GunnableScum{}",
-					"Китайская (трад.) локализация: {C:green}wilfredlam0418{}",
-					"Нидерландская локализация: {C:green}Soulsphere{}",
-					"Китайская (упр.) локализация: {C:green}ChromaPIE",
-					"Японская локализация: {C:green}koukichi_kkc",
-					"Polish localization by: {C:green}Sagiritarius{}"
+					"{C:green}Localization:",
+					"Russian: {C:green}WholeHorse{}  French: {C:green}SDM_0{}",
+					"Portuguese: {C:green}naumazeredo{}  Italian: {C:green}fleshness{}",
+					"German: {C:green}GunnableScum{}  Traditional Chinese: {C:green}wilfredlam0418{}",
+					"Dutch: {C:green}Soulsphere{}  Simplified Chinese: {C:green}ChromaPIE",
+					"Japanese: {C:green}koukichi_kkc{}  Polish: {C:green}Sagiritarius{}",
 				},
 			}
 		}
