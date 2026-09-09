@@ -12,16 +12,12 @@ return {
 					" ",
 					"Agradecimientos a {C:green}Eremel{} y {C:green}OppositeWolf770{}",
 					" ",
-					"Traducción al ruso por: {C:green}WholeHorse{}",
-					"Traducción al francés por: {C:green}SDM_0{}",
-					"Traducción al portugués por: {C:green}naumazeredo{}",
-					"Traducción al italiano por: {C:green}fleshness{}",
-					"Traducción al alemán por: {C:green}GunnableScum{}",
-					"Traducción al neerlandés por: {C:green}Soulsphere{}",
-					"Traducción al chino tradicional por: {C:green}wilfredlam0418{}",
-					"Traducción al chino simplificado por: {C:green}ChromaPIE",
-					"Traducción al japonés por: {C:green}koukichi_kkc",
-					"Traducción al polaco por: {C:green}Sagiritarius{}"
+					"{C:green}Localization:",
+					"Ruso: {C:green}WholeHorse{}  Francés: {C:green}SDM_0{}",
+					"Portugués: {C:green}naumazeredo{}  Italiano: {C:green}fleshness{}",
+					"Alemán: {C:green}GunnableScum{}  Chino tradicional: {C:green}wilfredlam0418{}",
+					"Neerlandés: {C:green}Soulsphere{}  Chino simplificado: {C:green}ChromaPIE",
+					"Japonés: {C:green}koukichi_kkc{}  Polaco: {C:green}Sagiritarius{}",
 				},
 			}
 		}
@@ -44,7 +40,12 @@ return {
 			jdis_active = "¡Activado!",
 			jdis_inactive = "Inactivo",
 			jdis_all_suits = "Todos los palos",
-			jdis_author = 'Autor/a'
+			jdis_author = 'Autor/a',
+			k_jdis_othermods = "Otros mods en los que trabajé:",
+			k_jdis_joyousspring = "JoyousSpring",
+			k_jdis_repertorium = "N's Repertorium",
+			k_jdis_playlog = "PlayLog",
+			k_jdis_vanillaremade = "VanillaRemade",
 		},
 		v_dictionary = {
 			jdis_odds = "#1# en #2#",

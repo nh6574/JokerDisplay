@@ -12,16 +12,12 @@ return {
 					" ",
 					"スペシャルサンクス {C:green}Eremel{} , {C:green}OppositeWolf770{}",
 					" ",
-					"ロシア語翻訳 {C:green}WholeHorse{}",
-					"フランス語翻訳 {C:green}SDM_0{}",
-					"ポルトガル語翻訳 {C:green}naumazeredo{}",
-					"イタリア語翻訳 {C:green}fleshness{}",
-					"ドイツ語翻訳 {C:green}GunnableScum{}",
-					"中国語(繁体字)翻訳 {C:green}wilfredlam0418{}",
-					"オランダ語翻訳 {C:green}Soulsphere{}",
-					"中国語(簡体字)翻訳 {C:green}ChromaPIE{}",
-					"日本語翻訳 {C:green}koukichi_kkc{}",
-					"Polish localization by: {C:green}Sagiritarius{}"
+					"{C:green}Localization:",
+					"Russian: {C:green}WholeHorse{}  French: {C:green}SDM_0{}",
+					"Portuguese: {C:green}naumazeredo{}  Italian: {C:green}fleshness{}",
+					"German: {C:green}GunnableScum{}  Traditional Chinese: {C:green}wilfredlam0418{}",
+					"Dutch: {C:green}Soulsphere{}  Simplified Chinese: {C:green}ChromaPIE",
+					"Japanese: {C:green}koukichi_kkc{}  Polish: {C:green}Sagiritarius{}",
 				},
 			}
 		}

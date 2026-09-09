@@ -8,15 +8,195 @@ local ui_config = {
     author_colour = HEX("D63939")
 }
 
+function G.FUNCS.jokerdisplay_github(e)
+    love.system.openURL("https://github.com/nh6574/JokerDisplay")
+end
+
+function G.FUNCS.jokerdisplay_bluesky(e)
+    love.system.openURL("https://bsky.app/profile/nh6574.com")
+end
+
+function G.FUNCS.jokerdisplay_kofi(e)
+    love.system.openURL("https://ko-fi.com/nh6574")
+end
+
+function G.FUNCS.jokerdisplay_joyousspring(e)
+    love.system.openURL("https://github.com/nh6574/JoyousSpring")
+end
+
+function G.FUNCS.jokerdisplay_repertorium(e)
+    love.system.openURL("https://github.com/nh6574/Repertorium")
+end
+
+function G.FUNCS.jokerdisplay_playlog(e)
+    love.system.openURL("https://github.com/nh6574/PlayLog")
+end
+
+function G.FUNCS.jokerdisplay_vanillaremade(e)
+    love.system.openURL("https://github.com/nh6574/VanillaRemade")
+end
+
 JokerDisplay.save_config = JokerDisplay.save_config or function() end
+
+JokerDisplay.custom_menu_ui = function(modNodes)
+    local ui_icon_button = function(button, colour, pos)
+        return {
+            n = G.UIT.R,
+            config = { align = 'cm' },
+            nodes = {
+                {
+                    n = G.UIT.C,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        hover = true,
+                        minh = 0.8,
+                        shadow = true,
+                        colour = colour,
+                        minw = 2,
+                        button = "jokerdisplay_" .. button,
+                    },
+                    nodes = {
+                        {
+                            n = G.UIT.R,
+                            config = { align = "cm" },
+                            nodes = {
+                                {
+                                    n = G.UIT.T,
+                                    config = {
+                                        text = localize("k_jdis_" .. button),
+                                        colour = G.C.UI.TEXT_LIGHT,
+                                        scale = 0.4,
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+            }
+        }
+    end
+
+    local socials = {
+        {
+            n = G.UIT.C,
+            config = {
+                padding = 0.07,
+                align = "cm",
+            },
+            nodes = {
+                ui_icon_button("github", HEX("1f1f1f"), { x = 1, y = 0 })
+            }
+        },
+        {
+            n = G.UIT.C,
+            config = {
+                padding = 0.07,
+                align = "cm",
+            },
+            nodes = {
+                ui_icon_button("bluesky", HEX("0886fe"), { x = 1, y = 1 })
+            }
+        },
+        {
+            n = G.UIT.C,
+            config = {
+                padding = 0.07,
+                align = "cm",
+            },
+            nodes = {
+                ui_icon_button("kofi", HEX("60b7e0"), { x = 1, y = 2 })
+            }
+        },
+    }
+
+    local make_mod_column = function(mod, colour)
+        return {
+            n = G.UIT.C,
+            config = {
+                padding = 0.2,
+                align = "cm",
+            },
+            nodes = {
+                UIBox_button({
+                    colour = colour,
+                    minw = 2.6,
+                    minh = 0.45,
+                    scale = 0.35,
+                    button = "jokerdisplay_" .. mod,
+                    label = { localize('k_jdis_' .. mod) }
+                })
+            }
+        }
+    end
+
+    local othermods1 = {
+        make_mod_column("joyousspring", HEX("F4A6C7")),
+        make_mod_column("repertorium", HEX("1E7A0A")),
+    }
+
+    local othermods2 = {
+        make_mod_column("playlog", HEX("178BAC")),
+        make_mod_column("vanillaremade", G.C.BLUE),
+    }
+
+    modNodes[#modNodes + 1] = {
+        n = G.UIT.R,
+        config = {
+            padding = 0.01,
+            align = "cm",
+        },
+        nodes = {
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0.01, no_fill = true },
+                nodes = socials
+            },
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0.07, no_fill = true },
+                nodes = {
+                    {
+                        n = G.UIT.T,
+                        config = { text = localize("k_jdis_othermods"), colour = G.C.UI.TEXT_LIGHT, scale = 0.35 },
+                    },
+                },
+            },
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0.1, no_fill = true },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = -0.3, no_fill = true },
+                        nodes = othermods1
+                    },
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0.1, no_fill = true },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = -0.3, no_fill = true },
+                        nodes = othermods2
+                    },
+                }
+            },
+        }
+    }
+end
 
 JokerDisplay.config_tab = function()
     if not JokerDisplay.init_loc then init_localization() end
     -- Create a card area that will display an example joker
-    G.jokerdisplay_config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W, 1.03 * G.CARD_H,
+    G.jokerdisplay_config_card_area = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 1.03 * G.CARD_W,
+        1.03 * G.CARD_H,
         { card_limit = 1, type = 'title', highlight_limit = 0, })
     local center = G.P_CENTERS['j_bloodstone']
-    local card = Card(G.jokerdisplay_config_card_area.T.x + G.jokerdisplay_config_card_area.T.w / 2, G.jokerdisplay_config_card_area.T.y, G.CARD_W, G.CARD_H,
+    local card = Card(G.jokerdisplay_config_card_area.T.x + G.jokerdisplay_config_card_area.T.w / 2,
+        G.jokerdisplay_config_card_area.T.y, G.CARD_W, G.CARD_H,
         nil, center)
     card:set_edition('e_foil', true, true)
     card:set_perishable(true)
@@ -67,6 +247,8 @@ JokerDisplay.config_tab = function()
     localize { type = 'descriptions', key = loc_vars.key or "JokerDisplay", set = 'Mod', nodes = modNodes[#modNodes], vars = loc_vars.vars, scale = loc_vars.scale, text_colour = loc_vars.text_colour, shadow = loc_vars.shadow }
     modNodes[#modNodes] = desc_from_rows(modNodes[#modNodes])
     modNodes[#modNodes].config.colour = loc_vars.background_colour or modNodes[#modNodes].config.colour
+
+    JokerDisplay.custom_menu_ui(modNodes)
 
     local config = {
         {

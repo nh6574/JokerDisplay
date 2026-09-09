@@ -12,16 +12,12 @@ return {
 					" ",
 					"特別感謝 {C:green}Eremel{} 和 {C:green}OppositeWolf770{}",
 					" ",
-					"俄文翻譯由: {C:green}WholeHorse{}",
-					"法文翻譯由: {C:green}SDM_0{}",
-					"葡萄牙文翻譯由: {C:green}naumazeredo{}",
-					"義大利文翻譯由: {C:green}fleshness{}",
-					"德文翻譯由: {C:green}GunnableScum{}",
-					"繁體中文由: {C:green}wilfredlam0418{}",
-					"Dutch localization by: {C:green}Soulsphere{}",
-					"Simplified Chinese localization by: {C:green}ChromaPIE",
-					"Japanese localization by: {C:green}koukichi_kkc",
-					"Polish localization by: {C:green}Sagiritarius{}"
+					"{C:green}Localization:",
+					"Russian: {C:green}WholeHorse{}  French: {C:green}SDM_0{}",
+					"Portuguese: {C:green}naumazeredo{}  Italian: {C:green}fleshness{}",
+					"German: {C:green}GunnableScum{}  Traditional Chinese: {C:green}wilfredlam0418{}",
+					"Dutch: {C:green}Soulsphere{}  Simplified Chinese: {C:green}ChromaPIE",
+					"Japanese: {C:green}koukichi_kkc{}  Polish: {C:green}Sagiritarius{}",
 				},
 			}
 		}
