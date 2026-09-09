@@ -292,10 +292,20 @@ local function invalidate_display_colours()
     end
 end
 
+local function resolve_picker_colour(colour)
+    if type(colour) == "string" then
+        colour = loc_colour(colour:lower())
+    end
+    assert(type(colour) == "table" and type(colour[1]) == "number"
+        and type(colour[2]) == "number" and type(colour[3]) == "number",
+        "JokerDisplay colour picker received an invalid colour")
+    return colour
+end
+
 local function picker_target_colour(picker)
     local target = picker.targets[picker.target]
-    if target.id == "background" then return JokerDisplay.get_background_colour() end
-    return (JokerDisplay.config.text_colour_overrides or {})[target.id] or target.colour
+    if target.id == "background" then return resolve_picker_colour(JokerDisplay.get_background_colour()) end
+    return resolve_picker_colour((JokerDisplay.config.text_colour_overrides or {})[target.id] or target.colour)
 end
 
 local function picker_load_target(picker)
@@ -680,13 +690,13 @@ G.FUNCS.joker_display_open_colour_picker = function()
         { "xmult", localize("jdis_xmult_colour"), G.C.XMULT }, { "money", localize("jdis_money_colour"), G.C.GOLD },
         { "odds",               localize("jdis_odds_colour"),               G.C.GREEN },
         { "required",           localize("jdis_required_colour"),           G.C.ORANGE },
-        { "perishable",         localize("perishable", "labels"),           lighten(G.C.PERISHABLE, 0.35) },
+        { "perishable",         localize("perishable", "labels"),           lighten(resolve_picker_colour(G.C.PERISHABLE), 0.35) },
         { "rental",             localize("rental", "labels"),               G.C.GOLD },
         { "sticker_background", localize("jdis_sticker_background_colour"), JokerDisplay.get_background_colour() },
-        { "suit_hearts",        localize("Hearts", 'suits_plural'),         lighten(G.C.SUITS.Hearts, 0.35) },
-        { "suit_diamonds",      localize("Diamonds", 'suits_plural'),       lighten(G.C.SUITS.Diamonds, 0.35) },
-        { "suit_spades",        localize("Spades", 'suits_plural'),         lighten(G.C.SUITS.Spades, 0.35) },
-        { "suit_clubs",         localize("Clubs", 'suits_plural'),          lighten(G.C.SUITS.Clubs, 0.35) },
+        { "suit_hearts",        localize("Hearts", 'suits_plural'),         lighten(resolve_picker_colour(G.C.SUITS.Hearts), 0.35) },
+        { "suit_diamonds",      localize("Diamonds", 'suits_plural'),       lighten(resolve_picker_colour(G.C.SUITS.Diamonds), 0.35) },
+        { "suit_spades",        localize("Spades", 'suits_plural'),         lighten(resolve_picker_colour(G.C.SUITS.Spades), 0.35) },
+        { "suit_clubs",         localize("Clubs", 'suits_plural'),          lighten(resolve_picker_colour(G.C.SUITS.Clubs), 0.35) },
         { "text",               localize("jdis_text_colour"),               G.C.UI.TEXT_LIGHT },
         { "inactive",           localize("jdis_inactive_colour"),           G.C.UI.TEXT_INACTIVE }
     }
@@ -695,7 +705,7 @@ G.FUNCS.joker_display_open_colour_picker = function()
         targets[#targets + 1] = {
             id = target[1],
             label = target[2],
-            colour = target[2]
+            colour = target[3]
         }
         added[target[1]] = true
     end
