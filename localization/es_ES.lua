@@ -41,11 +41,17 @@ return {
 			jdis_inactive = "Inactivo",
 			jdis_all_suits = "Todos los palos",
 			jdis_author = 'Autor/a',
+
+			k_jdis_github = "Github",
+			k_jdis_bluesky = "BlueSky",
+			k_jdis_kofi = "Ko-Fi",
 			k_jdis_othermods = "Otros mods en los que trabajé:",
 			k_jdis_joyousspring = "JoyousSpring",
 			k_jdis_repertorium = "N's Repertorium",
 			k_jdis_playlog = "PlayLog",
 			k_jdis_vanillaremade = "VanillaRemade",
+
+			jdis_background_colour = "Color de fondo",
 		},
 		v_dictionary = {
 			jdis_odds = "#1# en #2#",

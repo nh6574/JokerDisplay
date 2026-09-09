@@ -33,7 +33,6 @@ return {
 			jdis_disable_collapse = "Disable collapsing",
 			jdis_disable_perishable = "Disable Perishable",
 			jdis_disable_rental = "Disable Rental",
-			jdis_background_colour = "Display background",
 			jdis_modifiers = "Modifiers",
 			jdis_reminders = "Reminders",
 			jdis_extras = "Extras",
@@ -43,6 +42,7 @@ return {
 			jdis_inactive = "Inactive",
 			jdis_all_suits = "All Suits",
 			jdis_author = "Author",
+
 			k_jdis_github = "Github",
 			k_jdis_bluesky = "BlueSky",
 			k_jdis_kofi = "Ko-Fi",
@@ -51,6 +51,17 @@ return {
 			k_jdis_repertorium = "N's Repertorium",
 			k_jdis_playlog = "PlayLog",
 			k_jdis_vanillaremade = "VanillaRemade",
+
+			jdis_background_colour = "Display background",
+			jdis_chips_colour = "Chips",
+			jdis_mult_colour = "Mult",
+			jdis_xmult_colour = "Xmult",
+			jdis_money_colour = "Money",
+			jdis_odds_colour = "Chance",
+			jdis_required_colour = "Required text",
+			jdis_sticker_background_colour = "Sticker background",
+			jdis_text_colour = "Default text",
+			jdis_inactive_colour = "Inactive text",
 		},
 		v_dictionary = {
 			jdis_odds = "#1# in #2#",

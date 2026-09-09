@@ -194,12 +194,19 @@ local function hsv_to_rgb(h, s, v)
     local x = c * (1 - math.abs(h % 2 - 1))
     local m = v - c
     local r, g, b = 0, 0, 0
-    if h < 1 then r, g = c, x
-    elseif h < 2 then r, g = x, c
-    elseif h < 3 then g, b = c, x
-    elseif h < 4 then g, b = x, c
-    elseif h < 5 then r, b = x, c
-    else r, b = c, x end
+    if h < 1 then
+        r, g = c, x
+    elseif h < 2 then
+        r, g = x, c
+    elseif h < 3 then
+        g, b = c, x
+    elseif h < 4 then
+        g, b = x, c
+    elseif h < 5 then
+        r, b = x, c
+    else
+        r, b = c, x
+    end
     return r + m, g + m, b + m
 end
 
@@ -207,9 +214,13 @@ local function rgb_to_hsv(r, g, b)
     local maxc, minc = math.max(r, g, b), math.min(r, g, b)
     local d, h = maxc - minc, 0
     if d ~= 0 then
-        if maxc == r then h = 60 * (((g - b) / d) % 6)
-        elseif maxc == g then h = 60 * ((b - r) / d + 2)
-        else h = 60 * ((r - g) / d + 4) end
+        if maxc == r then
+            h = 60 * (((g - b) / d) % 6)
+        elseif maxc == g then
+            h = 60 * ((b - r) / d + 2)
+        else
+            h = 60 * ((r - g) / d + 4)
+        end
     end
     return h, maxc == 0 and 0 or d / maxc * 100, maxc * 100
 end
@@ -267,7 +278,9 @@ local function invalidate_display_colours()
         if not card or not card.children then return end
         for _, key in ipairs({ "joker_display", "joker_display_small", "joker_display_debuff" }) do
             local box = card.children[key]
-            if box and box.UIRoot then invalidate(box.UIRoot); box._canvas_dirty = true end
+            if box and box.UIRoot then
+                invalidate(box.UIRoot); box._canvas_dirty = true
+            end
         end
         JokerDisplay.update_sticker_colours(card)
     end
@@ -310,7 +323,10 @@ local function picker_apply(picker, save)
     end
 end
 
-local function picker_contains(rect, x, y) return rect and x >= rect.x and x <= rect.x + rect.w and y >= rect.y and y <= rect.y + rect.h end
+local function picker_contains(rect, x, y)
+    return rect and x >= rect.x and x <= rect.x + rect.w and y >= rect.y and
+        y <= rect.y + rect.h
+end
 
 local function picker_move(picker, x, y)
     local rect = picker.dragging == "hue" and picker._hbar_rect
@@ -318,9 +334,13 @@ local function picker_move(picker, x, y)
     if not rect then return end
     local nx = math.max(0, math.min(1, (x - rect.x) / rect.w))
     local ny = math.max(0, math.min(1, (y - rect.y) / rect.h))
-    if picker.dragging == "hue" then picker.h = nx * 360
-    elseif picker.dragging == "alpha" then picker.a = nx
-    else picker.s, picker.v = nx, 1 - ny end
+    if picker.dragging == "hue" then
+        picker.h = nx * 360
+    elseif picker.dragging == "alpha" then
+        picker.a = nx
+    else
+        picker.s, picker.v = nx, 1 - ny
+    end
     picker_apply(picker, true)
 end
 
@@ -391,7 +411,7 @@ function JokerDisplay.draw_colour_picker()
         love.graphics.rectangle("fill", x, alpha_y, sq_w / 24 + 1, hbar_h)
     end
     local averts = {
-        { hbar_x, alpha_y, 0, 0, r, g, b, 0 }, { hbar_x, alpha_y + hbar_h, 0, 1, r, g, b, 0 },
+        { hbar_x,        alpha_y, 0, 0, r, g, b, 0 }, { hbar_x, alpha_y + hbar_h, 0, 1, r, g, b, 0 },
         { hbar_x + sq_w, alpha_y, 1, 0, r, g, b, 1 }, { hbar_x + sq_w, alpha_y + hbar_h, 1, 1, r, g, b, 1 }
     }
     love.graphics.setColor(1, 1, 1, 1)
@@ -405,7 +425,8 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.setColor(0, 0, 0, 0.45)
     love.graphics.rectangle("fill", cx + 42, hex_y, input_w, 26, 4, 4)
     love.graphics.setColor(1, 1, 1, 0.9)
-    love.graphics.print("#" .. (pk.hex_focus and (pk.hex_input or "") or colour_hex({ r, g, b }):sub(2)), cx + 46, hex_y + 5, 0, 0.8, 0.8)
+    love.graphics.print("#" .. (pk.hex_focus and (pk.hex_input or "") or colour_hex({ r, g, b }):sub(2)), cx + 46,
+        hex_y + 5, 0, 0.8, 0.8)
     love.graphics.setColor(0.55, 0.55, 0.55, 0.7)
     love.graphics.print("click to type hex", cx + 42 + input_w + 8, hex_y + 7, 0, 0.65, 0.65)
     pk._sq_rect = { x = sq_x, y = sq_y, w = sq_w, h = sq_h }
@@ -459,14 +480,17 @@ function love.mousepressed(x, y, button, ...)
     local picker = G and G.jokerdisplay_colour_picker
     if picker then
         if button == 1 then
-            if picker_contains(picker._back_rect, x, y) then G.jokerdisplay_colour_picker = nil
+            if picker_contains(picker._back_rect, x, y) then
+                G.jokerdisplay_colour_picker = nil
             elseif picker_contains(picker._selector_rect, x, y) then
                 picker.dropdown = not picker.dropdown
                 picker.dropdown_scroll = math.max(1, math.min(picker.target, #picker.targets - 7))
             elseif picker.dropdown then
                 local selected
                 for _, row in ipairs(picker._dropdown_rows or {}) do
-                    if picker_contains(row.rect, x, y) then selected = row.index; break end
+                    if picker_contains(row.rect, x, y) then
+                        selected = row.index; break
+                    end
                 end
                 if selected then
                     picker.target, picker.dropdown = selected, false
@@ -479,7 +503,10 @@ function love.mousepressed(x, y, button, ...)
                 if target.id == "background" then
                     JokerDisplay.config.background_colour_override = false
                     local colour = JokerDisplay.get_background_colour()
-                    if G.jokerdisplay_config_card_area then update_box_colour(G.jokerdisplay_config_card_area.cards[1], colour) end
+                    if G.jokerdisplay_config_card_area then
+                        update_box_colour(G.jokerdisplay_config_card_area.cards[1],
+                            colour)
+                    end
                     if JokerDisplay.should_display() then
                         for _, area in pairs(JokerDisplay.get_display_areas()) do
                             for _, card in pairs(area.cards or {}) do update_box_colour(card, colour) end
@@ -491,10 +518,15 @@ function love.mousepressed(x, y, button, ...)
                 picker_load_target(picker)
                 invalidate_display_colours()
                 JokerDisplay.save_config()
-            elseif picker_contains(picker._hex_rect, x, y) then picker.hex_focus, picker.hex_input = true, ""
-            elseif picker_contains(picker._sq_rect, x, y) then picker.hex_focus, picker.dragging = false, "sv"
-            elseif picker_contains(picker._hbar_rect, x, y) then picker.hex_focus, picker.dragging = false, "hue"
-            elseif picker_contains(picker._alpha_rect, x, y) then picker.hex_focus, picker.dragging = false, "alpha" end
+            elseif picker_contains(picker._hex_rect, x, y) then
+                picker.hex_focus, picker.hex_input = true, ""
+            elseif picker_contains(picker._sq_rect, x, y) then
+                picker.hex_focus, picker.dragging = false, "sv"
+            elseif picker_contains(picker._hbar_rect, x, y) then
+                picker.hex_focus, picker.dragging = false, "hue"
+            elseif picker_contains(picker._alpha_rect, x, y) then
+                picker.hex_focus, picker.dragging = false, "alpha"
+            end
             if picker.dragging then picker_move(picker, x, y) end
         end
         return
@@ -572,25 +604,29 @@ function love.wheelmoved(x, y, ...)
 end
 
 G.FUNCS.joker_display_open_colour_picker = function()
-    local targets = { { id = "background", label = "Background", colour = JokerDisplay.config.background_colour } }
+    local targets = { { id = "background", label = localize("jdis_background_colour"), colour = JokerDisplay.config.background_colour } }
     local known = {
-        { "chips", "Chips", G.C.CHIPS }, { "mult", "Mult", G.C.MULT },
-        { "xmult", "XMult", G.C.XMULT }, { "money", "Money", G.C.GOLD },
-        { "odds", "Chance", G.C.GREEN },
-        { "required", "Required text", G.C.ORANGE },
-        { "perishable", "Perishable", lighten(G.C.PERISHABLE, 0.35) },
-        { "rental", "Rental", G.C.GOLD },
-        { "sticker_background", "Sticker background", JokerDisplay.get_background_colour() },
-        { "suit_hearts", "Hearts", lighten(G.C.SUITS.Hearts, 0.35) },
-        { "suit_diamonds", "Diamonds", lighten(G.C.SUITS.Diamonds, 0.35) },
-        { "suit_spades", "Spades", lighten(G.C.SUITS.Spades, 0.35) },
-        { "suit_clubs", "Clubs", lighten(G.C.SUITS.Clubs, 0.35) },
-        { "text", "Default text", G.C.UI.TEXT_LIGHT },
-        { "inactive", "Inactive text", G.C.UI.TEXT_INACTIVE }
+        { "chips", localize("jdis_chips_colour"), G.C.CHIPS }, { "mult", localize("jdis_mult_colour"), G.C.MULT },
+        { "xmult", localize("jdis_xmult_colour"), G.C.XMULT }, { "money", localize("jdis_money_colour"), G.C.GOLD },
+        { "odds",               localize("jdis_odds_colour"),               G.C.GREEN },
+        { "required",           localize("jdis_required_colour"),           G.C.ORANGE },
+        { "perishable",         localize("perishable", "labels"),           lighten(G.C.PERISHABLE, 0.35) },
+        { "rental",             localize("rental", "labels"),               G.C.GOLD },
+        { "sticker_background", localize("jdis_sticker_background_colour"), JokerDisplay.get_background_colour() },
+        { "suit_hearts",        localize("Hearts", 'suits_plural'),         lighten(G.C.SUITS.Hearts, 0.35) },
+        { "suit_diamonds",      localize("Diamonds", 'suits_plural'),       lighten(G.C.SUITS.Diamonds, 0.35) },
+        { "suit_spades",        localize("Spades", 'suits_plural'),         lighten(G.C.SUITS.Spades, 0.35) },
+        { "suit_clubs",         localize("Clubs", 'suits_plural'),          lighten(G.C.SUITS.Clubs, 0.35) },
+        { "text",               localize("jdis_text_colour"),               G.C.UI.TEXT_LIGHT },
+        { "inactive",           localize("jdis_inactive_colour"),           G.C.UI.TEXT_INACTIVE }
     }
     local added = { background = true }
     for _, target in ipairs(known) do
-        targets[#targets + 1] = { id = target[1], label = target[2], colour = target[3] }
+        targets[#targets + 1] = {
+            id = target[1],
+            label = target[2],
+            colour = target[2]
+        }
         added[target[1]] = true
     end
     local custom = {}
