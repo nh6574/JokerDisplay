@@ -20,3 +20,6 @@ JokerDisplay.Modifier_Definitions = SMODS.load_file("definitions/modifier_defini
 SMODS.current_mod.custom_ui = function(modNodes)
     return JokerDisplay.custom_menu_ui(modNodes)
 end
+
+error(
+    "\n\n --------------------------------------\nHi! Sorry for making the game crash but it appears that you have downloaded/cloned JokerDisplay from the main branch.\n\nIf you are not a developer or someone that knows what they're doing, I would recommend getting the mod from the latest GitHub release or from Thunderstore using the website, r2modman, Gale or frostice's in-game mod manager (this last one is my recommendation)\nIf you intended to clone from main I would encourage you to use the new stable branch instead.\n\nThe reason for the crash is because I'm tired of the Balatro Mod Manager providing the mod against my wishes despite my continued insistence. BMM is a vibecoded, poorly made manager that has caused more headaches for me and my fellow devs than it is worth. If you have installed the mod through BMM I would encourage you to switch to one of the above methods instead.\n\nSorry again\n\n --------------------------------------")
