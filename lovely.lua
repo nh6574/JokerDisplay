@@ -132,6 +132,8 @@ if not SMODS then
     JokerDisplay.load_file("src/api_helper_functions.lua")()
     JokerDisplay.load_file("src/controller.lua")()
     JokerDisplay.load_file("src/config_tab.lua")()
+    JokerDisplay.mod_keys = { "chips", "x_chips", "mult", "x_mult", "e_mult", "e_chips", "score", "xscore", "blindsize",
+        "xblindsize", "dollars", "xdollars", "edollars" }
 
     local jokerdisplay_game_main_menu_ref = Game.main_menu
     function Game:main_menu(...)
@@ -141,6 +143,7 @@ if not SMODS then
             JokerDisplay.Definitions = JokerDisplay.load_file("definitions/display_definitions.lua")() or {}
             JokerDisplay.Blind_Definitions = JokerDisplay.load_file("definitions/blind_definitions.lua")() or {}
             JokerDisplay.Edition_Definitions = JokerDisplay.load_file("definitions/edition_definitions.lua")() or {}
+            JokerDisplay.Modifier_Definitions = JokerDisplay.load_file("definitions/modifier_definitions.lua")() or {}
         end
 
         return jokerdisplay_game_main_menu_ref(self, ...)

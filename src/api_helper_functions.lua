@@ -256,35 +256,27 @@ end
 ---@param card table Joker to calculate.
 ---@return table # Modifiers.
 JokerDisplay.calculate_joker_modifiers = function(card)
-    local modifiers = {
-        chips = nil,
-        x_chips = nil,
-        mult = nil,
-        x_mult = nil,
-        dollars = nil,
-        e_mult = nil
-    }
+    local modifiers = {}
+    local extra_text = {}
 
     for _, edition in pairs(JokerDisplay.Edition_Definitions) do
         if edition.condition_function(card) then
             local edition_mods = edition.mod_function(card)
+            edition_mods.xdollars = edition_mods.xdollars or edition_mods.x_dollars
+            edition_mods.edollars = edition_mods.edollars or edition_mods.e_dollars
             edition_mods.x_mult = edition_mods.x_mult or edition_mods.xmult
             edition_mods.x_chips = edition_mods.x_chips or edition_mods.xchips
             edition_mods.e_mult = edition_mods.e_mult or edition_mods.emult
-            modifiers = {
-                chips = (modifiers.chips and edition_mods.chips and modifiers.chips + edition_mods.chips) or
-                    edition_mods.chips or modifiers.chips,
-                x_chips = (modifiers.x_chips and edition_mods.x_chips and modifiers.x_chips * edition_mods.x_chips) or
-                    edition_mods.x_chips or modifiers.x_chips,
-                mult = (modifiers.mult and edition_mods.mult and modifiers.mult + edition_mods.mult) or
-                    edition_mods.mult or modifiers.mult,
-                x_mult = (modifiers.x_mult and edition_mods.x_mult and modifiers.x_mult * edition_mods.x_mult) or
-                    edition_mods.x_mult or modifiers.x_mult,
-                dollars = (modifiers.dollars and edition_mods.dollars and modifiers.dollars + edition_mods.dollars) or
-                    edition_mods.dollars or modifiers.dollars,
-                e_mult = (modifiers.e_mult and edition_mods.e_mult and modifiers.e_mult * edition_mods.e_mult) or
-                    edition_mods.e_mult or modifiers.e_mult,
-            }
+            edition_mods.e_chips = edition_mods.e_chips or edition_mods.echips
+
+            extra_text[#extra_text + 1] = edition_mods.text
+
+            for _, key in ipairs(JokerDisplay.mod_keys) do
+                local mod = JokerDisplay.Modifier_Definitions[key]
+                if mod then
+                    modifiers[key] = mod.calc_function and mod.calc_function(card, modifiers[key], edition_mods[key])
+                end
+            end
         end
     end
 
@@ -303,27 +295,27 @@ JokerDisplay.calculate_joker_modifiers = function(card)
                     local extra_mods = mod_function(card,
                         joker.joker_display_values and not joker.joker_display_values.blueprint_stop_func and
                         joker.joker_display_values.blueprint_ability_joker or joker)
+                    extra_mods.xdollars = extra_mods.xdollars or extra_mods.x_dollars
+                    extra_mods.edollars = extra_mods.edollars or extra_mods.e_dollars
                     extra_mods.x_mult = extra_mods.x_mult or extra_mods.xmult
                     extra_mods.x_chips = extra_mods.x_chips or extra_mods.xchips
                     extra_mods.e_mult = extra_mods.e_mult or extra_mods.emult
-                    modifiers = {
-                        chips = (modifiers.chips and extra_mods.chips and modifiers.chips + extra_mods.chips) or
-                            extra_mods.chips or modifiers.chips,
-                        x_chips = (modifiers.x_chips and extra_mods.x_chips and modifiers.x_chips * extra_mods.x_chips) or
-                            extra_mods.x_chips or modifiers.x_chips,
-                        mult = (modifiers.mult and extra_mods.mult and modifiers.mult + extra_mods.mult) or
-                            extra_mods.mult or modifiers.mult,
-                        x_mult = (modifiers.x_mult and extra_mods.x_mult and modifiers.x_mult * extra_mods.x_mult) or
-                            extra_mods.x_mult or modifiers.x_mult,
-                        dollars = (modifiers.dollars and extra_mods.dollars and modifiers.dollars + extra_mods.dollars) or
-                            extra_mods.dollars or modifiers.dollars,
-                        e_mult = (modifiers.e_mult and extra_mods.e_mult and modifiers.e_mult * extra_mods.e_mult) or
-                            extra_mods.e_mult or modifiers.e_mult,
-                    }
+                    extra_mods.e_chips = extra_mods.e_chips or extra_mods.echips
+                    extra_text[#extra_text + 1] = extra_mods.text
+
+                    for _, key in ipairs(JokerDisplay.mod_keys) do
+                        local mod = JokerDisplay.Modifier_Definitions[key]
+                        if mod then
+                            modifiers[key] = mod.calc_function and
+                                mod.calc_function(card, modifiers[key], extra_mods[key])
+                        end
+                    end
                 end
             end
         end
     end
+
+    modifiers.extra_text = extra_text
 
     return modifiers
 end
@@ -360,6 +352,13 @@ JokerDisplay.calculate_joker_triggers = function(card)
     end
 
     local triggers = 1
+
+    for _, edition in pairs(JokerDisplay.Edition_Definitions) do
+        if edition.condition_function(card) and edition.retrigger_joker_function then
+            triggers = triggers +
+                math.floor(edition.retrigger_joker_function(card) or 0)
+        end
+    end
 
     if JokerDisplay.should_display() then
         for _, area in pairs(JokerDisplay.get_display_areas()) do

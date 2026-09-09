@@ -266,7 +266,9 @@ local function can_use_lightweight_dynatext(config)
     if config.min_cycle_time ~= 0 or type(config.string) ~= "table" then return false end
     if config.text_effect or config.shaders or config.shadow or config.rotate or config.float or
         config.bump or config.pulse or config.quiver or config.marquee or config.spacing or
-        config.text_outline or config.scale_function or config.text_rot then return false end
+        config.text_outline or config.scale_function or config.text_rot then
+        return false
+    end
     for _, value in ipairs(config.string) do
         local value_type = type(value)
         if value_type ~= "string" and value_type ~= "number" then
@@ -426,7 +428,9 @@ function JokerDisplayBox:_refresh_text(node)
             node.config.text = text
             node.config.prev_value = text
             node.config.prev_value_joker_display = text
-            if node._drawable then node._drawable:set(text) else
+            if node._drawable then
+                node._drawable:set(text)
+            else
                 node._drawable = love.graphics.newText(font.FONT, text)
             end
         end
@@ -504,7 +508,12 @@ function JokerDisplayBox:_measure(node, scale)
         end
     end
     if #node.children > 0 then
-        if node.children[#node.children].UIT == G.UIT.R then content_h = content_h - padding else content_w = content_w - padding end
+        if node.children[#node.children].UIT == G.UIT.R then
+            content_h = content_h - padding
+        else
+            content_w = content_w -
+                padding
+        end
     end
     node.T.w = math.max((config.minw or 0) * scale, content_w + padding * 2)
     node.T.h = math.max((config.minh or 0) * scale, content_h + padding * 2)
@@ -599,27 +608,26 @@ function JokerDisplayBox:remove_extra()
 end
 
 function JokerDisplayBox:change_modifiers(modifiers, reset)
-    local new_modifiers = {
-        chips = modifiers.chips,
-        x_chips = modifiers.x_chips,
-        mult = modifiers.mult,
-        x_mult = modifiers.x_mult,
-        dollars = modifiers.dollars,
-        e_mult = modifiers.e_mult,
-    }
-
-    local mod_keys = { "chips", "x_chips", "mult", "x_mult", "dollars", "e_mult" }
     local modifiers_changed = reset or false
     local has_modifiers = false
 
-    for i = 1, #mod_keys do
-        if (not not self.modifiers[mod_keys[i]]) ~= (not not new_modifiers[mod_keys[i]]) then
+    for i = 1, #JokerDisplay.mod_keys do
+        local key = JokerDisplay.mod_keys[i]
+        if (not not self.modifiers[key]) ~= (not not modifiers[key]) then
             modifiers_changed = true
         end
-        self.modifiers[mod_keys[i]] = new_modifiers[mod_keys[i]]
-        if self.modifiers[mod_keys[i]] then
+        self.modifiers[key] = modifiers[key]
+        if self.modifiers[key] then
             has_modifiers = true
         end
+    end
+
+    if (not not self.modifiers.extra_text) ~= (not not modifiers.extra_text) then
+        modifiers_changed = true
+    end
+    self.modifiers.extra_text = modifiers.extra_text
+    if self.modifiers.extra_text then
+        has_modifiers = true
     end
 
     if modifiers_changed then
@@ -635,70 +643,25 @@ function JokerDisplayBox:add_modifiers()
 
     local mod_nodes = {}
 
-    if self.modifiers.dollars then
-        local dollars_node = {}
-        table.insert(dollars_node,
-            JokerDisplay.create_display_object(self, { text = "+" .. localize('$'), colour = G.C.GOLD }))
-        table.insert(dollars_node,
-            JokerDisplay.create_display_object(self,
-                { ref_table = "card.modifiers", ref_value = "dollars", colour = G.C.GOLD }))
-        table.insert(mod_nodes, dollars_node)
+    for _, key in ipairs(JokerDisplay.mod_keys) do
+        local mod = JokerDisplay.Modifier_Definitions[key]
+        if self.modifiers[key] and mod then
+            local inner_nodes = {}
+            for _, element in ipairs(mod.text or {}) do
+                table.insert(inner_nodes, JokerDisplay.create_display_object(self, element))
+            end
+            table.insert(mod_nodes, inner_nodes)
+        end
     end
 
-    if self.modifiers.e_mult then
-        local emult_node = {}
-        table.insert(emult_node,
-            JokerDisplay.create_display_object(self,
-                {
-                    border_nodes = { { text = "^" },
-                        { ref_table = "card.modifiers", ref_value = "e_mult" } },
-                    border_colour = G.C.DARK_EDITION
-                }))
-        table.insert(mod_nodes, emult_node)
-    end
-
-    if self.modifiers.x_chips then
-        local xchip_node = {}
-        table.insert(xchip_node,
-            JokerDisplay.create_display_object(self,
-                {
-                    border_nodes = { { text = "X" },
-                        { ref_table = "card.modifiers", ref_value = "x_chips" } },
-                    border_colour = G.C.CHIPS
-                }))
-        table.insert(mod_nodes, xchip_node)
-    end
-
-    if self.modifiers.x_mult then
-        local xmult_node = {}
-        table.insert(xmult_node,
-            JokerDisplay.create_display_object(self,
-                {
-                    border_nodes = {
-                        { text = "X" },
-                        { ref_table = "card.modifiers", ref_value = "x_mult" }
-                    }
-                }
-            ))
-        table.insert(mod_nodes, xmult_node)
-    end
-
-    if self.modifiers.chips then
-        local chip_node = {}
-        table.insert(chip_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.CHIPS }))
-        table.insert(chip_node,
-            JokerDisplay.create_display_object(self,
-                { ref_table = "card.modifiers", ref_value = "chips", colour = G.C.CHIPS }))
-        table.insert(mod_nodes, chip_node)
-    end
-
-    if self.modifiers.mult then
-        local mult_node = {}
-        table.insert(mult_node, JokerDisplay.create_display_object(self, { text = "+", colour = G.C.MULT }))
-        table.insert(mult_node,
-            JokerDisplay.create_display_object(self,
-                { ref_table = "card.modifiers", ref_value = "mult", colour = G.C.MULT }))
-        table.insert(mod_nodes, mult_node)
+    if self.modifiers.extra_text then
+        for _, line in ipairs(self.modifiers.extra_text) do
+            local inner_nodes = {}
+            for _, element in ipairs(line or {}) do
+                table.insert(inner_nodes, JokerDisplay.create_display_object(self, element))
+            end
+            table.insert(mod_nodes, inner_nodes)
+        end
     end
 
     local row_index = 1
@@ -918,7 +881,8 @@ function UIElement:update_text()
         if JokerDisplay.config.enabled and card.joker_display_values and
             not card.joker_display_values.disabled and self.config.ref_table then
             local formatted_text = JokerDisplay.text_format(self.config.ref_table[self.config.ref_value], self)
-            local prev_value = self.config.prev_value_joker_display or JokerDisplay.text_format(self.config.prev_value, self)
+            local prev_value = self.config.prev_value_joker_display or
+                JokerDisplay.text_format(self.config.prev_value, self)
             if formatted_text ~= prev_value then
                 self.config.text = formatted_text
                 self.config.text_drawable:set(formatted_text)
@@ -944,7 +908,7 @@ JokerDisplay.text_format = function(text, node)
     local card = node.UIBox.parent
 
     text = JokerDisplay.retrigger_format(text, node, card)
-    text = JokerDisplay.number_format(text)
+    text = JokerDisplay.number_format(text, nil, nil, node.config.signed)
 
     return tostring(text)
 end
@@ -976,8 +940,8 @@ end
 
 ---Creates an object with JokerDisplay configurations.
 ---@param card table Reference card.
----@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table?, border_nodes: table?, border_colour: table?, dynatext: table?, retrigger_type: function|string?} Node configuration.
----@param defaults_config? {colour: table?, scale: number?} Defaults for all text objects.
+---@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table|function?, border_nodes: table?, border_colour: table|function?, dynatext: table?, retrigger_type: function|string?, signed: boolean|string|table?, font:integer|string|table?} Node configuration.
+---@param defaults_config? {colour: table?, scale: number?, font:integer|string|table?} Defaults for all text objects.
 ---@return table? # Display object.
 JokerDisplay.create_display_object = function(card, display_config, defaults_config)
     if not display_config or not next(display_config) then
@@ -1004,15 +968,20 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
             table.insert(inside_nodes,
                 JokerDisplay.create_display_object(card, display_config.border_nodes[i], defaults_config))
         end
-        return JokerDisplay.create_display_border_text_object(inside_nodes, display_config.border_colour or G.C.XMULT)
+        return JokerDisplay.create_display_border_text_object(inside_nodes, display_config.border_colour)
     end
     if display_config.ref_value and display_config.ref_table then
-        local table_path = JokerDisplay.strsplit(display_config.ref_table, ".")
-        local ref_table = table_path[1] == "card" and card or _G[table_path[1]]
-        for i = 2, #table_path do
-            if ref_table[table_path[i]] then
-                ref_table = ref_table[table_path[i]]
+        local ref_table
+        if type(display_config.ref_table) == "string" then
+            local table_path = JokerDisplay.strsplit(display_config.ref_table, ".")
+            ref_table = table_path[1] == "card" and card or _G[table_path[1]]
+            for i = 2, #table_path do
+                if ref_table[table_path[i]] then
+                    ref_table = ref_table[table_path[i]]
+                end
             end
+        else
+            ref_table = display_config.ref_table
         end
         local colour = display_config.colour or default_text_colour
         if colour.ref_table then
@@ -1024,7 +993,8 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
             colour = colour,
             scale = display_config.scale or default_text_scale,
             font = display_config.font or default_text_font,
-            retrigger_type = display_config.retrigger_type
+            retrigger_type = display_config.retrigger_type,
+            signed = display_config.signed
         })
     end
     if display_config.text then
@@ -1037,16 +1007,18 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
             colour = colour,
             scale = display_config.scale or default_text_scale,
             font = display_config.font or default_text_font,
-            retrigger_type = display_config.retrigger_type
+            retrigger_type = display_config.retrigger_type,
+            signed = display_config.signed
         })
     end
     return node
 end
 
 ---creates a G.UIT.T-compatible definition...JokerDisplayBox consumes it as a lightweight node..external callers should be able to insert it into a normal UIBox i think
----@param config {text: string?, ref_table: table?, ref_value: string?, scale: number?, colour: table?, retrigger_type: function|string? }
+---@param config {text: string?, ref_table: table?, ref_value: string?, scale: number?, colour: table?, retrigger_type: function|string?, signed: boolean|string|table?, font:integer|string|table? }
 ---@return table
 JokerDisplay.create_display_text_object = function(config)
+    local colour = type(config.colour) == "function" and config.colour() or config.colour or G.C.UI.TEXT_LIGHT
     return {
         n = G.UIT.T,
         config = {
@@ -1054,9 +1026,10 @@ JokerDisplay.create_display_text_object = function(config)
             ref_table = config.ref_table,
             ref_value = config.ref_value,
             scale = config.scale or 0.4,
-            colour = config.colour or G.C.UI.TEXT_LIGHT,
+            colour = colour,
             font = ((SMODS or {}).Fonts or {})[config.font] or G.FONTS[tonumber(config.font)],
             retrigger_type = config.retrigger_type,
+            signed = config.signed
         }
     }
 end
@@ -1066,9 +1039,10 @@ end
 ---@param border_color table Color of the border.
 ---@return table
 JokerDisplay.create_display_border_text_object = function(nodes, border_color)
+    local colour = type(border_color) == "function" and border_color() or border_color or G.C.XMULT
     return {
         n = G.UIT.C,
-        config = { colour = border_color, r = 0.05, padding = 0.03, res = 0.15 },
+        config = { colour = colour, r = 0.05, padding = 0.03, res = 0.15 },
         nodes = nodes
     }
 end

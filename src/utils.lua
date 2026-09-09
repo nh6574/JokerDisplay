@@ -51,7 +51,7 @@ end
 -- function taken from smods
 
 round_number = round_number or function(num, precision)
-    precision = 10^(precision or 0)
+    precision = 10 ^ (precision or 0)
 
     return math.floor(num * precision + 0.4999999999999994) / precision
 end
@@ -61,8 +61,9 @@ end
 ---@param num any Number to format. Accepts Talisman's bignum/omeganum.
 ---@param e_switch_point number? Number from where to switch to scientic notation. Defaults to 1000000.
 ---@param places number? Maximum decimal places. Defaults to 2.
+---@param signed boolean|string|table?
 ---@return any # The formatted string or `num` if it's not a number.
-function JokerDisplay.number_format(num, e_switch_point, places)
+function JokerDisplay.number_format(num, e_switch_point, places, signed)
     if not num then return num or '' end
     if type(num) == "function" then num = num() end
     if (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
@@ -75,7 +76,21 @@ function JokerDisplay.number_format(num, e_switch_point, places)
         num = num:to_number()
     end
     -- Copied from smods.. with some changes :)
-    local sign = (num >= 0 and "") or "-"
+    local plus = ""
+    local minus = "-"
+    if signed then
+        local typesigned = type(signed)
+        if typesigned == "table" then
+            plus = signed.plus or plus
+            minus = signed.minus or minus
+        elseif typesigned == "string" then
+            plus = signed == "$" and localize('$') or signed
+            minus = signed == "$" and "-" .. localize('$') or (signed .. minus)
+        else
+            plus = "+"
+        end
+    end
+    local sign = (num >= 0 and plus) or minus
     num = math.abs(num)
     if num >= (e_switch_point or 1000000) then
         local x = string.format("%.4g", num)
