@@ -324,15 +324,47 @@ local function picker_move(picker, x, y)
     picker_apply(picker, true)
 end
 
+local picker_window = {}
+local function move_picker_window(picker, x, y)
+    local sw, sh = love.graphics.getDimensions()
+    if picker.window_dragging then
+        picker.x = math.max(0, math.min(sw - picker.window_w, x - picker.window_dragging.x))
+        picker.y = math.max(0, math.min(sh - picker.window_h, y - picker.window_dragging.y))
+    elseif picker.resizing then
+        local resize = picker.resizing
+        local left, top = resize.x, resize.y
+        local right, bottom = resize.x + resize.w, resize.y + resize.h
+        if resize.corner:find("l") then left = math.max(0, math.min(right - 360, x))
+        else right = math.min(sw, math.max(left + 360, x)) end
+        if resize.corner:find("t") then top = math.max(0, math.min(bottom - 300, y))
+        else bottom = math.min(sh, math.max(top + 300, y)) end
+        picker.x, picker.y = left, top
+        picker.window_w, picker.window_h = right - left, bottom - top
+    end
+    picker_window.x, picker_window.y = picker.x, picker.y
+    picker_window.w, picker_window.h = picker.window_w, picker.window_h
+end
+
 function JokerDisplay.draw_colour_picker()
     local pk = G.jokerdisplay_colour_picker
     if not pk then return end
     local sw, sh = love.graphics.getDimensions()
-    local panel_w, panel_h = math.min(500, sw - 40), math.min(390, sh - 40)
-    local panel_x, panel_y = (sw - panel_w) / 2, (sh - panel_h) / 2
+    local panel_w = math.max(360, math.min(pk.window_w or 500, sw))
+    local panel_h = math.max(300, math.min(pk.window_h or 390, sh))
+    local panel_x = math.max(0, math.min(pk.x or (sw - panel_w) / 2, sw - panel_w))
+    local panel_y = math.max(0, math.min(pk.y or (sh - panel_h) / 2, sh - panel_h))
+    pk.x, pk.y, pk.window_w, pk.window_h = panel_x, panel_y, panel_w, panel_h
     pk._panel_rect = { x = panel_x, y = panel_y, w = panel_w, h = panel_h }
-    local cx, cy, cw = panel_x + 18, panel_y + 18, panel_w - 36
-    local sq_w, sq_h, hbar_h, pad = cw - 4, math.floor((cw - 4) * 0.55), 16, 8
+    pk._drag_rect = { x = panel_x + 8, y = panel_y + 3, w = panel_w - 16, h = 17 }
+    pk._resize_rects = {
+        tl = { x = panel_x + 2, y = panel_y + 2, w = 16, h = 16 },
+        tr = { x = panel_x + panel_w - 18, y = panel_y + 2, w = 16, h = 16 },
+        bl = { x = panel_x + 2, y = panel_y + panel_h - 18, w = 16, h = 16 },
+        br = { x = panel_x + panel_w - 18, y = panel_y + panel_h - 18, w = 16, h = 16 }
+    }
+    local cx, cy, cw = panel_x + 18, panel_y + 25, panel_w - 36
+    local sq_w, hbar_h, pad = cw - 4, 16, 8
+    local sq_h = math.max(105, math.min(math.floor(sq_w * 0.55), panel_h - 167))
     local sq_x, sq_y = cx, cy + 24
     local hbar_x, hbar_y = cx, sq_y + sq_h + pad
     love.graphics.push("all")
@@ -342,6 +374,8 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.setColor(0.95, 0.73, 0.25, 0.9)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", panel_x, panel_y, panel_w, panel_h, 8, 8)
+    love.graphics.setColor(0.95, 0.73, 0.25, 0.65)
+    love.graphics.print("COLOR PICKER  -  DRAG TO MOVE", panel_x + 12, panel_y + 5, 0, 0.48, 0.48)
     love.graphics.setColor(0.95, 0.73, 0.25, 0.7)
     love.graphics.rectangle("fill", cx, cy, 60, 18, 3, 3)
     love.graphics.setColor(0, 0, 0, 0.8)
@@ -408,6 +442,12 @@ function JokerDisplay.draw_colour_picker()
     love.graphics.print("#" .. (pk.hex_focus and (pk.hex_input or "") or colour_hex({ r, g, b }):sub(2)), cx + 46, hex_y + 5, 0, 0.8, 0.8)
     love.graphics.setColor(0.55, 0.55, 0.55, 0.7)
     love.graphics.print("click to type hex", cx + 42 + input_w + 8, hex_y + 7, 0, 0.65, 0.65)
+    love.graphics.setColor(0.95, 0.73, 0.25, 0.8)
+    local grip = 11
+    love.graphics.line(panel_x + 4, panel_y + 4 + grip, panel_x + 4 + grip, panel_y + 4)
+    love.graphics.line(panel_x + panel_w - 4 - grip, panel_y + 4, panel_x + panel_w - 4, panel_y + 4 + grip)
+    love.graphics.line(panel_x + 4, panel_y + panel_h - 4 - grip, panel_x + 4 + grip, panel_y + panel_h - 4)
+    love.graphics.line(panel_x + panel_w - 4 - grip, panel_y + panel_h - 4, panel_x + panel_w - 4, panel_y + panel_h - 4 - grip)
     pk._sq_rect = { x = sq_x, y = sq_y, w = sq_w, h = sq_h }
     pk._hbar_rect = { x = hbar_x, y = hbar_y, w = sq_w, h = hbar_h }
     pk._alpha_rect = { x = hbar_x, y = alpha_y, w = sq_w, h = hbar_h }
@@ -459,7 +499,21 @@ function love.mousepressed(x, y, button, ...)
     local picker = G and G.jokerdisplay_colour_picker
     if picker then
         if button == 1 then
-            if picker_contains(picker._back_rect, x, y) then G.jokerdisplay_colour_picker = nil
+            local resize_corner
+            for corner, rect in pairs(picker._resize_rects or {}) do
+                if picker_contains(rect, x, y) then resize_corner = corner; break end
+            end
+            if resize_corner then
+                picker.resizing = {
+                    corner = resize_corner,
+                    x = picker.x,
+                    y = picker.y,
+                    w = picker.window_w,
+                    h = picker.window_h
+                }
+            elseif picker_contains(picker._drag_rect, x, y) then
+                picker.window_dragging = { x = x - picker.x, y = y - picker.y }
+            elseif picker_contains(picker._back_rect, x, y) then G.jokerdisplay_colour_picker = nil
             elseif picker_contains(picker._selector_rect, x, y) then
                 picker.dropdown = not picker.dropdown
                 picker.dropdown_scroll = math.max(1, math.min(picker.target, #picker.targets - 7))
@@ -539,7 +593,8 @@ end
 local mousemoved_ref = love.mousemoved or function() end
 function love.mousemoved(x, y, dx, dy, ...)
     local picker = G.jokerdisplay_colour_picker
-    if picker and picker.dragging then picker_move(picker, x, y) end
+    if picker and (picker.window_dragging or picker.resizing) then move_picker_window(picker, x, y)
+    elseif picker and picker.dragging then picker_move(picker, x, y) end
     if picker then return end
     return mousemoved_ref(x, y, dx, dy, ...)
 end
@@ -547,9 +602,11 @@ end
 local mousereleased_ref = love.mousereleased or function() end
 function love.mousereleased(x, y, button, ...)
     local picker = G.jokerdisplay_colour_picker
-    if picker and button == 1 and picker.dragging then
+    if picker and button == 1 then
+        if picker.dragging then JokerDisplay.save_config() end
         picker.dragging = nil
-        JokerDisplay.save_config()
+        picker.window_dragging = nil
+        picker.resizing = nil
     end
     if picker then return end
     return mousereleased_ref(x, y, button, ...)
@@ -599,7 +656,17 @@ G.FUNCS.joker_display_open_colour_picker = function()
     end
     table.sort(custom, function(a, b) return a.label < b.label end)
     for _, target in ipairs(custom) do targets[#targets + 1] = target end
-    local picker = { targets = targets, target = 1 }
+    local sw, sh = love.graphics.getDimensions()
+    local w = math.max(360, math.min(picker_window.w or 500, sw))
+    local h = math.max(300, math.min(picker_window.h or 390, sh))
+    local picker = {
+        targets = targets,
+        target = 1,
+        window_w = w,
+        window_h = h,
+        x = math.max(0, math.min(picker_window.x or (sw - w) / 2, sw - w)),
+        y = math.max(0, math.min(picker_window.y or (sh - h) / 2, sh - h))
+    }
     G.jokerdisplay_colour_picker = picker
     picker_load_target(picker)
 end
