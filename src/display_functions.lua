@@ -48,13 +48,13 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
     end
 
     if not custom_parent then
-        if self.children.joker_display then            
+        if self.children.joker_display then
             self.children.joker_display:remove_text()
             self.children.joker_display:remove_reminder_text()
             self.children.joker_display:remove_extra()
             self.children.joker_display:remove_modifiers()
         end
-        if self.children.joker_display_small then            
+        if self.children.joker_display_small then
             self.children.joker_display_small:remove_text()
             self.children.joker_display_small:remove_reminder_text()
             self.children.joker_display_small:remove_extra()
@@ -127,13 +127,15 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         reminder_text_config.colour = reminder_text_config.colour or G.C.UI.TEXT_INACTIVE
         reminder_text_config.scale = reminder_text_config.scale or 0.3
         if JokerDisplay.config.default_rows.reminder then
-            if update_target_element.children.joker_display then                    
-                update_target_element.children.joker_display:add_reminder_text(definition_reminder_text, reminder_text_config, update_parent)
+            if update_target_element.children.joker_display then
+                update_target_element.children.joker_display:add_reminder_text(definition_reminder_text,
+                    reminder_text_config, update_parent)
             end
         end
         if JokerDisplay.config.small_rows.reminder then
-            if update_target_element.children.joker_display_small then                    
-                update_target_element.children.joker_display_small:add_reminder_text(definition_reminder_text, reminder_text_config, update_parent)
+            if update_target_element.children.joker_display_small then
+                update_target_element.children.joker_display_small:add_reminder_text(definition_reminder_text,
+                    reminder_text_config, update_parent)
             end
         end
     end
@@ -145,7 +147,8 @@ function Card:initialize_joker_display(custom_parent, stop_calc)
         end
         if JokerDisplay.config.small_rows.extra then
             if update_target_element.children.joker_display_small then
-                update_target_element.children.joker_display_small:add_extra(definition_extra, extra_config, update_parent)
+                update_target_element.children.joker_display_small:add_extra(definition_extra, extra_config,
+                    update_parent)
             end
         end
     end
@@ -353,7 +356,8 @@ function Card:update_joker_display(force_update, force_reload, _from)
                 should_reload = true
             end
             if not self.children.joker_display_small then
-                self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable", { type = "SMALL" })
+                self.children.joker_display_small = JokerDisplayBox(self, "joker_display_small_enable",
+                    { type = "SMALL" })
                 should_reload = true
             end
         else
@@ -493,9 +497,9 @@ G.FUNCS.joker_display_style_override = function(e)
 
             if style_card then
                 local recalculate = style_function(style_card, text, reminder_text, extra)
-            if recalculate then
-                JokerDisplayBox.recalculate(e.UIBox, true)
-            end
+                if recalculate then
+                    JokerDisplayBox.recalculate(e.UIBox, true)
+                end
             end
         end
     end
@@ -543,7 +547,7 @@ function Card:update(dt)
                         }
                     end
                     self:update_joker_display(false, false, "Card:update")
-    
+
                     if self.children.joker_display then self.children.joker_display:recalculate(true) end
                     if self.children.joker_display_small then self.children.joker_display_small:recalculate(true) end
                     if self.children.joker_display_debuff then self.children.joker_display_debuff:recalculate(true) end
@@ -582,7 +586,7 @@ JokerDisplay.get_scoring_hand = function()
     local count_facedowns = false
     if G.STATE ~= G.STATES.HAND_PLAYED then
         JokerDisplay.current_hand = {}
-        if G.STATE == G.STATES.SELECTING_HAND and G.GAME.blind and G.GAME.blind.in_blind and G.hand and G.hand.highlighted then
+        if G.STATE == G.STATES.SELECTING_HAND and G.GAME.blind and (G.GAME.blind.in_blind or G.GAME.blind.blind_set) and G.hand and G.hand.highlighted then
             JokerDisplay.current_hand = JokerDisplay.sort_cards(G.hand.highlighted)
         end
     else
