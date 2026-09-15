@@ -32,7 +32,7 @@ return {
     x_mult = {
         text = {
             {
-                border_nodes = { { ref_table = "card.modifiers", ref_value = "x_mult" } },
+                border_nodes = { { ref_table = "card.modifiers", ref_value = "x_mult", signed = "X" } },
             }
         },
         calc_function = function(card, old_modifier, new_modifier)
