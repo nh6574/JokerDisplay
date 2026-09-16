@@ -315,7 +315,7 @@ JokerDisplay.calculate_joker_modifiers = function(card)
         end
     end
 
-    modifiers.extra_text = extra_text
+    modifiers.extra_text = next(extra_text) and extra_text or nil
 
     return modifiers
 end
