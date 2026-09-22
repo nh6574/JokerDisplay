@@ -84,7 +84,7 @@ function JokerDisplay.number_format(num, e_switch_point, places, signed)
             plus = signed.plus or plus
             minus = signed.minus or minus
         elseif typesigned == "string" then
-            plus = signed == "$" and localize('$') or signed
+            plus = signed == "$" and "+" .. localize('$') or signed
             minus = signed == "$" and "-" .. localize('$') or (signed .. minus)
         else
             plus = "+"
