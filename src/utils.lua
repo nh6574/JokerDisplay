@@ -66,16 +66,8 @@ end
 function JokerDisplay.number_format(num, e_switch_point, places, signed)
     if not num then return num or '' end
     if type(num) == "function" then num = num() end
-    if (type(num) ~= 'number' and type(num) ~= 'table') then return num or '' end
-    -- Talisman compat. Copied from it with some changes :)
-    if type(num) == 'table' then
-        local big_num = to_big(num)
-        if big_num >= to_big(e_switch_point or 1000000) then
-            return Notations.Balatro:format(big_num, places or 2)
-        end
-        num = num:to_number()
-    end
-    -- Copied from smods.. with some changes :)
+    if (type(num) ~= 'number' and type(num) ~= 'table' and type(num) ~= 'cdata') then return num or '' end
+    -- Amulet compat. Copied from Talisman with some changes :)
     local plus = ""
     local minus = "-"
     if signed then
@@ -91,6 +83,14 @@ function JokerDisplay.number_format(num, e_switch_point, places, signed)
         end
     end
     local sign = (num >= 0 and plus) or minus
+    if type(num) == 'table' or type(num) == "cdata" then
+        local big_num = math.abs(to_big(num))
+        if big_num >= to_big(e_switch_point or 1000000) then
+            return sign .. Notations.Balatro:format(big_num, places or 2)
+        end
+        num = num:to_number()
+    end
+    -- Copied from smods.. with some changes :)
     num = math.abs(num)
     if num >= (e_switch_point or 1000000) then
         local x = string.format("%.4g", num)
