@@ -217,10 +217,12 @@ local function utf8_length(text)
 end
 
 --caching of dynatext strings for transitions
+local dynatext_effects = SMODS.DynaTextEffects or {}
 JokerDisplayDynaText = Moveable:extend()
 function JokerDisplayDynaText:init(config)
     self.config = config
     self.joker_display_lightweight = true
+    self.text_effect = dynatext_effects[config.text_effect]
     self.colours = config.colours or { G.C.RED }
     if #self.colours == 0 then self.colours = { G.C.UI.TEXT_LIGHT } end
     self.scale = config.scale or 1
@@ -259,12 +261,25 @@ function JokerDisplayDynaText:_update_entry(index, first_pass)
         return false
     end
     local letters, prefix_length, inner_length = {}, utf8_length(prefix), utf8_length(inner)
+    local letter_font = font or self.font
     for letter_index, character in utf8.chars(text) do
         local is_outer = letter_index <= prefix_length or letter_index > prefix_length + inner_length
-        letters[#letters + 1] = {
+        local letter = {
             char = character,
             colour = is_outer and outer_colour or colour,
         }
+        if self.text_effect then
+            letter.letter = love.graphics.newText(letter_font.FONT, character)
+            letter.pop_in = 1
+            letter.r = 0
+            letter.scale = 1
+            letter.offset = { x = 0, y = 0 }
+            letter.dims = {
+                x = letter_font.FONT:getWidth(character),
+                y = letter_font.FONT:getHeight()
+            }
+        end
+        letters[#letters + 1] = letter
     end
     self.strings[index] = {
         string = text,
@@ -297,6 +312,32 @@ function JokerDisplayDynaText:_set_drawable()
         self.drawable = love.graphics.newText(focused.font.FONT)
     end
     self.drawable:set(self:_coloured_text())
+end
+
+function JokerDisplayDynaText:draw_effect_letters(x, y, scale)
+    local focused = self.strings[self.focused_string]
+    local font = focused.font
+    local sx = scale * font.squish * font.FONTSCALE / G.TILESIZE
+    local sy = scale * font.FONTSCALE / G.TILESIZE
+    local cursor = x + font.TEXT_OFFSET.x * scale * font.FONTSCALE / G.TILESIZE
+    local baseline = y + font.TEXT_OFFSET.y * scale * font.FONTSCALE / G.TILESIZE
+    for index, letter in ipairs(focused.letters) do
+        self.text_effect.func(self, index, letter)
+        local width, height = letter.dims.x * sx, letter.dims.y * sy
+        local offset_x = letter.offset.x * sx
+        local offset_y = letter.offset.y * sy
+        love.graphics.setColor(JokerDisplay.get_display_colour(
+            letter.colour or self.colours[index % #self.colours + 1]))
+        love.graphics.draw(letter.letter,
+            cursor + width / 2 + offset_x,
+            baseline + height / 2 + offset_y,
+            letter.r,
+            sx * letter.scale,
+            sy * letter.scale,
+            letter.dims.x / 2,
+            letter.dims.y / 2)
+        cursor = cursor + width
+    end
 end
 
 function JokerDisplayDynaText:_measure()
@@ -387,7 +428,11 @@ end
 
 local function can_use_lightweight_dynatext(config)
     if config.min_cycle_time ~= 0 or type(config.string) ~= "table" then return false end
-    if config.text_effect or config.shaders or config.shadow or config.rotate or config.float or
+    if config.text_effect then
+        local effect = dynatext_effects[config.text_effect]
+        if not effect or effect.draw_letter or effect.draw_shadow or effect.draw_override then return false end
+    end
+    if config.shaders or config.shadow or config.rotate or config.float or
         config.bump or config.pulse or config.quiver or config.marquee or config.spacing or
         config.text_outline or config.scale_function or config.text_rot then
         return false
@@ -401,6 +446,15 @@ local function can_use_lightweight_dynatext(config)
         end
     end
     return true
+end
+
+local function has_lightweight_text_effect(node)
+    local object = node.config and node.config.object
+    if object and object.joker_display_lightweight and object.text_effect then return true end
+    for _, child in ipairs(node.children or {}) do
+        if has_lightweight_text_effect(child) then return true end
+    end
+    return false
 end
 
 JokerDisplayBox = Moveable:extend()
@@ -517,6 +571,7 @@ function JokerDisplayBox:recalculate(from_update)
         self._styling = nil
     end
     self:_refresh_text(self.UIRoot)
+    self._has_text_effect = has_lightweight_text_effect(self.UIRoot)
     if self._layout_dirty then self:_calculate_layout() end
     self:has_info()
 end
@@ -893,6 +948,7 @@ function JokerDisplayBox:update(dt)
             self._canvas_dirty = true
         end
         self:_refresh_text(self.UIRoot)
+        if self._has_text_effect then self._canvas_dirty = true end
         if self._layout_dirty then self:_calculate_layout() end
     end
 end
@@ -907,8 +963,13 @@ function JokerDisplayBox:_draw_node(node, pass)
     elseif node.UIT == G.UIT.O and node._drawable and pass ~= "shapes" then
         local font = node._font or G.LANG.font
         local scale = (node._object_scale or 1) * (node._render_scale or 1)
-        love.graphics.setColor(node._object_colour or G.C.UI.TEXT_LIGHT)
-        draw_text(node._drawable, font, scale, node.T.x, node.T.y)
+        local object = node.config.object
+        if object.joker_display_lightweight and object.text_effect then
+            object:draw_effect_letters(node.T.x, node.T.y, scale)
+        else
+            love.graphics.setColor(node._object_colour or G.C.UI.TEXT_LIGHT)
+            draw_text(node._drawable, font, scale, node.T.x, node.T.y)
+        end
     elseif pass ~= "text" and (node.UIT == G.UIT.C or node.UIT == G.UIT.R) and config.colour and config.colour[4] > 0.01 then
         love.graphics.setColor(JokerDisplay.get_display_colour(config.colour))
         if config.r then
@@ -1135,6 +1196,13 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
     local node = {}
     if display_config.dynatext then
         local dynatext_config = JokerDisplay.deepcopy(display_config.dynatext)
+        for _, entry in ipairs(dynatext_config.string or {}) do
+            if type(entry) == "table" and type(entry.ref_table) == "string" then
+                local path = JokerDisplay.strsplit(entry.ref_table, ".")
+                entry.ref_table = path[1] == "card" and card or _G[path[1]]
+                for index = 2, #path do entry.ref_table = entry.ref_table[path[index]] end
+            end
+        end
         return {
             n = G.UIT.O,
             config = {
