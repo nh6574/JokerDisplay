@@ -217,7 +217,7 @@ local function utf8_length(text)
 end
 
 --caching of dynatext strings for transitions
-local dynatext_effects = SMODS.DynaTextEffects or {}
+local dynatext_effects = SMODS and SMODS.DynaTextEffects or {}
 JokerDisplayDynaText = Moveable:extend()
 function JokerDisplayDynaText:init(config)
     self.config = config
