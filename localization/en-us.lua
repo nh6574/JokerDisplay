@@ -67,6 +67,7 @@ return {
 			jdis_chips_colour = "Chips",
 			jdis_mult_colour = "Mult",
 			jdis_xmult_colour = "XMult",
+			jdis_xmult_text_colour = "XMult text",
 			jdis_money_colour = "Money",
 			jdis_odds_colour = "Chance",
 			jdis_required_colour = "Required text",

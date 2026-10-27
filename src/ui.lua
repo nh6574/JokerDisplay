@@ -90,6 +90,7 @@ local function draw_text(drawable, font, scale, x, y)
 end
 
 JokerDisplay.display_colour_registry = JokerDisplay.display_colour_registry or {}
+G.C.JOKER_DISPLAY_XMULT_TEXT = G.C.JOKER_DISPLAY_XMULT_TEXT or { 1, 1, 1, 1 }
 local display_colour_ids = setmetatable({}, { __mode = "k" })
 local function suit_display_colour(suit) return lighten(G.C.SUITS[suit], 0.35) end
 
@@ -105,6 +106,7 @@ local function display_colour_id(colour)
     local known = {
         { "chips", "Chips", G.C.CHIPS }, { "mult", "Mult", G.C.MULT },
         { "xmult", "XMult", G.C.XMULT }, { "money", "Money", G.C.GOLD },
+        { "xmult_text", "XMult text", G.C.JOKER_DISPLAY_XMULT_TEXT },
         { "odds", "Chance", G.C.GREEN },
         { "required", "Required text", G.C.ORANGE },
         { "text", "Default text", G.C.UI.TEXT_LIGHT },
@@ -1249,12 +1251,18 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
         }
     end
     if display_config.border_nodes then
+        local border_colour = type(display_config.border_colour) == "function" and display_config.border_colour() or display_config.border_colour or G.C.XMULT
+        local border_defaults = defaults_config
+        if border_colour == G.C.XMULT then
+            border_defaults = JokerDisplay.deepcopy(defaults_config or {})
+            border_defaults.colour = G.C.JOKER_DISPLAY_XMULT_TEXT
+        end
         local inside_nodes = {}
         for i = 1, #display_config.border_nodes do
             table.insert(inside_nodes,
-                JokerDisplay.create_display_object(card, display_config.border_nodes[i], defaults_config))
+                JokerDisplay.create_display_object(card, display_config.border_nodes[i], border_defaults))
         end
-        return JokerDisplay.create_display_border_text_object(inside_nodes, display_config.border_colour)
+        return JokerDisplay.create_display_border_text_object(inside_nodes, border_colour)
     end
     if display_config.ref_value and display_config.ref_table then
         local ref_table

@@ -733,6 +733,7 @@ G.FUNCS.joker_display_open_colour_picker = function()
     local known = {
         { "chips", localize("jdis_chips_colour"), G.C.CHIPS }, { "mult", localize("jdis_mult_colour"), G.C.MULT },
         { "xmult", localize("jdis_xmult_colour"), G.C.XMULT }, { "money", localize("jdis_money_colour"), G.C.GOLD },
+        { "xmult_text",        localize("jdis_xmult_text_colour"),        G.C.JOKER_DISPLAY_XMULT_TEXT },
         { "odds",               localize("jdis_odds_colour"),               G.C.GREEN },
         { "required",           localize("jdis_required_colour"),           G.C.ORANGE },
         { "perishable",         localize("perishable", "labels"),           lighten(resolve_picker_colour(G.C.PERISHABLE), 0.35) },
