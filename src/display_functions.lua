@@ -263,6 +263,7 @@ function Card:update_joker_display(force_update, force_reload, _from)
                         padding = 0.1,
                         align = 'cm',
                         colour = JokerDisplay.get_sticker_colour("sticker_background"),
+                        emboss = JokerDisplay.config.emboss and 0.05 or nil,
                         shadow = false,
                         ref_table = self
                     },
@@ -307,6 +308,7 @@ function Card:update_joker_display(force_update, force_reload, _from)
                         padding = 0.1,
                         align = 'cm',
                         colour = JokerDisplay.get_sticker_colour("sticker_background"),
+                        emboss = JokerDisplay.config.emboss and 0.05 or nil,
                         shadow = false,
                         ref_table = self
                     },

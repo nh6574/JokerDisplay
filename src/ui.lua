@@ -176,6 +176,7 @@ JokerDisplay.update_sticker_colours = function(card)
         local box = card.children[key]
         if not (box and box.UIRoot) then return end
         box.UIRoot.config.colour = JokerDisplay.get_sticker_colour("sticker_background")
+        box.UIRoot.config.emboss = JokerDisplay.config.emboss and 0.05 or nil
         local function update_text(node)
             if node.config and node.config.ref_value == kind then
                 node.config.colour = JokerDisplay.get_sticker_colour(kind)
