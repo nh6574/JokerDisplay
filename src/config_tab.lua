@@ -840,7 +840,7 @@ JokerDisplay.config_tab = function()
     local config = {
         {
             n = G.UIT.R,
-            config = { padding = 0.2 },
+            config = { align = "cm", padding = 0.2 },
             nodes = {
                 {
                     n = G.UIT.C,
@@ -935,7 +935,7 @@ JokerDisplay.config_tab = function()
         },
         {
             n = G.UIT.R,
-            config = { padding = 0.2 },
+            config = { align = "cm", padding = 0.2 },
             nodes = {
                 {
                     n = G.UIT.C,
@@ -1072,7 +1072,7 @@ JokerDisplay.config_tab = function()
                 {
                     n = G.UIT.T,
                     config = {
-                        text = localize('jdis_picker_info') .. "     ",
+                        text = localize('jdis_picker_info') .. "        ",
                         colour = G.C.GOLD,
                         scale = 0.35
                     }
@@ -1127,7 +1127,7 @@ JokerDisplay.config_tab = function()
 
     return SMODS and {
         n = G.UIT.ROOT,
-        config = { r = 0.1, minw = 8, align = "tm", padding = 0.2, colour = G.C.BLACK },
+        config = { r = 0.1, minw = 8, align = "tm", padding = 0.1, colour = G.C.BLACK },
         nodes = config
     } or {
         n = G.UIT.ROOT,
