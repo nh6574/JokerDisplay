@@ -788,6 +788,13 @@ JokerDisplay.config_tab = function()
     card:set_edition('e_foil', true, true)
     card:set_perishable(true)
     card:set_rental(true)
+    card.states.visible = false
+    G.E_MANAGER:add_event(Event({
+        func = function()
+            card.states.visible = true
+            return true
+        end
+    }))
     G.jokerdisplay_config_card_area:emplace(card)
     G.jokerdisplay_config_card_area.cards[1]:update_joker_display()
     G.jokerdisplay_config_card_area.cards[1].joker_display_values.disabled = false
