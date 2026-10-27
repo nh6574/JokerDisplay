@@ -106,11 +106,11 @@ local function display_colour_id(colour)
     local known = {
         { "chips", "Chips", G.C.CHIPS }, { "mult", "Mult", G.C.MULT },
         { "xmult", "XMult", G.C.XMULT }, { "money", "Money", G.C.GOLD },
-        { "xmult_text", "XMult text", G.C.JOKER_DISPLAY_XMULT_TEXT },
-        { "odds", "Chance", G.C.GREEN },
-        { "required", "Required text", G.C.ORANGE },
-        { "text", "Default text", G.C.UI.TEXT_LIGHT },
-        { "inactive", "Inactive text", G.C.UI.TEXT_INACTIVE }
+        { "xmult_text", "XMult text",    G.C.JOKER_DISPLAY_XMULT_TEXT },
+        { "odds",       "Chance",        G.C.GREEN },
+        { "required",   "Required text", G.C.ORANGE },
+        { "text",       "Default text",  G.C.UI.TEXT_LIGHT },
+        { "inactive",   "Inactive text", G.C.UI.TEXT_INACTIVE }
     }
     for _, entry in ipairs(known) do
         if colour == entry[3] then
@@ -635,7 +635,8 @@ function JokerDisplayBox:_refresh_text(node)
             local colours = object.colours or { G.C.UI.TEXT_LIGHT }
             if #colours == 0 then colours = { G.C.UI.TEXT_LIGHT } end
             for index, letter in ipairs(focused.letters or {}) do
-                local colour = JokerDisplay.get_display_colour(letter.prefix or letter.suffix or letter.colour or colours[index % #colours + 1])
+                local colour = JokerDisplay.get_display_colour(letter.prefix or letter.suffix or letter.colour or
+                colours[index % #colours + 1])
                 table.insert(coloured_text, colour)
                 table.insert(coloured_text, letter.char)
             end
@@ -989,7 +990,8 @@ end
 function JokerDisplayBox:_draw_background(width, height)
     local colour = self.UIRoot.config.colour or G.C.CLEAR
     local emboss = JokerDisplay.config.emboss and emboss_height or 0
-    if emboss == 0 then love.graphics.setColor(colour)
+    if emboss == 0 then
+        love.graphics.setColor(colour)
         if self.UIRoot.config.r then
             draw_pixel_rect(0, 0, width, height, self.UIRoot.config)
         else
@@ -1222,13 +1224,14 @@ end
 ---Creates an object with JokerDisplay configurations.
 ---@param card table Reference card.
 ---@param display_config {text: string?, ref_table: string?, ref_value: string?, scale: number?, colour: table|function?, border_nodes: table?, border_colour: table|function?, dynatext: table?, retrigger_type: function|string?, signed: boolean|string|table?, font:integer|string|table?} Node configuration.
----@param defaults_config? {colour: table?, scale: number?, font:integer|string|table?} Defaults for all text objects.
+---@param defaults_config? {colour: table|function?, scale: number?, font:integer|string|table?} Defaults for all text objects.
 ---@return table? # Display object.
 JokerDisplay.create_display_object = function(card, display_config, defaults_config)
     if not display_config or not next(display_config) then
         return nil
     end
     local default_text_colour = defaults_config and defaults_config.colour or G.C.UI.TEXT_LIGHT
+    if type(default_text_colour) == "function" then default_text_colour = default_text_colour() end
     local default_text_scale = defaults_config and defaults_config.scale or 0.4
     local default_text_font = defaults_config and defaults_config.font or nil
 
@@ -1251,12 +1254,12 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
         }
     end
     if display_config.border_nodes then
-        local border_colour = type(display_config.border_colour) == "function" and display_config.border_colour() or display_config.border_colour or G.C.XMULT
+        local border_colour = type(display_config.border_colour) == "function" and display_config.border_colour() or
+        display_config.border_colour or G.C.XMULT
         local border_defaults = defaults_config
-        if border_colour == G.C.XMULT then
-            border_defaults = JokerDisplay.deepcopy(defaults_config or {})
-            border_defaults.colour = G.C.JOKER_DISPLAY_XMULT_TEXT
-        end
+        border_defaults = JokerDisplay.deepcopy(defaults_config or {})
+        border_defaults.colour = defaults_config and defaults_config.colour or G.C.JOKER_DISPLAY_XMULT_TEXT
+        if type(border_defaults.colour) == "function" then border_defaults.colour = border_defaults.colour() end
         local inside_nodes = {}
         for i = 1, #display_config.border_nodes do
             table.insert(inside_nodes,
@@ -1278,6 +1281,7 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
             ref_table = display_config.ref_table
         end
         local colour = display_config.colour or default_text_colour
+        if type(colour) == "function" then colour = colour() end
         if colour.ref_table then
             colour = colour.ref_table[colour.ref_value]
         end
@@ -1293,6 +1297,7 @@ JokerDisplay.create_display_object = function(card, display_config, defaults_con
     end
     if display_config.text then
         local colour = display_config.colour or default_text_colour
+        if type(colour) == "function" then colour = colour() end
         if colour.ref_table then
             colour = colour.ref_table[colour.ref_value]
         end
