@@ -29,6 +29,7 @@ return {
 			jdis_hide_empty = "Ocultar vacíos",
 			jdis_shift_to_hide = "Shift + Click Derecho para ocultar",
 			jdis_joker_count = "Mostrar ranuras de comodín por sobre información",
+			jdis_emboss = "Realzar display",
 			jdis_disable_collapse = "Dehabilitar colapsado",
 			jdis_disable_perishable = "Dehabilitar Perecedero",
 			jdis_disable_rental = "Dehabilitar Alquiler",

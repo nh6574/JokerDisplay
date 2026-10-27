@@ -457,6 +457,8 @@ local function has_lightweight_text_effect(node)
     return false
 end
 
+local emboss_height = 0.08
+
 JokerDisplayBox = Moveable:extend()
 function JokerDisplayBox:init(parent, func, args)
     args = args or {}
@@ -723,7 +725,8 @@ function JokerDisplayBox:_calculate_layout()
     root._layout_scale = scale
     if scale < 1 then self:_measure(root, scale) end
     self:_place(root, 0, 0)
-    self.T.w, self.T.h = root.T.w, root.T.h
+    self.T.w = root.T.w
+    self.T.h = root.T.h + (JokerDisplay.config.emboss and emboss_height or 0)
     self._layout_dirty = false
     self._canvas_dirty = true
     self:align_to_text()
@@ -981,15 +984,48 @@ function JokerDisplayBox:_draw_node(node, pass)
     for _, child in ipairs(node.children or {}) do self:_draw_node(child, pass) end
 end
 
-function JokerDisplayBox:_draw_contents(width, height, pass)
-    if pass ~= "text" then
-        love.graphics.setColor(self.UIRoot.config.colour or G.C.CLEAR)
+function JokerDisplayBox:_draw_background(width, height)
+    local colour = self.UIRoot.config.colour or G.C.CLEAR
+    local emboss = JokerDisplay.config.emboss and emboss_height or 0
+    if emboss == 0 then love.graphics.setColor(colour)
         if self.UIRoot.config.r then
             draw_pixel_rect(0, 0, width, height, self.UIRoot.config)
         else
             love.graphics.rectangle("fill", 0, 0, width, height)
         end
+        return
     end
+
+    local scale = G.TILESIZE * 2
+    local canvas_width = math.max(1, math.ceil(width * scale))
+    local canvas_height = math.max(1, math.ceil(height * scale))
+    local canvas_key = table.concat({ canvas_width, canvas_height, colour[1], colour[2], colour[3], colour[4] }, ":")
+    if self._emboss_key ~= canvas_key then
+        self._emboss_key = canvas_key
+        if self.emboss_canvas and self.emboss_canvas.release then self.emboss_canvas:release() end
+        self.emboss_canvas = love.graphics.newCanvas(canvas_width, canvas_height, { dpiscale = 1 })
+        self.emboss_canvas:setFilter("linear", "linear")
+        love.graphics.push("all")
+        love.graphics.setCanvas(self.emboss_canvas)
+        love.graphics.origin()
+        love.graphics.clear(0, 0, 0, 0)
+        love.graphics.scale(scale)
+        love.graphics.setBlendMode("replace")
+        love.graphics.setColor(darken(colour, 0.3))
+        draw_pixel_rect(0, emboss, width, height - emboss, self.UIRoot.config)
+        love.graphics.setColor(colour)
+        draw_pixel_rect(0, 0, width, height - emboss, self.UIRoot.config)
+        love.graphics.pop()
+    end
+    love.graphics.push("all")
+    love.graphics.setBlendMode("alpha", "premultiplied")
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(self.emboss_canvas, 0, 0, 0, 1 / scale, 1 / scale)
+    love.graphics.pop()
+end
+
+function JokerDisplayBox:_draw_contents(width, height, pass)
+    if pass ~= "text" then self:_draw_background(width, height) end
     self:_draw_node(self.UIRoot, pass)
 end
 
@@ -1037,6 +1073,7 @@ end
 function JokerDisplayBox:remove()
     remove_compat_node(self.UIRoot)
     if self.canvas and self.canvas.release then self.canvas:release() end
+    if self.emboss_canvas and self.emboss_canvas.release then self.emboss_canvas:release() end
     Moveable.remove(self)
 end
 

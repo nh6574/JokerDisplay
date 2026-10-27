@@ -11,6 +11,7 @@ return {
 	disable_collapse = false,
 	disable_perishable = false,
 	disable_rental = false,
+	emboss = false,
 	background_colour = { 0, 0, 0, 0.8 },
 	background_opacity = 0.8,
 	background_colour_override = false,

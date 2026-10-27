@@ -1081,15 +1081,32 @@ JokerDisplay.config_tab = function()
         },
         {
             n = G.UIT.R,
-            config = { padding = 0.01, align = "cr" },
+            config = { padding = 0.01, align = "cm" },
             nodes = {
-                create_toggle({
-                    label = localize('jdis_shift_to_hide'),
-                    ref_table = JokerDisplay.config,
-                    ref_value =
-                    'shift_to_hide',
-                    callback = JokerDisplay.save_config
-                })
+                {
+                    n = G.UIT.C,
+                    config = { align = "cr", padding = 0.05 },
+                    nodes = {
+                        create_toggle({
+                            label = localize('jdis_shift_to_hide'),
+                            ref_table = JokerDisplay.config,
+                            ref_value = 'shift_to_hide',
+                            callback = JokerDisplay.save_config
+                        })
+                    }
+                },
+                {
+                    n = G.UIT.C,
+                    config = { align = "cr", padding = 0.05 },
+                    nodes = {
+                        create_toggle({
+                            label = localize('jdis_emboss'),
+                            ref_table = JokerDisplay.config,
+                            ref_value = 'emboss',
+                            callback = update_display
+                        })
+                    }
+                }
             }
         },
         {
